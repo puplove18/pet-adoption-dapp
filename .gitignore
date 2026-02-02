@@ -20,3 +20,23 @@ build/
 # OS
 .DS_Store
 hyperledger/fabric-samples/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Office temp files
+~$*
+*.tmp
+
+# Archives (optional)
+*.zip
