@@ -1,42 +1,26 @@
-# Node
-node_modules/
-npm-debug.log
-.env
+# Ignore everything by default
+*
 
-# Fabric
+# But DO track .gitignore itself
+!.gitignore
+
+# Allow only these folders
+!hyperledger/
+!petadopt/
+
+# Allow their contents
+!hyperledger/**
+!petadopt/**
+
+# Explicitly exclude fabric-samples (external repo)
+hyperledger/fabric-samples/
+
+# Node / Fabric safety
+node_modules/
 wallet/
 organizations/
 crypto-config/
 *.pem
-
-# Build
-dist/
-build/
-
-# IDE
+*.key
+.env
 .vscode/
-.idea/
-
-# OS
-.DS_Store
-hyperledger/fabric-samples/
-
-# LaTeX build artifacts
-*.aux
-*.log
-*.out
-*.toc
-*.lof
-*.lot
-*.bbl
-*.blg
-*.fls
-*.fdb_latexmk
-*.synctex.gz
-
-# Office temp files
-~$*
-*.tmp
-
-# Archives (optional)
-*.zip
