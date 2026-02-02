@@ -1,0 +1,37 @@
+[
+  {
+  "animalId": "dog001",
+  "name": "Mochi",
+  "species": "dog",
+  "breed": "shiba",
+  "gender": "male",
+  "age": "3",
+  "shelterId": "shelter A",
+  "microchipNumber": "123456789012345",
+  "vaccination": "true",
+  "notes": "Healthy"
+  },
+  {
+    "animalId": "cat001",
+    "name": "Yuki",
+    "species": "cat",
+    "breed": "british shorthair",
+    "gender": "female",
+    "shelterId": "shelter A",
+    "microchipNumber": "987654321098765",
+    "vaccination": "false",
+    "notes": "Needs vaccine update ASAP"
+  },
+  {
+    "animalId": "dog002",
+    "name": "N/A",
+    "species": "dog",
+    "breed": "German Shepherd",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelter B",
+    "microchipNumber": "000000000000000",
+    "vaccination": "false",
+    "notes": "Needs vaccine update ASAP"
+  }
+]

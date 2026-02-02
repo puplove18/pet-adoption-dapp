@@ -1,0 +1,63 @@
+\chapter{Tables, Figures, and Referring to Them} \label{cha:chapter2}
+
+
+This chapter shows simple ways of creating tables and figures. It also
+provides examples on how to refer to them. The creation part is
+relevant to those using \LaTeX{}, but how to refer to them and general
+style comments are useful for everyone.
+
+\section{Tables} \label{sec:chap2:tables}
+
+There is a table here, Table~\ref{tab:table1}. Every table is numbered
+based on the current chapter, and it has a caption providing a brief
+explanation of the table. The numbering and captions are what is going
+to appear in the List of Tables. For \LaTeX{} users, note also the [t]
+next to {\tt begin\{table\}}, this will always put the table at the
+top of the page.
+
+\begin{table}[t]
+  \centering
+  \begin{tabular}{| c | l |}
+    \hline
+    {\bf Something} & \textbf{Something}\\
+    \hline
+    \hline
+    Value A & Value B\\
+    \hline
+    Value C & Value D\\
+    \hline
+  \end{tabular}
+  \caption{A very simple example of a table}
+  \label{tab:table1}
+\end{table}
+
+
+\section{Figures}
+\label{sec:chap2:figures}
+
+Creation and general formatting of figures is similar to the ones for
+tables. Look for example at Figure~\ref{fig:example1}.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=.4\linewidth]{lancaster-university-leipzig-logo}
+  \caption{The university logo as an example figure}
+  \label{fig:example1}
+\end{figure}
+
+
+Remember: as a rule of thumb, if you have a figure or table which is
+not mentioned in your text, then either you do not need the
+figure/table or some text is missing!
+
+
+\section{Referring to Things}
+\label{sec:chap2:referring}
+
+Remember to always refer to chapters, sections, figures, tables,
+\ldots correctly. That is, you might want to refer to something in the
+former chapter by saying something like ``as mentioned in
+Chapter~\ref{cha:intro} \ldots'', ``as mentioned in
+Section~\ref{sec:intro:signposting}'', ``as it can be seen
+in Figure~\ref{fig:example1}/Table~\ref{tab:table1}'', or ``more
+detailed information can be found in Appendix~\ref{chap:A1}.

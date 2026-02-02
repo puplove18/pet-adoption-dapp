@@ -1,0 +1,100 @@
+\documentclass{LULCSProject}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{graphicx}
+\lstset{language=Java,
+	basicstyle=\small,
+	identifierstyle=\emph}
+
+\newcommand{\tvect}[3] { \ensuremath{\Bigl(\negthinspace\begin{smallmatrix}#1\\#2\\#3\end{smallmatrix}\Bigr)}}
+\newcommand{\twovect}[2] { \ensuremath{\left(\negthinspace\begin{smallmatrix}#1\\#2\end{smallmatrix}\right)}}
+
+
+\title{Blockchain for Pet Welfare: A Dual Public-Private Adoption Management Architecture}
+\author{Juri Kasai}
+\date{Date of Submission (e.g., 24/03/2023)}
+%\BSc % \MEng \BEng etc. 
+\supervisor{Dr Jiejun Hu-Bolz}
+
+\wordcount{0000} % number of words in your report 
+
+
+\abstract{Put your abstract here. You should create a short abstract (200
+words at maximum) which is on a page by itself. The abstract should be
+a very high-level overview: for example 1--2 sentences on the aims of
+the project, 1--2 sentences on the kind of design, implementation, or
+empirical work undertaken, and 2--3 sentences summarising the primary
+contribution or findings from your work. The abstract appears in the
+front matter of the report: after your title page but before the table
+of contents.}
+
+
+\declaration{
+  Put some text similar to the following in here:\\[.5em]
+I certify that the material contained in this dissertation is my own work and does not contain
+unreferenced or unacknowledged material. I also warrant that the above statement applies to the
+implementation of the project and all associated documentation. Regarding the electronically
+submitted work, I consent to this being stored electronically and copied for assessment purposes,
+including the School's use of plagiarism detection systems in order to check the integrity of
+assessed work.\\
+I agree to my dissertation being placed in the public domain, with my name explicitly included
+as the author of the work.\\
+Name: Juri Kasai\\
+Date: \today
+}
+
+\dedication{
+  If you want to dedicate to someone in particular
+}
+
+\acknowledgements{
+  General acknowledgements \ldots
+
+  your supervisor, your family, your
+  firends, \ldots
+}
+
+\begin{document}
+
+\maketitle
+
+\pagenumbering{Roman}
+
+\tableofcontents
+
+\listoffigures
+\newpage
+% \begingroup
+% \let\clearpage\relax
+\listoftables
+%\endgroup
+
+\newpage
+\pagenumbering{arabic}
+
+%%
+%% include your chapters here
+%%
+\include{chapter1}
+
+% Always start your chapter on a new page!
+\newpage
+\include{chapter2}
+
+%%
+%% You bib file
+%%
+\newpage
+\bibliography{report}
+
+\newpage
+\appendix
+%%
+%% Your appendices
+%%
+\include{appendix1}
+\newpage
+\include{appendix2}
+
+\end{document}

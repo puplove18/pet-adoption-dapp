@@ -1,0 +1,9 @@
+\begin{thebibliography}{xx}
+
+\harvarditem[Papacchini et~al.]{Papacchini, Caminati \harvardand\ Hu}{2023}{PapacchiniCaminatiHu23}
+Papacchini, F., Caminati, M.~B. \harvardand\ Hu, J.  \harvardyearleft 2023\harvardyearright , Another example citation, {\em in} J.~Stovold \harvardand\ C.~Blome, eds, `Dissertation Templates', Vol. 8945 of {\em Lecture Notes in Computer Science}, LUL Press, pp.~143--149.
+
+\harvarditem{Stovold \harvardand\ Papacchini}{2023}{lulcs}
+Stovold, J. \harvardand\ Papacchini, F.  \harvardyearleft 2023\harvardyearright , {\em An Example Citation}, LUL Press, chapter~1, pp.~1--31.
+
+\end{thebibliography}

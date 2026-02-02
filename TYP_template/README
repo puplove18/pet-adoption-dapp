@@ -1,0 +1,11 @@
+BUV LaTeX template for CS project dissertations 
+===============================================
+
+To compile:
+ - run the following statements in a terminal:
+   pdflatex report
+   bibtex report
+   pdflatex report
+   pdflatex report
+
+The output will be in report.pdf 
