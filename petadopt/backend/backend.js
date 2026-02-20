@@ -40,6 +40,14 @@ const imageUpload = multer({
 const CHANNEL = 'mychannel';
 const CC = 'adoption';
 
+// Transaction Log on terminal as I was told to have it somewhere 
+function txLog(action, org, userId, animalId, extra = '') {
+  const ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
+  const pad = (s, n) => s.padEnd(n);
+  const line = `[${ts}] TX | ${pad(action, 10)} | ${pad(org, 4)} ${pad(userId, 12)} | ${animalId}${extra ? ' | ' + extra : ''}`;
+  console.log('\x1b[36m%s\x1b[0m', line);  // cyan color
+}
+
 function getAuth(req) {
   const org = req.header('x-org');
   const userId = req.header('x-user');
@@ -333,6 +341,8 @@ app.post('/api/animals', async (req, res) => {
       String(notes ?? 'Unknown')
     );
 
+    txLog('CREATE', org, userId, animalId, `${species} / ${name}`);
+
     // Persist to JSON so the pet survives teardown + redeploy
     appendToPetData({
       animalId,
@@ -417,6 +427,8 @@ app.put('/api/animals/:id', async (req, res) => {
       }
     }
 
+    txLog('UPDATE', org, userId, animalId, `${name}`);
+
     // Persist to JSON
     updatePetData(animalId, {
       name: name ?? undefined,
@@ -443,7 +455,8 @@ app.put('/api/animals/:id', async (req, res) => {
 // POST: upload image for a pet (off-chain, saved to pet_data/images/{id}.jpg)
 app.post('/api/animals/:id/image', imageUpload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No image file provided' });
-  console.log(`Image saved for ${req.params.id}: ${req.file.path}`);
+  const { org: imgOrg, userId: imgUser } = getAuth(req);
+  txLog('IMAGE', imgOrg, imgUser, req.params.id, req.file.originalname);
   res.json({ ok: true, path: `/pet_images/${req.params.id}.jpg` });
 });
 
@@ -482,6 +495,8 @@ app.patch('/api/animals/:id/status', async (req, res) => {
       String(current.shelterId ?? ''),
       String(adoptionStatus).toUpperCase()
     );
+
+    txLog('STATUS', org, userId, animalId, `→ ${String(adoptionStatus).toUpperCase()}`);
 
     // Persist to JSON
     updatePetData(animalId, { adoptionStatus: String(adoptionStatus).toUpperCase() });
@@ -523,6 +538,8 @@ app.delete('/api/animals/:id', async (req, res) => {
 
     // Delete from ledger (public + private data)
     await contract.submitTransaction('DeleteAnimal', animalId);
+
+    txLog('DELETE', org, userId, animalId);
 
     // Remove from pet_data.json
     removePetData(animalId);

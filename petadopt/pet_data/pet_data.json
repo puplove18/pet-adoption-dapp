@@ -48,5 +48,18 @@
     "vaccination": "true",
     "notes": "",
     "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "deletion001",
+    "name": "coco",
+    "species": "hamster",
+    "breed": "",
+    "gender": "MALE",
+    "age": "2",
+    "shelterId": "sample1",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED"
   }
 ]
