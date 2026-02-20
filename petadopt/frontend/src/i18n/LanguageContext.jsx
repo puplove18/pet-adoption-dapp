@@ -1,4 +1,6 @@
 // change the language by clicking the button on top 
+// i18n is library for internationalization, and no need for the manual translation
+// but I do not like the japanese translation, so I wrote my own hehe
 
 
 import { createContext, useContext, useState, useCallback } from "react";

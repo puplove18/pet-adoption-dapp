@@ -7,12 +7,35 @@ const { Gateway, Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 // for the image uploads
 app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
+// serve pet images from pet_data/images (off-chain, persistent)
+const PET_IMAGES_DIR = path.join(__dirname, '../pet_data/images');
+app.use("/pet_images", express.static(PET_IMAGES_DIR));
+
+// ── Multer config: save uploaded images as {animalId}.jpg ──
+const imageUpload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => {
+      fs.mkdirSync(PET_IMAGES_DIR, { recursive: true });
+      cb(null, PET_IMAGES_DIR);
+    },
+    filename: (req, _file, cb) => {
+      const animalId = req.params.id || req.body.animalId || 'unknown';
+      cb(null, `${animalId}.jpg`);
+    },
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB max
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Only image files are allowed'));
+  },
+});
 
 const CHANNEL = 'mychannel';
 const CC = 'adoption';
@@ -417,6 +440,14 @@ app.put('/api/animals/:id', async (req, res) => {
 });
 
 
+// POST: upload image for a pet (off-chain, saved to pet_data/images/{id}.jpg)
+app.post('/api/animals/:id/image', imageUpload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No image file provided' });
+  console.log(`Image saved for ${req.params.id}: ${req.file.path}`);
+  res.json({ ok: true, path: `/pet_images/${req.params.id}.jpg` });
+});
+
+
 // PATCH: update only adoption status (quick workflow buttons)
 app.patch('/api/animals/:id/status', async (req, res) => {
   let gateway;
@@ -458,6 +489,54 @@ app.patch('/api/animals/:id/status', async (req, res) => {
     res.json({ ok: true, adoptionStatus: String(adoptionStatus).toUpperCase() });
   } catch (e) {
     console.error('PATCH /api/animals/:id/status failed:', e);
+    res.status(500).json({ error: String(e) });
+  } finally {
+    if (gateway) gateway.disconnect();
+  }
+});
+
+
+// test: remove a pet from pet_data.json
+function removePetData(animalId) {
+  let existing = [];
+  try {
+    existing = JSON.parse(fs.readFileSync(PET_DATA_PATH, 'utf8'));
+  } catch { return; }
+
+  const filtered = existing.filter((p) => p.animalId !== animalId);
+  fs.writeFileSync(PET_DATA_PATH, JSON.stringify(filtered, null, 2) + '\n', 'utf8');
+  console.log(`Removed ${animalId} from pet_data.json`);
+}
+
+
+// DELETE: delete an animal from ledger + JSON + image
+app.delete('/api/animals/:id', async (req, res) => {
+  let gateway;
+  try {
+    const { org, userId } = getAuth(req);
+    const { gateway: g, contract } = await connect({
+      org, userId, channelName: CHANNEL, chaincodeName: CC,
+    });
+    gateway = g;
+
+    const animalId = req.params.id;
+
+    // Delete from ledger (public + private data)
+    await contract.submitTransaction('DeleteAnimal', animalId);
+
+    // Remove from pet_data.json
+    removePetData(animalId);
+
+    // Remove image if exists
+    const imgPath = path.join(PET_IMAGES_DIR, `${animalId}.jpg`);
+    if (fs.existsSync(imgPath)) {
+      fs.unlinkSync(imgPath);
+      console.log(`Deleted image: ${imgPath}`);
+    }
+
+    res.json({ ok: true, deleted: animalId });
+  } catch (e) {
+    console.error('DELETE /api/animals/:id failed:', e);
     res.status(500).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();

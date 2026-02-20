@@ -115,6 +115,8 @@ const translations = {
     "form.microchip":     "Microchip",
     "form.vaccinated":    "Vaccinated",
     "form.notes":         "Notes",
+    "form.image":         "Photo",
+    "form.imageHint":     "JPG/PNG, max 10 MB",
     "form.submit":        "Create Pet",
     "form.submitting":    "Creating...",
 
@@ -161,13 +163,18 @@ const translations = {
     "status.confirm":     "Are you sure?",
     "status.updating":    "Updating...",
     "status.updated":     "Status updated!",
+
+    // Delete pet
+    "delete.button":      "Delete",
+    "delete.confirm":     "Are you sure you want to delete this pet? This cannot be undone.",
+    "delete.deleting":    "Deleting...",
   },
 
   // not so perfect but understandable for survey!
   ja: {
     // Layout / Nav 
     "nav.brand":          "pawLedger",
-    "nav.subtitle":       "ペットの里親",
+    "nav.subtitle":       "パウレッジャー",
     "nav.home":           "ホーム",
     "nav.pets":           "ペット一覧",
     "nav.logout":         "ログアウト",
@@ -231,7 +238,7 @@ const translations = {
     "pets.staffOnly":     "スタッフのみ",
     "pets.searchPlaceholder": "🔍名前で検索...",
     "pets.allStatuses":   "すべてのステータス",
-    "pets.available":     "利用可能",
+    "pets.available":     "保護可能",
     "pets.reserved":      "予約済み",
     "pets.adopted":       "譲渡済み",
     "pets.createSuccess": "ペットが正常に作成されました！",
@@ -277,6 +284,8 @@ const translations = {
     "form.microchip":     "マイクロチップ",
     "form.vaccinated":    "ワクチン接種",
     "form.notes":         "メモ",
+    "form.image":         "写真",
+    "form.imageHint":     "JPG/PNG、最大10MB",
     "form.submit":        "ペットを登録",
     "form.submitting":    "作成中...",
 
@@ -323,6 +332,11 @@ const translations = {
     "status.confirm":     "本当によろしいですか？",
     "status.updating":    "更新中...",
     "status.updated":     "ステータスが更新されました！",
+
+    // Delete pet
+    "delete.button":      "削除",
+    "delete.confirm":     "このペットを削除してもよろしいですか？この操作は元に戻せません。",
+    "delete.deleting":    "削除中...",
   },
 };
 

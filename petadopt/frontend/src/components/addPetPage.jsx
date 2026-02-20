@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PetForm from "./petForm"; 
-import { apiPost } from "./api"; 
+import { apiPost, apiUploadImage } from "./api"; 
 import { useTranslation } from "../i18n/LanguageContext";
 
 
@@ -9,12 +9,16 @@ export default function AddPetPage() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
-  async function handleCreatePet(form) {
+  async function handleCreatePet(form, imageFile) {
     setSubmitting(true);
     setMessage("");
 
     try {
       await apiPost("/api/animals", form);
+      // Upload image if provided (off-chain, optional)
+      if (imageFile) {
+        await apiUploadImage(form.animalId, imageFile);
+      }
       setMessage(t("addPet.success"));
     } catch (err) {
       setMessage(t("addPet.fail") + err.message);

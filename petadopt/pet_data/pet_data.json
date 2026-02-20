@@ -33,18 +33,20 @@
     "shelterId": "shelter B",
     "microchipNumber": "",
     "vaccination": "true",
-    "notes": ""
+    "notes": "",
+    "adoptionStatus": "ADOPTED"
   },
   {
     "animalId": "test001",
     "name": "test",
     "species": "cat",
-    "breed": "test",
+    "breed": "mix",
     "gender": "FEMALE",
     "age": "4",
     "shelterId": "test001",
     "microchipNumber": "123456789098765",
     "vaccination": "true",
-    "notes": ""
+    "notes": "",
+    "adoptionStatus": "RESERVED"
   }
 ]

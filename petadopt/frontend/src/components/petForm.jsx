@@ -4,6 +4,8 @@ import { useTranslation } from "../i18n/LanguageContext";
 
 export default function PetForm({ onSubmit, submitting }) {
   const { t } = useTranslation();
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [form, setForm] = useState({
     animalId: "",
     name: "",
@@ -17,6 +19,14 @@ export default function PetForm({ onSubmit, submitting }) {
     notes: "",
   });
 
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  }
+
   function Set(key, value) {
     setForm((p) => ({ ...p, [key]: value }));
   }
@@ -26,7 +36,7 @@ export default function PetForm({ onSubmit, submitting }) {
       className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm"
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit(form);
+        onSubmit(form, imageFile);
       }}
     >
       <div className="grid gap-4 md:grid-cols-2">
@@ -123,6 +133,19 @@ export default function PetForm({ onSubmit, submitting }) {
             onChange={(e) => Set("notes", e.target.value)}
             rows={3}
           />
+        </Field>
+
+        <Field label={t("form.image")} wide>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm file:mr-3 file:rounded-lg file:border-0 file:bg-purple-50 file:px-3 file:py-1 file:text-sm file:font-semibold file:text-purple-700 hover:file:bg-purple-100"
+          />
+          <p className="mt-1 text-xs text-gray-400">{t("form.imageHint")}</p>
+          {imagePreview && (
+            <img src={imagePreview} alt="Preview" className="mt-2 h-32 w-auto rounded-xl object-cover border border-gray-200" />
+          )}
         </Field>
       </div>
 

@@ -1,6 +1,6 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { apiGet, apiPut, apiPatch } from "../lib/api";
+import { apiGet, apiPut, apiPatch, apiDelete, apiUploadImage } from "../lib/api";
 import { getSession } from "../lib/session";
 import { useTranslation } from "../i18n/LanguageContext";
 
@@ -15,6 +15,7 @@ function statusBadge(status) {
 
 export default function PetDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const session = getSession();
   const role = session?.role;
@@ -30,6 +31,9 @@ export default function PetDetails() {
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState("");
   const [statusSaving, setStatusSaving] = useState(false);
+  const [editImageFile, setEditImageFile] = useState(null);
+  const [editImagePreview, setEditImagePreview] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   function loadPet() {
     setError("");
@@ -65,8 +69,13 @@ export default function PetDetails() {
     setNotice("");
     try {
       await apiPut(`/api/animals/${id}`, form);
+      if (editImageFile) {
+        await apiUploadImage(id, editImageFile);
+      }
       setNotice(t("edit.success"));
       setEditing(false);
+      setEditImageFile(null);
+      setEditImagePreview(null);
       setTimeout(() => setNotice(""), 2500);
       await loadPet();
     } catch (e) {
@@ -93,9 +102,26 @@ export default function PetDetails() {
     }
   }
 
+  async function handleDelete() {
+    if (!confirm(t("delete.confirm"))) return;
+    setDeleting(true);
+    setError("");
+    try {
+      await apiDelete(`/api/animals/${id}`);
+      navigate("/pets", { replace: true });
+    } catch (e) {
+      setError(e?.message ?? String(e));
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
+
+  const statusMap = { AVAILABLE: t("pets.available"), RESERVED: t("pets.reserved"), ADOPTED: t("pets.adopted") };
+  const statusLabel = (s) => statusMap[(s ?? "").toUpperCase()] ?? s;
 
   if (loading)
     return (
@@ -146,7 +172,25 @@ export default function PetDetails() {
         </div>
       )}
 
-      <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[var(--border)] bg-white overflow-hidden shadow-sm">
+        {/* ── Pet Image ── */}
+        <div className="w-full overflow-hidden bg-gray-100">
+          <img
+            src={`/pet_images/${pet.animalId}.jpg`}
+            alt={pet.name ?? t("detail.unnamed")}
+            className="w-full max-h-[28rem] object-contain"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+              e.currentTarget.parentElement.classList.add("flex", "items-center", "justify-center");
+              const span = document.createElement("span");
+              span.textContent = "🐾";
+              span.className = "text-7xl opacity-30";
+              e.currentTarget.parentElement.appendChild(span);
+            }}
+          />
+        </div>
+
+        <div className="p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="text-2xl font-extrabold tracking-tight text-gray-900">
@@ -159,15 +203,24 @@ export default function PetDetails() {
 
           <div className="flex items-center gap-2">
             <span className={statusBadge(pet.adoptionStatus ?? t("detail.unknown"))}>
-              {pet.adoptionStatus ?? t("detail.unknown")}
+              {statusLabel(pet.adoptionStatus) ?? t("detail.unknown")}
             </span>
             {isStaff && !editing && (
-              <button
-                onClick={() => setEditing(true)}
-                className="rounded-full border border-purple-200 bg-purple-50 px-4 py-1 text-xs font-bold text-purple-700 hover:bg-purple-100 transition"
-              >
-                ✏️ {t("edit.title")}
-              </button>
+              <>
+                <button
+                  onClick={() => setEditing(true)}
+                  className="rounded-full border border-purple-200 bg-purple-50 px-4 py-1 text-xs font-bold text-purple-700 hover:bg-purple-100 transition"
+                >
+                  ✏️ {t("edit.title")}
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="rounded-full border border-red-200 bg-red-50 px-4 py-1 text-xs font-bold text-red-700 hover:bg-red-100 disabled:opacity-50 transition"
+                >
+                  {deleting ? t("delete.deleting") : `🗑️ ${t("delete.button")}`}
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -213,6 +266,7 @@ export default function PetDetails() {
             )}
           </div>
         )}
+      </div>
       </div>
 
       {/* ── Edit Form (staff only) ── */}
@@ -277,6 +331,26 @@ export default function PetDetails() {
               rows={3}
               className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm"
             />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-600 mb-1">{t("form.image")}</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const f = e.target.files[0];
+                if (f) {
+                  setEditImageFile(f);
+                  setEditImagePreview(URL.createObjectURL(f));
+                }
+              }}
+              className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-purple-50 file:px-3 file:py-1 file:text-sm file:font-semibold file:text-purple-700 hover:file:bg-purple-100"
+            />
+            <p className="mt-1 text-xs text-gray-400">{t("form.imageHint")}</p>
+            {editImagePreview && (
+              <img src={editImagePreview} alt="Preview" className="mt-2 h-24 w-auto rounded-xl object-cover border border-gray-200" />
+            )}
           </div>
 
           <div className="flex gap-3 pt-2">

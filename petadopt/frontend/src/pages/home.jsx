@@ -89,9 +89,10 @@ export default function Home() {
         </div>
 
         {/* Hero image */}
-        <div className="overflow-hidden rounded-3xl bg-gray-100">
-          <img src="/hero.jpg" alt="Pets" className="h-full w-full object-cover" />
-        </div>
+        <div
+          className="rounded-3xl bg-gray-100 bg-cover bg-center min-h-[300px]"
+          style={{ backgroundImage: "url('/hero.jpg')" }}
+        />
       </div>
 
       {/* FEATURES */}

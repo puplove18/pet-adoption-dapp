@@ -13,9 +13,10 @@ function badgeClass(status) {
 export default function PetCard({ pet }) {
   const { t } = useTranslation();
   const status = pet.adoptionStatus ?? "UNKNOWN";
+  const statusLabel = { AVAILABLE: t("pets.available"), RESERVED: t("pets.reserved"), ADOPTED: t("pets.adopted") }[status.toUpperCase()] ?? status;
 
-  // off-chain image by ID
-  const imageUrl = pet?.animalId ? `/pets/${pet.animalId}.jpg` : "/placeholder.jpg";
+  // off-chain image by ID (served from pet_data/images via backend)
+  const imageUrl = pet?.animalId ? `/pet_images/${pet.animalId}.jpg` : null;
 
   // age display
   const age = pet?.age === -1 || pet?.age === "-1" ? t("card.unknown") : (pet?.age ?? "—");
@@ -24,14 +25,25 @@ export default function PetCard({ pet }) {
     <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
       {/* IMAGE */}
       <div className="h-48 w-full overflow-hidden bg-gray-100">
-        <img
-          src={imageUrl}
-          alt={pet?.name ?? t("card.unnamed")}
-          className="h-full w-full object-cover transition hover:scale-105"
-          onError={(e) => {
-            e.currentTarget.src = "/placeholder.jpg";
-          }}
-        />
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={pet?.name ?? t("card.unnamed")}
+            className="h-full w-full object-cover transition hover:scale-105"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+              e.currentTarget.parentElement.classList.add("flex", "items-center", "justify-center");
+              const span = document.createElement("span");
+              span.textContent = "🐾";
+              span.className = "text-6xl opacity-30";
+              e.currentTarget.parentElement.appendChild(span);
+            }}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="text-6xl opacity-30">🐾</span>
+          </div>
+        )}
       </div>
 
       {/* BODY */}
@@ -49,7 +61,7 @@ export default function PetCard({ pet }) {
             </div>
           </div>
 
-          <span className={badgeClass(status)}>{status}</span>
+          <span className={badgeClass(status)}>{statusLabel}</span>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
