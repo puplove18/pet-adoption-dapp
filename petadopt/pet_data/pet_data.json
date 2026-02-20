@@ -1,15 +1,15 @@
 [
   {
-  "animalId": "dog001",
-  "name": "Mochi",
-  "species": "dog",
-  "breed": "shiba",
-  "gender": "male",
-  "age": "3",
-  "shelterId": "shelter A",
-  "microchipNumber": "123456789012345",
-  "vaccination": "true",
-  "notes": "Healthy"
+    "animalId": "dog001",
+    "name": "Mochi",
+    "species": "dog",
+    "breed": "shiba",
+    "gender": "male",
+    "age": "3",
+    "shelterId": "shelter A",
+    "microchipNumber": "123456789012345",
+    "vaccination": "true",
+    "notes": "Healthy"
   },
   {
     "animalId": "cat001",
@@ -20,18 +20,31 @@
     "shelterId": "shelter A",
     "microchipNumber": "987654321098765",
     "vaccination": "false",
-    "notes": "Needs vaccine update ASAP"
+    "notes": "Needs vaccine update ASAP",
+    "adoptionStatus": "AVAILABLE"
   },
   {
     "animalId": "dog002",
-    "name": "N/A",
+    "name": "",
     "species": "dog",
     "breed": "German Shepherd",
     "gender": "female",
-    "age": "unknown",
+    "age": "",
     "shelterId": "shelter B",
-    "microchipNumber": "000000000000000",
-    "vaccination": "false",
-    "notes": "Needs vaccine update ASAP"
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": ""
+  },
+  {
+    "animalId": "test001",
+    "name": "test",
+    "species": "cat",
+    "breed": "test",
+    "gender": "FEMALE",
+    "age": "4",
+    "shelterId": "test001",
+    "microchipNumber": "123456789098765",
+    "vaccination": "true",
+    "notes": ""
   }
 ]

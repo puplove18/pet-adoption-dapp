@@ -6,46 +6,7 @@ const cors = require('cors');
 const { Gateway, Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const path = require('path');
-
-const { buildCAClient, registerAndEnrollUser, enrollAdmin } =
-  require('../../hyperledger/fabric-samples/test-application/javascript/CAUtil.js');
-const { buildCCPOrg1, buildWallet } =
-  require('../../hyperledger/fabric-samples/test-application/javascript/AppUtil.js');
-
-const channelName = 'mychannel';
-const chaincodeName = 'adoption';
-const mspOrg1 = 'Org1MSP';
-
-const walletPath = path.join(__dirname, 'wallet');
-const userId = 'appUser2'; // keep for now
-
-async function connect() {
-  const ccp = buildCCPOrg1();
-  const caClient = buildCAClient(FabricCAServices, ccp, 'ca.org1.example.com');
-  const wallet = await buildWallet(Wallets, walletPath);
-
-  await enrollAdmin(caClient, wallet, mspOrg1);
-
-  // don’t crash if CA already has it registered
-  try {
-    await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'org1.department1');
-  } catch (e) {
-    if (!String(e).includes('already registered')) throw e;
-  }
-
-  const gateway = new Gateway();
-  await gateway.connect(ccp, {
-    wallet,
-    identity: userId,
-    discovery: { enabled: true, asLocalhost: true },
-  });
-
-  const network = await gateway.getNetwork(channelName);
-  const contract = network.getContract(chaincodeName);
-
-  return { gateway, contract };
-}
-
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
@@ -53,79 +14,451 @@ app.use(express.json());
 // for the image uploads
 app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 
+const CHANNEL = 'mychannel';
+const CC = 'adoption';
 
-// TEST: list animals
+function getAuth(req) {
+  const org = req.header('x-org');
+  const userId = req.header('x-user');
+  if (!org || !userId) throw new Error('Missing headers: x-org and x-user');
+  return { org, userId };
+}
+
+
+const { buildCAClient, registerAndEnrollUser, enrollAdmin } =
+  require('../../hyperledger/fabric-samples/test-application/javascript/CAUtil.js');
+//const { buildCCPOrg1, buildWallet } =
+//  require('../../hyperledger/fabric-samples/test-application/javascript/AppUtil.js');
+
+
+// this is for the login and rfegistration
+function orgConfig(org) {
+  const base = path.resolve(__dirname, '../../hyperledger/fabric-samples/test-network/organizations/peerOrganizations');
+
+  const map = {
+    org1: {
+      mspId: 'Org1MSP',
+      caName: 'ca.org1.example.com',
+      ccpPath: path.join(base, 'org1.example.com', 'connection-org1.json'),
+      affiliation: 'org1.department1',
+    },
+    org2: {
+      mspId: 'Org2MSP',
+      caName: 'ca.org2.example.com',
+      ccpPath: path.join(base, 'org2.example.com', 'connection-org2.json'),
+      affiliation: 'org2.department1',
+    },
+    org3: {
+      mspId: 'Org3MSP',
+      caName: 'ca.org3.example.com',
+      ccpPath: path.join(base, 'org3.example.com', 'connection-org3.json'),
+      affiliation: 'org3.department1',
+    },
+  };
+
+  const config = map[String(org).toLowerCase()];
+  if (!config) throw new Error("Unknown org: " + org);
+  return config;
+}
+
+function roleForOrg(org) {
+  org = String(org).toLowerCase();
+  if (org === "org1") return "adoption_center";
+  if (org === "org2") return "veterinarian";
+  if (org === "org3") return "adopter";
+  throw new Error("Unknown org: " + org);
+}
+
+
+function readCCP(ccpPath) {
+  const json = fs.readFileSync(ccpPath, 'utf8');
+  return JSON.parse(json);
+}
+
+function walletDir() {
+  return path.join(__dirname, 'wallet');
+}
+
+
+async function checkIdentity({org, userId}) {
+  const config = orgConfig(org);
+  const ccp = readCCP(config.ccpPath);
+
+  const caClient = buildCAClient(FabricCAServices, ccp, config.caName)
+  const wallet = await Wallets.newFileSystemWallet(walletDir());
+
+  // Enroll admin with an org-specific label so admins from different orgs
+  // don't collide in the shared wallet (the upstream enrollAdmin always uses "admin")
+  const adminLabel = `admin_${org}`;
+  const existingAdmin = await wallet.get(adminLabel);
+  if (!existingAdmin) {
+    const enrollment = await caClient.enroll({ enrollmentID: 'admin', enrollmentSecret: 'adminpw' });
+    const x509Identity = {
+      credentials: {
+        certificate: enrollment.certificate,
+        privateKey: enrollment.key.toBytes(),
+      },
+      mspId: config.mspId,
+      type: 'X.509',
+    };
+    await wallet.put(adminLabel, x509Identity);
+    console.log(`Enrolled admin for ${org} as ${adminLabel}`);
+  }
+
+  // if the user already exists in wallet, 
+  const existing = await wallet.get(userId);
+  if (existing) return {wallet, ccp, mspId: config.mspId, role: roleForOrg(org)};
+
+  // otherwise, register and enroll via the org-specific admin
+  try {
+    const adminIdentity = await wallet.get(adminLabel);
+    const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
+    const adminUser = await provider.getUserContext(adminIdentity, adminLabel);
+
+    let secret;
+    try {
+      secret = await caClient.register({
+        affiliation: config.affiliation,
+        enrollmentID: userId,
+        role: 'client',
+      }, adminUser);
+    } catch (regErr) {
+      // If the identity was already registered in a previous session (wallet
+      // was cleared but CA still knows the user), reset its enrollment secret
+      // and re-enroll with the new secret.
+      if (String(regErr).includes('is already registered')) {
+        console.log(`User ${userId} already registered in CA — resetting enrollment secret`);
+        const idService = caClient.newIdentityService();
+        const newSecret = `${userId}_reset_${Date.now()}`;
+        await idService.update(userId, {
+          enrollmentSecret: newSecret,
+          maxEnrollments: -1,
+        }, adminUser);
+        secret = newSecret;
+      } else {
+        throw regErr;
+      }
+    }
+
+    const enrollment = await caClient.enroll({
+      enrollmentID: userId,
+      enrollmentSecret: secret,
+    });
+
+    const x509Identity = {
+      credentials: {
+        certificate: enrollment.certificate,
+        privateKey: enrollment.key.toBytes(),
+      },
+      mspId: config.mspId,
+      type: 'X.509',
+    };
+    await wallet.put(userId, x509Identity);
+    console.log(`Registered and enrolled user ${userId} for ${org}`);
+  } catch (e) {
+    throw new Error(`Failed to register user: ${userId} in ${org}: ${String(e)}`);
+  }
+  return {wallet, ccp, mspId: config.mspId, role: roleForOrg(org)};
+}
+
+async function connect({ org, userId, channelName, chaincodeName }) {
+  const {wallet, ccp, mspId} = await checkIdentity({org, userId});
+  
+  const gateway = new Gateway();
+  await gateway.connect(ccp, {
+    wallet,
+    identity: userId,
+    discovery: { enabled: true, asLocalhost: true },
+  });
+  
+  const network = await gateway.getNetwork(channelName);
+  const contract = network.getContract(chaincodeName);
+  return { gateway, contract, mspId };
+}
+
+//module.exports = { connect, checkIdentity, roleForOrg };
+
+
+// login endpoint after registration
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { org, userId } = req.body || {};
+    if (!org || !userId) return res.status(400).json({ error: 'org and userId required' });
+
+    const info = await checkIdentity({ org, userId });
+    res.json({ ok: true, org, userId, role: info.role, mspId: info.mspId });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+
+
+// LIST: get all animals (for UI)
 app.get('/api/animals', async (req, res) => {
   let gateway;
   try {
-    const connection = await connect();
-    gateway = connection.gateway;
+    const { org, userId } = getAuth(req);
 
-    const result = await connection.contract.evaluateTransaction('GetAllAnimals');
-    const animals = JSON.parse(result.toString() || '[]');
-    
-    res.json(animals);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: String(error) });
+    const { gateway: g, contract } = await connect({
+      org,
+      userId,
+      channelName: CHANNEL,
+      chaincodeName: CC,
+    });
+    gateway = g;
+
+    const result = await contract.evaluateTransaction('GetAllAnimals');
+    res.json(JSON.parse(result.toString() || '[]'));
+  } catch (e) {
+    console.error("GET /api/animals failed:", e);
+    res.status(500).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
 });
 
-// TEST: get animal by ID
+
+// GET: animal by ID
 app.get('/api/animals/:id', async (req, res) => {
   let gateway;
   try {
-    const connection = await connect();
-    gateway = connection.gateway;
-    
-    const result = await connection.contract.evaluateTransaction('GetAnimalByID', req.params.id);
-    const animal = JSON.parse(result.toString() || 'null');
+    const { org, userId } = getAuth(req);
 
-    const pet = animals.find((a) => String(a.animalId) === String(req.params.id));
-    if (!pet) return res.status(404).json({ error: 'Not found' });
+    const { gateway: g, contract } = await connect({
+      org,
+      userId,
+      channelName: CHANNEL,
+      chaincodeName: CC,
+    });
+    gateway = g;
+
+    const result = await contract.evaluateTransaction('ReadAsset', req.params.id);
+    const animal = JSON.parse(result.toString() || 'null');
+    if (!animal) return res.status(404).json({ error: "Not found" });
+
+    // Merge private data for Org1 & Org2 (PDC members)
+    if (org === 'org1' || org === 'org2') {
+      try {
+        const pvt = await contract.evaluateTransaction('ReadPrivateAnimal', req.params.id);
+        const pvtData = JSON.parse(pvt.toString() || '{}');
+        animal.microchipNumber = pvtData.microchipNumber ?? null;
+        animal.vaccination = pvtData.vaccination ?? null;
+        animal.notes = pvtData.notes ?? null;
+        animal._hasPrivateData = true;
+      } catch (pvtErr) {
+        console.warn('Private data not available for', req.params.id, String(pvtErr));
+        animal._hasPrivateData = false;
+      }
+    }
 
     res.json(animal);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: String(error) });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
 });
 
-// TEST: create animal from UI
+
+// ── Helper: persist a new pet to pet_data.json so it survives redeployment ──
+const PET_DATA_PATH = path.join(__dirname, '../pet_data/pet_data.json');
+
+function appendToPetData(pet) {
+  let existing = [];
+  try {
+    existing = JSON.parse(fs.readFileSync(PET_DATA_PATH, 'utf8'));
+  } catch { /* file missing or corrupt – start fresh */ }
+
+  // Don't duplicate if the same animalId already exists
+  if (existing.some((p) => p.animalId === pet.animalId)) return;
+
+  existing.push(pet);
+  fs.writeFileSync(PET_DATA_PATH, JSON.stringify(existing, null, 2) + '\n', 'utf8');
+  console.log(`Persisted ${pet.animalId} to pet_data.json`);
+}
+
+
+// POST: create animal
 app.post('/api/animals', async (req, res) => {
   let gateway;
   try {
-    const conn = await connect();
-    gateway = conn.gateway;
-    const c = conn.contract;
+    const { org, userId } = getAuth(req);
 
-    const {
-      animalId, name, species, breed, gender, age,
-      shelterId, microchipNumber, vaccination, notes
-    } = req.body;
+    const { gateway: g, contract } = await connect({
+      org,
+      userId,
+      channelName: CHANNEL,
+      chaincodeName: CC,
+    });
+    gateway = g;
 
-    await c.submitTransaction(
+    const { animalId, name, species, breed, gender, age, shelterId, microchipNumber, vaccination, notes } = req.body;
+
+    await contract.submitTransaction(
       'CreateAnimal',
       String(animalId),
       String(name ?? 'Unknown'),
       String(species ?? 'Unknown'),
       String(breed ?? 'Unknown'),
-      String(gender),
-      String(age ?? 'Unknown'),
+      String(gender ?? ''),
+      String(age ?? ''),
       String(shelterId ?? 'Unknown'),
       String(microchipNumber ?? 'Unknown'),
       String(vaccination ?? 'Unknown'),
       String(notes ?? 'Unknown')
     );
 
+    // Persist to JSON so the pet survives teardown + redeploy
+    appendToPetData({
+      animalId,
+      name: name ?? 'Unknown',
+      species: species ?? 'Unknown',
+      breed: breed ?? 'Unknown',
+      gender: gender ?? '',
+      age: String(age ?? ''),
+      shelterId: shelterId ?? 'Unknown',
+      microchipNumber: microchipNumber ?? 'Unknown',
+      vaccination: String(vaccination ?? 'Unknown'),
+      notes: notes ?? 'Unknown',
+    });
+
     res.status(201).json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: String(err) });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: String(e) });
+  } finally {
+    if (gateway) gateway.disconnect();
+  }
+});
+
+
+
+// ── Helper: update a pet in pet_data.json ──
+function updatePetData(animalId, updates) {
+  let existing = [];
+  try {
+    existing = JSON.parse(fs.readFileSync(PET_DATA_PATH, 'utf8'));
+  } catch { return; }
+
+  const idx = existing.findIndex((p) => p.animalId === animalId);
+  if (idx === -1) return;
+
+  existing[idx] = { ...existing[idx], ...updates };
+  fs.writeFileSync(PET_DATA_PATH, JSON.stringify(existing, null, 2) + '\n', 'utf8');
+  console.log(`Updated ${animalId} in pet_data.json`);
+}
+
+
+// PUT: update animal (public + private data)
+app.put('/api/animals/:id', async (req, res) => {
+  let gateway;
+  try {
+    const { org, userId } = getAuth(req);
+    const { gateway: g, contract } = await connect({
+      org, userId, channelName: CHANNEL, chaincodeName: CC,
+    });
+    gateway = g;
+
+    const animalId = req.params.id;
+    const { name, species, breed, gender, age, shelterId, adoptionStatus,
+            microchipNumber, vaccination, notes } = req.body;
+
+    // Update public data on ledger
+    await contract.submitTransaction(
+      'UpdateAsset',
+      String(animalId),
+      String(name ?? ''),
+      String(species ?? ''),
+      String(breed ?? ''),
+      String(gender ?? ''),
+      String(age ?? ''),
+      String(shelterId ?? ''),
+      String(adoptionStatus ?? 'AVAILABLE')
+    );
+
+    // Update private data on ledger (only Org1 & Org2 can write to PDC)
+    const role = req.header('x-org');
+    if (role === 'org1' || role === 'org2') {
+      try {
+        await contract.submitTransaction(
+          'UpdatePrivateAnimal',
+          String(animalId),
+          String(microchipNumber ?? ''),
+          String(vaccination ?? ''),
+          String(notes ?? '')
+        );
+      } catch (pdcErr) {
+        console.warn('Private data update skipped:', String(pdcErr));
+      }
+    }
+
+    // Persist to JSON
+    updatePetData(animalId, {
+      name: name ?? undefined,
+      species: species ?? undefined,
+      breed: breed ?? undefined,
+      gender: gender ?? undefined,
+      age: String(age ?? ''),
+      shelterId: shelterId ?? undefined,
+      microchipNumber: microchipNumber ?? undefined,
+      vaccination: String(vaccination ?? ''),
+      notes: notes ?? undefined,
+    });
+
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('PUT /api/animals/:id failed:', e);
+    res.status(500).json({ error: String(e) });
+  } finally {
+    if (gateway) gateway.disconnect();
+  }
+});
+
+
+// PATCH: update only adoption status (quick workflow buttons)
+app.patch('/api/animals/:id/status', async (req, res) => {
+  let gateway;
+  try {
+    const { org, userId } = getAuth(req);
+    const { gateway: g, contract } = await connect({
+      org, userId, channelName: CHANNEL, chaincodeName: CC,
+    });
+    gateway = g;
+
+    const animalId = req.params.id;
+    const { adoptionStatus } = req.body;
+
+    const valid = ['AVAILABLE', 'RESERVED', 'ADOPTED'];
+    if (!valid.includes(String(adoptionStatus).toUpperCase())) {
+      return res.status(400).json({ error: `Invalid status. Must be one of: ${valid.join(', ')}` });
+    }
+
+    // Read current public data first
+    const result = await contract.evaluateTransaction('ReadAsset', animalId);
+    const current = JSON.parse(result.toString());
+
+    // Re-submit with only status changed
+    await contract.submitTransaction(
+      'UpdateAsset',
+      String(animalId),
+      String(current.name ?? ''),
+      String(current.species ?? ''),
+      String(current.breed ?? ''),
+      String(current.gender ?? ''),
+      String(current.age ?? ''),
+      String(current.shelterId ?? ''),
+      String(adoptionStatus).toUpperCase()
+    );
+
+    // Persist to JSON
+    updatePetData(animalId, { adoptionStatus: String(adoptionStatus).toUpperCase() });
+
+    res.json({ ok: true, adoptionStatus: String(adoptionStatus).toUpperCase() });
+  } catch (e) {
+    console.error('PATCH /api/animals/:id/status failed:', e);
+    res.status(500).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }

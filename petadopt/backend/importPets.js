@@ -15,7 +15,7 @@ const channelName = 'mychannel';
 const chaincodeName = 'adoption';
 const mspOrg1 = 'Org1MSP';
 const walletPath = path.join(__dirname, 'wallet');
-const userId = 'appUser2';
+const userId = 'importUser';
 
 async function connect() {
   const ccp = buildCCPOrg1();

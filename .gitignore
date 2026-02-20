@@ -24,3 +24,6 @@ crypto-config/
 *.key
 .env
 .vscode/
+
+# Runtime PID files
+*.pid
