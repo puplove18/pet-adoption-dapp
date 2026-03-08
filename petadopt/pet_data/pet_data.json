@@ -39,7 +39,7 @@
   {
     "animalId": "test001",
     "name": "test",
-    "species": "cat",
+    "species": "dog",
     "breed": "mix",
     "gender": "FEMALE",
     "age": "4",

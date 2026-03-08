@@ -14,6 +14,7 @@ export default function PetCard({ pet }) {
   const { t } = useTranslation();
   const status = pet.adoptionStatus ?? "UNKNOWN";
   const statusLabel = { AVAILABLE: t("pets.available"), RESERVED: t("pets.reserved"), ADOPTED: t("pets.adopted") }[status.toUpperCase()] ?? status;
+  const detailPath = pet?.animalId ? `/pets/${pet.animalId}` : "/pets";
 
   // off-chain image by ID (served from pet_data/images via backend)
   const imageUrl = pet?.animalId ? `/pet_images/${pet.animalId}.jpg` : null;
@@ -22,7 +23,10 @@ export default function PetCard({ pet }) {
   const age = pet?.age === -1 || pet?.age === "-1" ? t("card.unknown") : (pet?.age ?? "—");
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+    <Link
+      to={detailPath}
+      className="block overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2"
+    >
       {/* IMAGE */}
       <div className="h-48 w-full overflow-hidden bg-gray-100">
         {imageUrl ? (
@@ -50,12 +54,9 @@ export default function PetCard({ pet }) {
       <div className="p-5">
         <div className="flex items-start justify-between">
           <div>
-            <Link
-              className="text-lg font-extrabold text-gray-900 hover:underline"
-              to={`/pets/${pet.animalId}`}
-            >
+            <div className="text-lg font-extrabold text-gray-900">
               {pet.name ?? t("card.unnamed")}
-            </Link>
+            </div>
             <div className="mt-1 text-sm text-gray-500">
               {pet.species} • {pet.breed || "—"}
             </div>
@@ -69,7 +70,7 @@ export default function PetCard({ pet }) {
           <Mini k={t("card.age")} v={age} />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

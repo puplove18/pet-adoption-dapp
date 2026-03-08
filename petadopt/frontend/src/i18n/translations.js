@@ -164,6 +164,12 @@ const translations = {
     "status.updating":    "Updating...",
     "status.updated":     "Status updated!",
 
+    // Confirmation dialog
+    "confirm.statusTitle": "Change status?",
+    "confirm.deleteTitle": "Delete pet?",
+    "confirm.cancel":      "Cancel",
+    "confirm.proceed":     "Confirm",
+
     // Delete pet
     "delete.button":      "Delete",
     "delete.confirm":     "Are you sure you want to delete this pet? This cannot be undone.",
@@ -332,6 +338,12 @@ const translations = {
     "status.confirm":     "本当によろしいですか？",
     "status.updating":    "更新中...",
     "status.updated":     "ステータスが更新されました！",
+
+    // Confirmation dialog
+    "confirm.statusTitle": "ステータスを変更しますか？",
+    "confirm.deleteTitle": "このペットを削除しますか？",
+    "confirm.cancel":      "キャンセル",
+    "confirm.proceed":     "実行",
 
     // Delete pet
     "delete.button":      "削除",

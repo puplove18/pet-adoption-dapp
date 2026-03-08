@@ -34,6 +34,20 @@ export default function PetDetails() {
   const [editImageFile, setEditImageFile] = useState(null);
   const [editImagePreview, setEditImagePreview] = useState(null);
   const [deleting, setDeleting] = useState(false);
+    // Confirmation dialog box customized
+  const [confirmDialog, setConfirmDialog] = useState({
+    open: false,
+    type: null,
+    nextStatus: null,
+  });
+
+  function closeConfirmDialog() {
+    setConfirmDialog({
+      open: false,
+      type: null,
+      nextStatus: null,
+    });
+  }
 
   function loadPet() {
     setError("");
@@ -85,8 +99,7 @@ export default function PetDetails() {
     }
   }
 
-  async function handleStatusChange(newStatus) {
-    if (!confirm(t("status.confirm"))) return;
+  async function runStatusChange(newStatus) {
     setStatusSaving(true);
     setError("");
     setNotice("");
@@ -102,8 +115,7 @@ export default function PetDetails() {
     }
   }
 
-  async function handleDelete() {
-    if (!confirm(t("delete.confirm"))) return;
+  async function runDelete() {
     setDeleting(true);
     setError("");
     try {
@@ -113,6 +125,36 @@ export default function PetDetails() {
       setError(e?.message ?? String(e));
     } finally {
       setDeleting(false);
+    }
+  }
+
+  // Confirmation dialog 
+  function handleStatusChange(newStatus) {
+    setConfirmDialog({
+      open: true,
+      type: "status",
+      nextStatus: newStatus,
+    });
+  }
+
+  function handleDelete() {
+    setConfirmDialog({
+      open: true,
+      type: "delete",
+      nextStatus: null,
+    });
+  }
+
+  async function confirmDialogAction() {
+    const { type, nextStatus } = confirmDialog;
+    closeConfirmDialog();
+
+    if (type === "status" && nextStatus) {
+      await runStatusChange(nextStatus);
+    }
+
+    if (type === "delete") {
+      await runDelete();
     }
   }
 
@@ -155,6 +197,39 @@ export default function PetDetails() {
 
   return (
     <div className="space-y-5">
+      {confirmDialog.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-white p-6 shadow-xl">
+            <h2 className="text-lg font-extrabold text-gray-900">
+              {confirmDialog.type === "delete" ? t("confirm.deleteTitle") : t("confirm.statusTitle")}
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              {confirmDialog.type === "delete" ? t("delete.confirm") : t("status.confirm")}
+            </p>
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={closeConfirmDialog}
+                className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-50"
+              >
+                {t("confirm.cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDialogAction}
+                className={
+                  confirmDialog.type === "delete"
+                    ? "rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white hover:bg-red-700"
+                    : "rounded-xl bg-purple-600 px-4 py-2 text-sm font-bold text-white hover:bg-purple-700"
+                }
+              >
+                {confirmDialog.type === "delete" ? t("delete.button") : t("confirm.proceed")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Link to="/pets" className="text-sm font-semibold text-gray-600 hover:text-gray-900">
         {t("detail.back")}
       </Link>
