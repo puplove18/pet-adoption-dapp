@@ -7,6 +7,7 @@ const { Gateway, Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const path = require('path');
 const fs = require('fs');
+const util = require('util');
 const multer = require('multer');
 
 const app = express();
@@ -87,7 +88,78 @@ function getAuth(req) {
 }
 
 function isAuthorizationError(err) {
-  return String(err).includes('Unauthorized userId');
+  return extractErrorMessage(err).toLowerCase().includes('unauthorized userid');
+}
+
+// prevent overwritten data i hope this works
+function isConflictError(err) {
+  const message = extractErrorMessage(err).toLowerCase();
+  return message.includes('already exists') || message.includes('already assigned');
+}
+
+function isValidationError(err) {
+  const message = extractErrorMessage(err).toLowerCase();
+  return message.includes('microchip number must be exactly 15 digits');
+}
+
+function extractPeerMessage(text) {
+  if (!text) return "";
+
+  const patterns = [
+    /message=([^\n\r]+?(?:already exists|already assigned)[^\n\r]*)/i,
+    /message:\s*["']([^"']+?(?:already exists|already assigned)[^"']*)["']/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = String(text).match(pattern);
+    if (match?.[1]) return match[1].trim();
+  }
+
+  return "";
+}
+
+function extractErrorMessage(err) {
+  const messages = [];
+  const rawMessage = typeof err?.message === 'string' ? err.message.trim() : '';
+  const stringified = String(err);
+  const inspected = util.inspect(err, { depth: 8, breakLength: 140 });
+
+  const extractedPeerMessage = extractPeerMessage(rawMessage)
+    || extractPeerMessage(stringified)
+    || extractPeerMessage(inspected);
+  if (extractedPeerMessage) {
+    messages.push(extractedPeerMessage);
+  }
+
+  if (rawMessage) {
+    messages.push(rawMessage);
+  }
+
+  if (Array.isArray(err?.responses)) {
+    for (const response of err.responses) {
+      const peerMessage = response?.response?.message ?? response?.message;
+      if (typeof peerMessage === 'string' && peerMessage.trim()) {
+        messages.push(peerMessage.trim());
+      }
+    }
+  }
+
+  if (Array.isArray(err?.errors)) {
+    for (const nestedError of err.errors) {
+      if (typeof nestedError === 'string' && nestedError.trim()) {
+        messages.push(nestedError.trim());
+      } else if (typeof nestedError?.message === 'string' && nestedError.message.trim()) {
+        messages.push(nestedError.message.trim());
+      }
+    }
+  }
+
+  const uniqueMessages = [...new Set(messages)];
+  if (uniqueMessages.length > 0) {
+    return uniqueMessages.join(' | ');
+  }
+
+  return stringified !== '[object Object]' ? stringified : inspected;
 }
 
 function parseFabricBoolean(bufferValue) {
@@ -99,6 +171,48 @@ function parseFabricBoolean(bufferValue) {
   } catch {
     return false;
   }
+}
+
+// MC number be 15 digits or empty
+function normalizeMicrochipNumber(value) {
+  const normalized = String(value ?? '').trim();
+  if (!normalized) return '';
+
+  const lower = normalized.toLowerCase();
+  if (lower === 'null' || lower === 'n/a' || lower === 'unknown') return '';
+
+  return normalized;
+}
+
+function isValidMicrochipNumber(value) {
+  const normalized = normalizeMicrochipNumber(value);
+  return normalized === '' || /^\d{15}$/.test(normalized);
+}
+
+async function findAnimalIdByMicrochip(contract, microchipNumber, excludeAnimalId = '') {
+  const normalizedMicrochip = normalizeMicrochipNumber(microchipNumber);
+  if (!normalizedMicrochip) return '';
+
+  const result = await contract.evaluateTransaction('GetAllAnimals');
+  const animals = JSON.parse(result.toString() || '[]');
+
+  for (const animal of animals) {
+    if (!animal?.animalId || animal.animalId === excludeAnimalId) continue;
+
+    try {
+      const privateResult = await contract.evaluateTransaction('ReadPrivateAnimal', animal.animalId);
+      const privateAnimal = JSON.parse(privateResult.toString() || '{}');
+      const existingMicrochip = normalizeMicrochipNumber(privateAnimal?.microchipNumber);
+
+      if (existingMicrochip === normalizedMicrochip) {
+        return animal.animalId;
+      }
+    } catch {
+      // Ignore pets without private data while scanning for duplicate microchips.
+    }
+  }
+
+  return '';
 }
 
 async function isUserAllowedOnChain({ wallet, ccp, adminLabel, org, userId }) {
@@ -336,7 +450,7 @@ app.get('/api/animals', async (req, res) => {
   } catch (e) {
     console.error("GET /api/animals failed:", e);
     const status = isAuthorizationError(e) ? 403 : 500;
-    res.status(status).json({ error: String(e) });
+    res.status(status).json({ error: extractErrorMessage(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -380,8 +494,8 @@ app.get('/api/animals/:id', async (req, res) => {
     res.json(animal);
   } catch (e) {
     console.error(e);
-    const status = isAuthorizationError(e) ? 403 : 500;
-    res.status(status).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : isValidationError(e) ? 400 : isConflictError(e) ? 409 : 500;
+    res.status(status).json({ error: extractErrorMessage(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -425,6 +539,16 @@ app.post('/api/animals', async (req, res) => {
 
     const { animalId, name, species, breed, gender, age, shelterId, microchipNumber, vaccination, notes } = req.body;
 
+    // if not 15 digits or empty, error messgae
+    if (!isValidMicrochipNumber(microchipNumber)) {
+      return res.status(400).json({ error: 'Microchip number must be exactly 15 digits.' });
+    }
+
+    const duplicateAnimalId = await findAnimalIdByMicrochip(contract, microchipNumber);
+    if (duplicateAnimalId) {
+      return res.status(409).json({ error: `Microchip number is already assigned to animal '${duplicateAnimalId}'.` });
+    }
+
     await contract.submitTransaction(
       'CreateAnimal',
       String(animalId),
@@ -458,8 +582,8 @@ app.post('/api/animals', async (req, res) => {
     res.status(201).json({ ok: true });
   } catch (e) {
     console.error(e);
-    const status = isAuthorizationError(e) ? 403 : 500;
-    res.status(status).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : isValidationError(e) ? 400 : isConflictError(e) ? 409 : 500;
+    res.status(status).json({ error: extractErrorMessage(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -496,6 +620,29 @@ app.put('/api/animals/:id', async (req, res) => {
     const animalId = req.params.id;
     const { name, species, breed, gender, age, shelterId, adoptionStatus,
             microchipNumber, vaccination, notes } = req.body;
+    const role = req.header('x-org');
+
+    if (!isValidMicrochipNumber(microchipNumber)) {
+      return res.status(400).json({ error: 'Microchip number must be exactly 15 digits.' });
+    }
+
+    if (role === 'org1' || role === 'org2') {
+      const duplicateAnimalId = await findAnimalIdByMicrochip(contract, microchipNumber, animalId);
+      if (duplicateAnimalId) {
+        return res.status(409).json({ error: `Microchip number is already assigned to animal '${duplicateAnimalId}'.` });
+      }
+    }
+
+    // Update private data on ledger (only Org1 & Org2 can write to PDC)
+    if (role === 'org1' || role === 'org2') {
+      await contract.submitTransaction(
+        'UpdatePrivateAnimal',
+        String(animalId),
+        String(microchipNumber ?? ''),
+        String(vaccination ?? ''),
+        String(notes ?? '')
+      );
+    }
 
     // Update public data on ledger
     await contract.submitTransaction(
@@ -509,22 +656,6 @@ app.put('/api/animals/:id', async (req, res) => {
       String(shelterId ?? ''),
       String(adoptionStatus ?? 'AVAILABLE')
     );
-
-    // Update private data on ledger (only Org1 & Org2 can write to PDC)
-    const role = req.header('x-org');
-    if (role === 'org1' || role === 'org2') {
-      try {
-        await contract.submitTransaction(
-          'UpdatePrivateAnimal',
-          String(animalId),
-          String(microchipNumber ?? ''),
-          String(vaccination ?? ''),
-          String(notes ?? '')
-        );
-      } catch (pdcErr) {
-        console.warn('Private data update skipped:', String(pdcErr));
-      }
-    }
 
     txLog('UPDATE', org, userId, animalId, `${name}`);
 
@@ -544,8 +675,8 @@ app.put('/api/animals/:id', async (req, res) => {
     res.json({ ok: true });
   } catch (e) {
     console.error('PUT /api/animals/:id failed:', e);
-    const status = isAuthorizationError(e) ? 403 : 500;
-    res.status(status).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : isValidationError(e) ? 400 : isConflictError(e) ? 409 : 500;
+    res.status(status).json({ error: extractErrorMessage(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -605,7 +736,7 @@ app.patch('/api/animals/:id/status', async (req, res) => {
   } catch (e) {
     console.error('PATCH /api/animals/:id/status failed:', e);
     const status = isAuthorizationError(e) ? 403 : 500;
-    res.status(status).json({ error: String(e) });
+    res.status(status).json({ error: extractErrorMessage(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -656,7 +787,7 @@ app.delete('/api/animals/:id', async (req, res) => {
   } catch (e) {
     console.error('DELETE /api/animals/:id failed:', e);
     const status = isAuthorizationError(e) ? 403 : 500;
-    res.status(status).json({ error: String(e) });
+    res.status(status).json({ error: extractErrorMessage(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }

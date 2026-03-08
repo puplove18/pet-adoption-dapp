@@ -49,10 +49,14 @@ export default function PetDetails() {
     });
   }
 
+  function normalizeMicrochip(value) {
+    return String(value ?? "").replace(/\D/g, "").trim();
+  }
+
   function loadPet() {
     setError("");
     setLoading(true);
-    apiGet(`/api/animals/${id}`)
+    return apiGet(`/api/animals/${id}`)
       .then((data) => {
         setPet(data);
         setForm({
@@ -67,13 +71,17 @@ export default function PetDetails() {
           vaccination: String(data.vaccination ?? ""),
           notes: data.notes ?? "",
         });
+        return data;
       })
-      .catch((e) => setError(e?.message ?? "Failed to load pet details."))
+      .catch((e) => {
+        setError(e?.message ?? "Failed to load pet details.");
+        throw e;
+      })
       .finally(() => setLoading(false));
   }
 
   useEffect(() => {
-    loadPet();
+    loadPet().catch(() => {});
   }, [id]);
 
   async function handleSave(e) {
@@ -86,14 +94,21 @@ export default function PetDetails() {
       if (editImageFile) {
         await apiUploadImage(id, editImageFile);
       }
+      const updatedPet = await loadPet();
+      const expectedMicrochip = normalizeMicrochip(form.microchipNumber);
+      const savedMicrochip = normalizeMicrochip(updatedPet?.microchipNumber);
+
+      if (expectedMicrochip !== savedMicrochip) {
+        throw new Error(t("edit.microchipNotSaved"));
+      }
+
       setNotice(t("edit.success"));
       setEditing(false);
       setEditImageFile(null);
       setEditImagePreview(null);
       setTimeout(() => setNotice(""), 2500);
-      await loadPet();
     } catch (e) {
-      setError(e?.message ?? String(e));
+      setError(getEditErrorMessage(e?.message ?? String(e)));
     } finally {
       setSaving(false);
     }
@@ -162,6 +177,24 @@ export default function PetDetails() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  function getEditErrorMessage(rawMessage) {
+    const normalized = String(rawMessage ?? "").toLowerCase();
+
+    if (normalized.includes("microchip") && normalized.includes("could not be saved")) {
+      return t("edit.microchipNotSaved");
+    }
+
+    if (normalized.includes("microchip") && (normalized.includes("already assigned") || normalized.includes("already exists"))) {
+      return t("register.duplicateMicrochip");
+    }
+
+    if (normalized.includes("microchip") && normalized.includes("15 digits")) {
+      return t("register.invalidMicrochip");
+    }
+
+    return rawMessage;
+  }
+
   const statusMap = { AVAILABLE: t("pets.available"), RESERVED: t("pets.reserved"), ADOPTED: t("pets.adopted") };
   const statusLabel = (s) => statusMap[(s ?? "").toUpperCase()] ?? s;
 
@@ -181,7 +214,7 @@ export default function PetDetails() {
       </div>
     );
 
-  if (error)
+  if (error && !pet)
     return (
       <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-800">
         {error}
@@ -384,7 +417,20 @@ export default function PetDetails() {
                 <option value="ADOPTED">{t("pets.adopted")}</option>
               </select>
             </div>
-            <EditField label={t("edit.microchip")} value={form.microchipNumber} onChange={(v) => handleChange("microchipNumber", v)} />
+            <div>
+              <label className="block text-xs font-bold text-gray-600 mb-1">{t("edit.microchip")}</label>
+              <input
+                type="text"
+                value={form.microchipNumber}
+                onChange={(e) => handleChange("microchipNumber", e.target.value.replace(/\D/g, "").slice(0, 15))}
+                inputMode="numeric"
+                maxLength={15}
+                pattern="\d{15}"
+                title={t("form.microchipHint")}
+                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm"
+              />
+              <p className="mt-1 text-xs text-gray-400">{t("form.microchipHint")}</p>
+            </div>
             <div>
               <label className="block text-xs font-bold text-gray-600 mb-1">{t("edit.vaccinated")}</label>
               <select
@@ -448,7 +494,7 @@ export default function PetDetails() {
       )}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm">
+        <div className={`rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm ${!isStaff ? "lg:col-span-2" : ""}`}>
           <h2 className="text-lg font-extrabold text-gray-900">{t("detail.overview")}</h2>
           <div className="mt-4 grid gap-2 text-sm">
             <KV k={t("detail.id")} v={pet.animalId} />
@@ -460,40 +506,40 @@ export default function PetDetails() {
             <KV k={t("detail.docType")} v={pet.docType} />
           </div>
         </div>
-
-        {/* ── Private Data (staff) / Restricted notice (non-staff) ── */}
-        {isStaff && pet._hasPrivateData ? (
-          <div className="rounded-3xl border border-indigo-200 bg-indigo-50/30 p-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-extrabold text-gray-900">🔒 {t("private.title")}</h2>
-              <span className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700">
-                {t("private.badge")}
-              </span>
+        
+        {/* Private data section (staff only) vs adopter */}
+        {isStaff && (
+          pet._hasPrivateData ? (
+            <div className="rounded-3xl border border-indigo-200 bg-indigo-50/30 p-6 shadow-sm">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-extrabold text-gray-900">🔒 {t("private.title")}</h2>
+                <span className="rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700">
+                  {t("private.badge")}
+                </span>
+              </div>
+              <div className="mt-4 grid gap-2 text-sm">
+                <KV k={t("private.microchip")} v={pet.microchipNumber ?? t("private.unknown")} />
+                <KV
+                  k={t("private.vaccination")}
+                  v={
+                    pet.vaccination === true ? t("private.yes")
+                    : pet.vaccination === false ? t("private.no")
+                    : t("private.unknown")
+                  }
+                />
+              </div>
+              <div className="mt-4">
+                <h3 className="text-xs font-bold text-gray-500 mb-1">{t("private.notes")}</h3>
+                <p className="rounded-2xl bg-white px-3 py-2 text-sm text-gray-700 border border-indigo-100">
+                  {pet.notes ?? t("private.noNotes")}
+                </p>
+              </div>
             </div>
-            <div className="mt-4 grid gap-2 text-sm">
-              <KV k={t("private.microchip")} v={pet.microchipNumber ?? t("private.unknown")} />
-              <KV
-                k={t("private.vaccination")}
-                v={
-                  pet.vaccination === true ? t("private.yes")
-                  : pet.vaccination === false ? t("private.no")
-                  : t("private.unknown")
-                }
-              />
+          ) : (
+            <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
+              <p className="text-sm text-gray-500">{t("private.unavailable")}</p>
             </div>
-            <div className="mt-4">
-              <h3 className="text-xs font-bold text-gray-500 mb-1">{t("private.notes")}</h3>
-              <p className="rounded-2xl bg-white px-3 py-2 text-sm text-gray-700 border border-indigo-100">
-                {pet.notes ?? t("private.noNotes")}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 shadow-sm flex items-center justify-center">
-            <p className="text-sm text-gray-500 text-center">
-              🔒 {t("private.restricted")}
-            </p>
-          </div>
+          )
         )}
       </div>
     </div>

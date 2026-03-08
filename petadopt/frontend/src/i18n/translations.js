@@ -8,6 +8,7 @@ const translations = {
     "nav.subtitle":       "Pet Adoption",
     "nav.home":           "Home",
     "nav.pets":           "Pets",
+    "nav.registerPet":    "Register Pet",
     "nav.logout":         "Logout",
 
     // Roles 
@@ -113,6 +114,7 @@ const translations = {
     "form.shelter":       "Shelter",
     "form.shelterPlaceholder": "e.g., ShelterA",
     "form.microchip":     "Microchip",
+    "form.microchipHint": "15 digits, numbers only",
     "form.vaccinated":    "Vaccinated",
     "form.notes":         "Notes",
     "form.image":         "Photo",
@@ -123,6 +125,18 @@ const translations = {
     // Add Pet Page 
     "addPet.success":     "Pet successfully stored on blockchain.",
     "addPet.fail":        "Failed to create pet: ",
+
+    // Register page
+    "register.title":       "Register a new pet",
+    "register.desc":        "Create a pet record and upload an optional profile photo.",
+    "register.back":        "← Back to pets",
+    "register.success":     "Pet created successfully.",
+    "register.staffOnly":   "Adoption center only",
+    "register.deniedTitle": "Access restricted",
+    "register.deniedBody":  "Only adoption center users can register new pets.",
+    "register.duplicateId": "That animal ID is already registered. Please use a different ID.",
+    "register.duplicateMicrochip": "That microchip number is already registered to another pet.",
+    "register.invalidMicrochip": "Microchip number must be exactly 15 digits.",
 
     // Edit Pet (Detail page) 
     "edit.title":         "Edit Pet",
@@ -139,6 +153,7 @@ const translations = {
     "edit.save":          "Save Changes",
     "edit.saving":        "Saving...",
     "edit.success":       "Pet updated successfully!",
+    "edit.microchipNotSaved": "The microchip number could not be saved. Please check if it is unique.",
     "edit.cancel":        "Cancel",
     "edit.staffOnly":     "Staff only",
     "edit.yes":           "Yes",
@@ -155,6 +170,9 @@ const translations = {
     "private.unknown":    "Unknown",
     "private.noNotes":    "No notes provided.",
     "private.restricted": "Private data is restricted to authorized staff.",
+    "private.unavailable": "No private data is available for this pet yet.",
+    "private.summaryTitle": "Verified record",
+    "private.summaryBody": "Identification and medical records are maintained and verified by authorized staff.",
 
     // Status workflow buttons
     "status.reserve":     "Reserve",
@@ -183,6 +201,7 @@ const translations = {
     "nav.subtitle":       "パウレッジャー",
     "nav.home":           "ホーム",
     "nav.pets":           "ペット一覧",
+    "nav.registerPet":    "ペット登録",
     "nav.logout":         "ログアウト",
 
     // Roles 
@@ -288,6 +307,7 @@ const translations = {
     "form.shelter":       "保護施設",
     "form.shelterPlaceholder": "例: ShelterA",
     "form.microchip":     "マイクロチップ",
+    "form.microchipHint": "15桁の数字で入力してください",
     "form.vaccinated":    "ワクチン接種",
     "form.notes":         "メモ",
     "form.image":         "写真",
@@ -298,6 +318,18 @@ const translations = {
     // Add Pet Page 
     "addPet.success":     "ペットがブロックチェーンに正常に保存されました。",
     "addPet.fail":        "ペットの作成に失敗しました: ",
+
+    // Register page
+    "register.title":       "新しいペットを登録",
+    "register.desc":        "ペット情報を登録し、必要に応じてプロフィール写真をアップロードできます。",
+    "register.back":        "← ペット一覧に戻る",
+    "register.success":     "ペットが正常に登録されました。",
+    "register.staffOnly":   "保護施設のみ",
+    "register.deniedTitle": "アクセス制限",
+    "register.deniedBody":  "新しいペットを登録できるのは保護施設ユーザーのみです。",
+    "register.duplicateId": "その動物IDはすでに登録されています。別のIDを使用してください。",
+    "register.duplicateMicrochip": "そのマイクロチップ番号は別のペットにすでに登録されています。",
+    "register.invalidMicrochip": "マイクロチップ番号は15桁で入力してください。",
 
     // Edit Pet (Detail page) 
     "edit.title":         "ペット編集",
@@ -314,6 +346,7 @@ const translations = {
     "edit.save":          "変更を保存",
     "edit.saving":        "保存中...",
     "edit.success":       "情報が正常に更新されました！",
+    "edit.microchipNotSaved": "マイクロチップ番号を保存できませんでした。他のペットと重複していないか確認してください。",
     "edit.cancel":        "キャンセル",
     "edit.staffOnly":     "スタッフのみ",
     "edit.yes":           "はい",
@@ -330,6 +363,9 @@ const translations = {
     "private.unknown":    "不明",
     "private.noNotes":    "メモはありません。",
     "private.restricted": "プライベートデータは権限のあるスタッフのみ閲覧可能です。",
+    "private.unavailable": "このペットのプライベートデータはまだ登録されていません。",
+    "private.summaryTitle": "確認済み記録",
+    "private.summaryBody": "個体識別情報や医療記録は、権限のあるスタッフによって管理・確認されています。",
 
     // Status workflow buttons
     "status.reserve":     "予約する",

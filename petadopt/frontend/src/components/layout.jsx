@@ -48,9 +48,14 @@ export default function Layout() {
             <NavLink to="/" end className={navClass}>
               {t("nav.home")}
             </NavLink>
-            <NavLink to="/pets" className={navClass}>
+            <NavLink to="/pets" end className={navClass}>
               {t("nav.pets")}
             </NavLink>
+            {session?.role === "adoption_center" && (
+              <NavLink to="/pets/register" className={navClass}>
+                {t("nav.registerPet")}
+              </NavLink>
+            )}
 
             {/* User info and logout */}
             <div className="ml-4 flex items-center gap-3 border-l border-gray-200 pl-4">

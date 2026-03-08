@@ -111,8 +111,13 @@ export default function PetForm({ onSubmit, submitting }) {
           <input
             className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-200"
             value={form.microchipNumber}
-            onChange={(e) => Set("microchipNumber", e.target.value)}
+            onChange={(e) => Set("microchipNumber", e.target.value.replace(/\D/g, "").slice(0, 15))}
+            inputMode="numeric"
+            maxLength={15}
+            pattern="\d{15}"
+            title={t("form.microchipHint")}
           />
+          <p className="mt-1 text-xs text-gray-400">{t("form.microchipHint")}</p>
         </Field>
 
         <Field label={t("form.vaccinated")}>

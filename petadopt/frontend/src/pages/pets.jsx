@@ -1,10 +1,10 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { apiGet, apiPost } from "../lib/api";
+import { apiGet } from "../lib/api";
 import { getSession } from "../lib/session";
 import { useTranslation } from "../i18n/LanguageContext";
 
 import PetCard from "../components/petCard";
-import PetForm from "../components/petForm";
 
 
 export default function Pets() {
@@ -18,9 +18,7 @@ export default function Pets() {
 
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
@@ -35,23 +33,6 @@ export default function Pets() {
       setError(e?.message ?? String(e));
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function CreatePet(form) {
-    setSubmitting(true);
-    setError("");
-    setNotice("");
-    try {
-      await apiPost("/api/animals", form);
-      setNotice(t("pets.createSuccess"));
-      // disappear after 2.5 seconds
-      setTimeout(() => setNotice(""), 2500);
-      await load();
-    } catch (e) {
-      setError(e?.message ?? String(e));
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -78,32 +59,28 @@ export default function Pets() {
           </p>
         </div>
 
-        {/* Current role display */}
-        <div className="rounded-3xl border border-[var(--border)] bg-white p-4 shadow-sm">
-          <div className="text-xs font-extrabold text-gray-600">{t("pets.yourRole")}</div>
-          <div className="mt-2 text-sm font-bold text-gray-900">
-            {roleDisplay[role] || role}
-          </div>
-          <div className="mt-1 text-xs text-gray-500">
-            {isStaff ? t("pets.staffAccess") : t("pets.publicAccess")}
+        <div className="flex flex-wrap items-end gap-3">
+          {canAddPets && (
+            <Link
+              to="/pets/register"
+              className="inline-flex items-center justify-center rounded-2xl bg-purple-600 px-5 py-3 text-sm font-extrabold text-white shadow hover:bg-purple-700"
+            >
+              {t("nav.registerPet")}
+            </Link>
+          )}
+
+          {/* Current role display */}
+          <div className="rounded-3xl border border-[var(--border)] bg-white p-4 shadow-sm">
+            <div className="text-xs font-extrabold text-gray-600">{t("pets.yourRole")}</div>
+            <div className="mt-2 text-sm font-bold text-gray-900">
+              {roleDisplay[role] || role}
+            </div>
+            <div className="mt-1 text-xs text-gray-500">
+              {isStaff ? t("pets.staffAccess") : t("pets.publicAccess")}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Staff-only create form */}
-      {canAddPets && (
-        <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-extrabold text-gray-900">{t("pets.createTitle")}</h2>
-            <span className="rounded-full border border-purple-200 bg-purple-50 px-3 py-1 text-xs font-bold text-purple-700">
-              {t("pets.staffOnly")}
-            </span>
-          </div>
-          <div className="mt-4">
-            <PetForm onSubmit={CreatePet} submitting={submitting} />
-          </div>
-        </div>
-      )}
 
       {/* Error */}
       {error && (
@@ -131,15 +108,6 @@ export default function Pets() {
           <option value="ADOPTED">{t("pets.adopted")}</option>
         </select>
       </div>
-
-      {/* Message */}
-      {notice && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
-          {notice}
-        </div>
-      )}
-
-
 
       {loading ? (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

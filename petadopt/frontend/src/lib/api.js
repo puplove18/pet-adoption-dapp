@@ -26,6 +26,19 @@ async function parseErrorMessage(res) {
     backendError = "";
   }
 
+  const normalizedError = backendError.toLowerCase();
+  if (normalizedError.includes("animal id") && normalizedError.includes("already exists")) {
+    return backendError;
+  }
+
+  if (normalizedError.includes("microchip") && (normalizedError.includes("already assigned") || normalizedError.includes("already exists"))) {
+    return backendError;
+  }
+
+  if (normalizedError.includes("microchip") && normalizedError.includes("15 digits")) {
+    return backendError;
+  }
+
   if (res.status === 403) {
     if (backendError.includes("Unauthorized userId")) {
       return "That user ID is not approved for this organization yet. Try one of the suggested IDs.";
@@ -35,6 +48,10 @@ async function parseErrorMessage(res) {
 
   if (res.status === 401) {
     return "Please log in again.";
+  }
+
+  if (res.status === 409) {
+    return backendError || "That record already exists.";
   }
 
   if (res.status >= 500) {
