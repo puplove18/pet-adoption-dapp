@@ -2,6 +2,7 @@ import { Link, Outlet, NavLink, useNavigate } from "react-router-dom";
 import { getSession, clearSession } from "../lib/session";
 import { useTranslation } from "../i18n/LanguageContext";
 import LanguageToggle from "./languageToggle";
+import { PawPrint } from "lucide-react";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -32,7 +33,9 @@ export default function Layout() {
       <header className="sticky top-0 z-10 border-b border-[var(--border)] bg-white/70 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-pink-400 to-purple-500" />
+            <div className="h-9 w-9 flex items-center justify-center rounded-xl bg-gradient-to-br from-pink-400 to-purple-500">
+              <PawPrint size={28} className="text-white drop-shadow"/>
+            </div>
             <div className="leading-tight">
               <div className="text-sm font-extrabold tracking-tight text-gray-900">
                 {t("nav.brand")}

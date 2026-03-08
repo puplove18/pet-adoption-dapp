@@ -4,7 +4,8 @@
   "main": "backend.js",
   "scripts": {
     "start": "node backend.js",
-    "import": "node importPets.js"
+    "import": "node importPets.js",
+    "seed:users": "node importUser.js"
   },
   "keywords": [],
   "author": "",

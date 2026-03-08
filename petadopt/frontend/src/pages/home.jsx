@@ -14,7 +14,7 @@ export default function Home() {
   // Check if user has staff permissions (adoption center / vet)
   const isStaff = role === "adoption_center" || role === "veterinarian";
 
-  // Featured pets rendered with ledger
+  // List pets on chain
   const [pets, setPets] = useState([]);
   const [loadingPets, setLoadingPets] = useState(true);
 
@@ -23,7 +23,7 @@ export default function Home() {
       try {
         const data = await apiGet("/api/animals");
         setPets(Array.isArray(data) ? data : []);
-      } catch {
+      } catch (e) {
         setPets([]);
       } finally {
         setLoadingPets(false);
@@ -77,7 +77,7 @@ export default function Home() {
               {t("home.browsePets")}
             </Link>
 
-            {(role === "adoption_center" || role === "veterinarian") && (
+            {role === "adoption_center" && (
               <Link
                 className="inline-flex items-center justify-center rounded-2xl border border-purple-200 bg-white px-6 py-3 text-sm font-extrabold text-purple-700 shadow-sm hover:bg-purple-50"
                 to="/pets"

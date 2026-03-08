@@ -175,6 +175,10 @@ npm install
 info "Importing pet data..."
 npm run import || warn "Pet data import failed — you might need to import manually later"
 
+# Seed allowed login identities on-chain
+info "Seeding allowed login user IDs on-chain..."
+npm run seed:users || warn "Allowed user seeding failed — login checks may reject all users"
+
 info "Starting backend server on port 4000..."
 node backend.js &
 BACKEND_PID=$!

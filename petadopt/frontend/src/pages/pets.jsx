@@ -14,7 +14,7 @@ export default function Pets() {
 
   // Check if user has staff permissions (adoption center or vet)
   const isStaff = role === "adoption_center" || role === "veterinarian";
-  const canAddPets = role === "adoption_center" || role === "veterinarian"; // Adoption centers and vets can add pets
+  const canAddPets = role === "adoption_center"; // Only adoption centers can register new pets
 
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);

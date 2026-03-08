@@ -21,7 +21,7 @@
     "microchipNumber": "987654321098765",
     "vaccination": "false",
     "notes": "Needs vaccine update ASAP",
-    "adoptionStatus": "AVAILABLE"
+    "adoptionStatus": "RESERVED"
   },
   {
     "animalId": "dog002",
@@ -34,7 +34,7 @@
     "microchipNumber": "",
     "vaccination": "true",
     "notes": "",
-    "adoptionStatus": "ADOPTED"
+    "adoptionStatus": "AVAILABLE"
   },
   {
     "animalId": "test001",
@@ -54,12 +54,24 @@
     "name": "coco",
     "species": "hamster",
     "breed": "",
-    "gender": "MALE",
+    "gender": "male",
     "age": "2",
     "shelterId": "sample1",
     "microchipNumber": "",
     "vaccination": "false",
     "notes": "",
-    "adoptionStatus": "RESERVED"
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "ohio",
+    "name": "ohio2",
+    "species": "dog",
+    "breed": "shiba inu",
+    "gender": "MALE",
+    "age": "2",
+    "shelterId": "kyoto",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": ""
   }
 ]

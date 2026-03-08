@@ -40,19 +40,87 @@ const imageUpload = multer({
 const CHANNEL = 'mychannel';
 const CC = 'adoption';
 
+function logTs() {
+  return new Date().toISOString().replace('T', ' ').slice(0, 19);
+}
+
 // Transaction Log on terminal as I was told to have it somewhere 
 function txLog(action, org, userId, animalId, extra = '') {
-  const ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
   const pad = (s, n) => s.padEnd(n);
-  const line = `[${ts}] TX | ${pad(action, 10)} | ${pad(org, 4)} ${pad(userId, 12)} | ${animalId}${extra ? ' | ' + extra : ''}`;
+  const line = `[${logTs()}] TX  | ${pad(action, 10)} | ${pad(org, 4)} ${pad(userId, 12)} | ${animalId}${extra ? ' | ' + extra : ''}`;
   console.log('\x1b[36m%s\x1b[0m', line);  // cyan color
 }
+
+function eventLog(event, org = '-', userId = '-', extra = '') {
+  const pad = (s, n) => String(s).padEnd(n);
+  const line = `[${logTs()}] EVT | ${pad(event, 10)} | ${pad(org, 4)} ${pad(userId, 12)}${extra ? ' | ' + extra : ''}`;
+  console.log('\x1b[35m%s\x1b[0m', line);  // magenta color
+}
+
+function authForLog(req) {
+  const org = req.header('x-org') || req.body?.org || '-';
+  const userId = req.header('x-user') || req.body?.userId || '-';
+  return { org, userId };
+}
+
+// Request-level terminal audit line for every API call
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api/')) return next();
+
+  const started = Date.now();
+  const { org, userId } = authForLog(req);
+  res.on('finish', () => {
+    const ms = Date.now() - started;
+    const pad = (s, n) => String(s).padEnd(n);
+    const line = `[${logTs()}] REQ | ${pad(req.method, 6)} ${pad(req.originalUrl, 24)} | ${res.statusCode} | ${pad(`${ms}ms`, 6)} | ${pad(org, 4)} ${pad(userId, 12)}`;
+    const color = res.statusCode >= 400 ? '\x1b[31m%s\x1b[0m' : '\x1b[90m%s\x1b[0m';
+    console.log(color, line);
+  });
+  next();
+});
 
 function getAuth(req) {
   const org = req.header('x-org');
   const userId = req.header('x-user');
   if (!org || !userId) throw new Error('Missing headers: x-org and x-user');
   return { org, userId };
+}
+
+function isAuthorizationError(err) {
+  return String(err).includes('Unauthorized userId');
+}
+
+function parseFabricBoolean(bufferValue) {
+  const raw = String(bufferValue?.toString?.() ?? '').trim().toLowerCase();
+  if (raw === 'true' || raw === '"true"') return true;
+  if (raw === 'false' || raw === '"false"' || raw === '') return false;
+  try {
+    return Boolean(JSON.parse(raw));
+  } catch {
+    return false;
+  }
+}
+
+async function isUserAllowedOnChain({ wallet, ccp, adminLabel, org, userId }) {
+  const gateway = new Gateway();
+  try {
+    await gateway.connect(ccp, {
+      wallet,
+      identity: adminLabel,
+      discovery: { enabled: true, asLocalhost: true },
+    });
+
+    const network = await gateway.getNetwork(CHANNEL);
+    const contract = network.getContract(CC);
+    const result = await contract.evaluateTransaction(
+      'IsUserAllowed',
+      String(org).toLowerCase(),
+      String(userId)
+    );
+    return parseFabricBoolean(result);
+  } finally {
+    gateway.disconnect();
+  }
 }
 
 
@@ -136,6 +204,24 @@ async function checkIdentity({org, userId}) {
     console.log(`Enrolled admin for ${org} as ${adminLabel}`);
   }
 
+  let allowed = false;
+  try {
+    allowed = await isUserAllowedOnChain({
+      wallet,
+      ccp,
+      adminLabel,
+      org,
+      userId,
+    });
+  } catch (authErr) {
+    throw new Error(
+      `Authorization check failed. Ensure chaincode includes IsUserAllowed and is redeployed. ${String(authErr)}`
+    );
+  }
+  if (!allowed) {
+    throw new Error(`Unauthorized userId '${userId}' for ${org}`);
+  }
+
   // if the user already exists in wallet, 
   const existing = await wallet.get(userId);
   if (existing) return {wallet, ccp, mspId: config.mspId, role: roleForOrg(org)};
@@ -217,9 +303,13 @@ app.post('/api/auth/login', async (req, res) => {
     if (!org || !userId) return res.status(400).json({ error: 'org and userId required' });
 
     const info = await checkIdentity({ org, userId });
+    eventLog('LOGIN_OK', org, userId, `role=${info.role}`);
     res.json({ ok: true, org, userId, role: info.role, mspId: info.mspId });
   } catch (e) {
-    res.status(500).json({ error: String(e) });
+    const { org = '-', userId = '-' } = req.body || {};
+    eventLog('LOGIN_FAIL', org, userId, String(e));
+    const status = isAuthorizationError(e) ? 403 : 500;
+    res.status(status).json({ error: String(e) });
   }
 });
 
@@ -240,10 +330,13 @@ app.get('/api/animals', async (req, res) => {
     gateway = g;
 
     const result = await contract.evaluateTransaction('GetAllAnimals');
-    res.json(JSON.parse(result.toString() || '[]'));
+    const animals = JSON.parse(result.toString() || '[]');
+    eventLog('LIST', org, userId, `count=${Array.isArray(animals) ? animals.length : 0}`);
+    res.json(animals);
   } catch (e) {
     console.error("GET /api/animals failed:", e);
-    res.status(500).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : 500;
+    res.status(status).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -283,10 +376,12 @@ app.get('/api/animals/:id', async (req, res) => {
       }
     }
 
+    eventLog('READ', org, userId, `${req.params.id} private=${animal._hasPrivateData === true}`);
     res.json(animal);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : 500;
+    res.status(status).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -316,6 +411,9 @@ app.post('/api/animals', async (req, res) => {
   let gateway;
   try {
     const { org, userId } = getAuth(req);
+    if (org !== 'org1') {
+      return res.status(403).json({ error: 'Only Org1 (Adoption Center) can register new pets' });
+    }
 
     const { gateway: g, contract } = await connect({
       org,
@@ -360,7 +458,8 @@ app.post('/api/animals', async (req, res) => {
     res.status(201).json({ ok: true });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : 500;
+    res.status(status).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -445,7 +544,8 @@ app.put('/api/animals/:id', async (req, res) => {
     res.json({ ok: true });
   } catch (e) {
     console.error('PUT /api/animals/:id failed:', e);
-    res.status(500).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : 500;
+    res.status(status).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -504,7 +604,8 @@ app.patch('/api/animals/:id/status', async (req, res) => {
     res.json({ ok: true, adoptionStatus: String(adoptionStatus).toUpperCase() });
   } catch (e) {
     console.error('PATCH /api/animals/:id/status failed:', e);
-    res.status(500).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : 500;
+    res.status(status).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }
@@ -554,7 +655,8 @@ app.delete('/api/animals/:id', async (req, res) => {
     res.json({ ok: true, deleted: animalId });
   } catch (e) {
     console.error('DELETE /api/animals/:id failed:', e);
-    res.status(500).json({ error: String(e) });
+    const status = isAuthorizationError(e) ? 403 : 500;
+    res.status(status).json({ error: String(e) });
   } finally {
     if (gateway) gateway.disconnect();
   }

@@ -54,7 +54,7 @@ export default function PetDetails() {
           notes: data.notes ?? "",
         });
       })
-      .catch((e) => setError(String(e)))
+      .catch((e) => setError(e?.message ?? "Failed to load pet details."))
       .finally(() => setLoading(false));
   }
 

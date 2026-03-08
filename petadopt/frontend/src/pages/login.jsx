@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiPost } from "../lib/api";
 import { setSession } from "../lib/session";
 import { useTranslation } from "../i18n/LanguageContext";
 import LanguageToggle from "../components/languageToggle";
+import { PawPrint } from "lucide-react";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,8 +13,35 @@ export default function Login() {
   const [org, setOrg] = useState("org1");
   const [userId, setUserId] = useState("center1");
   const [error, setError] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
-  // Suggest user IDs based on the selected org
+
+  // Show splash page briefly before showing the login form
+  // paw print bouncing ❤
+  useEffect(() => {
+    const timer = setTimeout(() => setShowForm(true), 2000); // 1.8s splash
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!showForm) {
+    return (
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--bg)] p-6">
+        <div className="relative w-full max-w-sm rounded-3xl border border-[var(--border)] bg-white/90 p-8 shadow-lg backdrop-blur flex flex-col items-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-400 to-purple-500 shadow-md mb-6">
+            <span className="inline-block animate-bounce" style={{animationDuration: '1.2s'}}>
+              <PawPrint size={40} className="text-white drop-shadow-lg" />
+            </span>
+          </div>
+          <div className="mt-2 text-center">
+            <div className="text-lg font-bold text-gray-900">{t("login.brand")}</div>
+            <div className="text-sm text-gray-500">{t("login.subtitle")}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Suggest user IDs for the selected org under the box
   const suggestedUsers = {
     org1: ["center1", "center2", "admin1"],
     org2: ["vet1", "vet2", "doctor1"],
@@ -21,7 +50,6 @@ export default function Login() {
 
   function handleOrgChange(newOrg) {
     setOrg(newOrg);
-    // Auto-update userId to the first suggested user for that org
     setUserId(suggestedUsers[newOrg][0]);
   }
 
@@ -30,7 +58,7 @@ export default function Login() {
     setError("");
     try {
       const data = await apiPost("/api/auth/login", { org, userId });
-      setSession(data); // {ok, org, userId, role, mspId} will be stored
+      setSession(data);
       navigate("/");
     } catch (e) {
       setError(String(e));
@@ -48,7 +76,9 @@ export default function Login() {
 
           {/* Logo/branding */}
           <div className="mb-6 flex items-center justify-center gap-3">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-pink-400 to-purple-500" />
+            <div className="h-12 w-12 flex items-center justify-center rounded-2xl bg-gradient-to-br from-pink-400 to-purple-500">
+              <PawPrint size={32} className="text-white drop-shadow" />
+            </div>
             <div className="leading-tight">
               <div className="text-xl font-extrabold tracking-tight text-gray-900">
                 {t("login.brand")}

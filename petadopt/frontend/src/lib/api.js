@@ -11,11 +11,44 @@ function authHeaders() {
   };
 }
 
+async function parseErrorMessage(res) {
+  let backendError = "";
+
+  try {
+    const contentType = res.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      const body = await res.json();
+      backendError = String(body?.error ?? "").trim();
+    } else {
+      backendError = (await res.text()).trim();
+    }
+  } catch {
+    backendError = "";
+  }
+
+  if (res.status === 403) {
+    if (backendError.includes("Unauthorized userId")) {
+      return "That user ID is not approved for this organization yet. Try one of the suggested IDs.";
+    }
+    return backendError || "You do not have permission to do that.";
+  }
+
+  if (res.status === 401) {
+    return "Please log in again.";
+  }
+
+  if (res.status >= 500) {
+    return "Server issue right now. Please try again in a moment.";
+  }
+
+  return backendError || `Request failed (${res.status}).`;
+}
+
 export async function apiGet(url) {
   const res = await fetch(url, {
     headers: { ...authHeaders() },
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new Error(await parseErrorMessage(res));
   return res.json();
 }
 
@@ -26,10 +59,7 @@ export async function apiPost(url, body) {
       , ...authHeaders() },
     body: JSON.stringify(body),
   });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`HTTP ${res.status}: ${text}`);
-  }
+  if (!res.ok) throw new Error(await parseErrorMessage(res));
   return res.json();
 }
 
@@ -39,10 +69,7 @@ export async function apiPut(url, body) {
     headers: { "Content-Type": "application/json", ...authHeaders() },
     body: JSON.stringify(body),
   });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`HTTP ${res.status}: ${text}`);
-  }
+  if (!res.ok) throw new Error(await parseErrorMessage(res));
   return res.json();
 }
 
@@ -54,10 +81,7 @@ export async function apiUploadImage(animalId, file) {
     headers: { ...authHeaders() },
     body: formData,
   });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`HTTP ${res.status}: ${text}`);
-  }
+  if (!res.ok) throw new Error(await parseErrorMessage(res));
   return res.json();
 }
 
@@ -67,10 +91,7 @@ export async function apiPatch(url, body) {
     headers: { "Content-Type": "application/json", ...authHeaders() },
     body: JSON.stringify(body),
   });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`HTTP ${res.status}: ${text}`);
-  }
+  if (!res.ok) throw new Error(await parseErrorMessage(res));
   return res.json();
 }
 
@@ -79,9 +100,6 @@ export async function apiDelete(url) {
     method: "DELETE",
     headers: { ...authHeaders() },
   });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`HTTP ${res.status}: ${text}`);
-  }
+  if (!res.ok) throw new Error(await parseErrorMessage(res));
   return res.json();
 }
