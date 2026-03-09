@@ -55,7 +55,7 @@ async function parseErrorMessage(res) {
   }
 
   if (res.status >= 500) {
-    return "Server issue right now. Please try again in a moment.";
+    return backendError || "Server issue right now. Please try again in a moment.";
   }
 
   return backendError || `Request failed (${res.status}).`;

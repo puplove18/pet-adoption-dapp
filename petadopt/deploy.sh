@@ -173,7 +173,7 @@ npm install
 
 # Import sample pet data from .json
 info "Importing pet data..."
-npm run import || warn "Pet data import failed — you might need to import manually later"
+npm run import || fail "Pet data import failed — no pets will appear in the UI until the import succeeds"
 
 # Seed allowed login identities on-chain
 info "Seeding allowed login user IDs on-chain..."

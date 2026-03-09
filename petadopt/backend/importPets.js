@@ -57,24 +57,56 @@ async function main() {
       
       // -1 is for unknown age for now, and default to false for unknown
       const age = Number.isFinite(Number(animal.age)) ? String(animal.age) : '-1';
+      const adoptionStatus = ['AVAILABLE', 'RESERVED', 'ADOPTED'].includes(String(animal.adoptionStatus ?? '').toUpperCase())
+        ? String(animal.adoptionStatus).toUpperCase()
+        : 'AVAILABLE';
       const vaccination = 
         String(animal.vaccination).toLowerCase() === 'true' ? 'true':
         String(animal.vaccination).toLowerCase() === 'false' ? 'false' :
         'false';
         
-      await contract.submitTransaction(
-        'CreateAnimal',
-        String(animal.animalId),         
-        String(animal.name ?? 'Unknown'),             
-        String(animal.species ?? 'Unknown'),
-        String(animal.breed ?? 'Unknown'),
-        String(animal.gender),
-        age,
-        String(animal.shelterId ?? 'Unknown'),
-        String(animal.microchipNumber ?? 'Unknown'),
-        vaccination,
-        String(animal.notes ?? 'Unknown')
-      );
+      try {
+        await contract.submitTransaction(
+          'CreateAnimal',
+          String(animal.animalId),         
+          String(animal.name ?? 'Unknown'),             
+          String(animal.species ?? 'Unknown'),
+          String(animal.breed ?? 'Unknown'),
+          String(animal.gender),
+          age,
+          String(animal.shelterId ?? 'Unknown'),
+          String(animal.microchipNumber ?? 'Unknown'),
+          vaccination,
+          String(animal.notes ?? 'Unknown'),
+          JSON.stringify(animal.currentOwner ?? null),
+          JSON.stringify(Array.isArray(animal.formerOwners) ? animal.formerOwners : [])
+        );
+
+        if (adoptionStatus !== 'AVAILABLE') {
+          await contract.submitTransaction(
+            'UpdateAsset',
+            String(animal.animalId),
+            String(animal.name ?? 'Unknown'),
+            String(animal.species ?? 'Unknown'),
+            String(animal.breed ?? 'Unknown'),
+            String(animal.gender ?? ''),
+            age,
+            String(animal.shelterId ?? 'Unknown'),
+            adoptionStatus,
+          );
+        }
+      } catch (e) {
+        const message = String(e);
+        if (
+          message.includes('already exists')
+          || message.includes('already assigned')
+          || message.includes('15 digits')
+        ) {
+          console.warn(`Skipping ${animal.animalId}: ${message}`);
+          continue;
+        }
+        throw e;
+      }
     }
     console.log('Import complete.');
   } finally {

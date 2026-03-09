@@ -20,7 +20,7 @@ const translations = {
     "role.adopter.full":    "Adopter",
 
     // Home page 
-    "home.badge":         "Trust + Privacy with Hyperledger Fabric",
+    "home.badge":         "Secure & Transparent Pet Records with Hyperledger Fabric",
     "home.title":         "Pet Adoption Ledger",
     "home.desc":          "Browse pets, track adoption status, and store sensitive health notes securely with role-based access.",
     "home.yourRole":      "Your role",
@@ -119,6 +119,15 @@ const translations = {
     "form.notes":         "Notes",
     "form.image":         "Photo",
     "form.imageHint":     "JPG/PNG, max 10 MB",
+    "form.currentOwner":  "Current owner",
+    "form.formerOwners":  "Former owners",
+    "form.formerOwner":   "Former owner",
+    "form.ownerName":     "Owner name",
+    "form.ownerPhone":    "Phone",
+    "form.ownerCity":     "City",
+    "form.addFormerOwner": "Add former owner",
+    "form.removeFormerOwner": "Remove",
+    "form.noFormerOwners": "No former owners added yet.",
     "form.submit":        "Create Pet",
     "form.submitting":    "Creating...",
 
@@ -158,6 +167,15 @@ const translations = {
     "edit.staffOnly":     "Staff only",
     "edit.yes":           "Yes",
     "edit.no":            "No",
+
+    // Owner sections
+    "owner.currentTitle": "Current owner",
+    "owner.formerTitle":  "Former owners",
+    "owner.name":         "Name",
+    "owner.phone":        "Phone",
+    "owner.city":         "City",
+    "owner.currentEmpty": "No current owner is registered for this pet.",
+    "owner.formerEmpty":  "No former owners are registered for this pet.",
 
     // Private Data section (detail page)
     "private.title":      "Private Data",
@@ -213,7 +231,7 @@ const translations = {
     "role.adopter.full":    "里親希望者",
 
     // Home page 
-    "home.badge":         "Hyperledger Fabricで信頼とプライバシーを実現",
+    "home.badge":         "Hyperledger Fabricで安全かつ透明性の高いペット記録管理",
     "home.title":         "ペットアドプションレッジャー",
     "home.desc":          "ペットの閲覧、保護の状況確認、あなたの役割に応じた安全な健康の管理ができます。",
     "home.yourRole":      "あなたの役割",
@@ -312,6 +330,15 @@ const translations = {
     "form.notes":         "メモ",
     "form.image":         "写真",
     "form.imageHint":     "JPG/PNG、最大10MB",
+    "form.currentOwner":  "現在の飼い主",
+    "form.formerOwners":  "以前の飼い主",
+    "form.formerOwner":   "以前の飼い主",
+    "form.ownerName":     "飼い主の名前",
+    "form.ownerPhone":    "電話番号",
+    "form.ownerCity":     "市区町村",
+    "form.addFormerOwner": "以前の飼い主を追加",
+    "form.removeFormerOwner": "削除",
+    "form.noFormerOwners": "以前の飼い主はまだ登録されていません。",
     "form.submit":        "ペットを登録",
     "form.submitting":    "作成中...",
 
@@ -351,6 +378,15 @@ const translations = {
     "edit.staffOnly":     "スタッフのみ",
     "edit.yes":           "はい",
     "edit.no":            "いいえ",
+
+    // Owner sections
+    "owner.currentTitle": "現在の飼い主",
+    "owner.formerTitle":  "以前の飼い主",
+    "owner.name":         "名前",
+    "owner.phone":        "電話番号",
+    "owner.city":         "市区町村",
+    "owner.currentEmpty": "このペットには現在の飼い主が登録されていません。",
+    "owner.formerEmpty":  "このペットには以前の飼い主が登録されていません。",
 
     // Private Data section (detail page)
     "private.title":      "プライベートデータ",

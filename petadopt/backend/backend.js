@@ -189,6 +189,54 @@ function isValidMicrochipNumber(value) {
   return normalized === '' || /^\d{15}$/.test(normalized);
 }
 
+function normalizeOwnerValue(value) {
+  const normalized = String(value ?? '').trim();
+  if (!normalized) return null;
+
+  const lower = normalized.toLowerCase();
+  if (lower === 'null' || lower === 'n/a' || lower === 'unknown') return null;
+
+  return normalized;
+}
+
+function normalizeOwnerInfo(owner) {
+  if (!owner || typeof owner !== 'object') return null;
+
+  const normalized = {
+    name: normalizeOwnerValue(owner.name),
+    phone: normalizeOwnerValue(owner.phone),
+    city: normalizeOwnerValue(owner.city),
+  };
+
+  if (!normalized.name && !normalized.phone && !normalized.city) {
+    return null;
+  }
+
+  return normalized;
+}
+
+function normalizeFormerOwnersInput(formerOwners) {
+  if (!Array.isArray(formerOwners)) return [];
+
+  return formerOwners
+    .map((owner) => normalizeOwnerInfo(owner))
+    .filter((owner) => owner !== null);
+}
+
+const SHARED_PRIVATE_ENDORSERS = ['Org1MSP', 'Org2MSP'];
+
+async function evaluateWithEndorsers(contract, txName, endorsers, ...args) {
+  const tx = contract.createTransaction(txName);
+  tx.setEndorsingOrganizations(...endorsers);
+  return tx.evaluate(...args);
+}
+
+async function submitWithEndorsers(contract, txName, endorsers, ...args) {
+  const tx = contract.createTransaction(txName);
+  tx.setEndorsingOrganizations(...endorsers);
+  return tx.submit(...args);
+}
+
 async function findAnimalIdByMicrochip(contract, microchipNumber, excludeAnimalId = '') {
   const normalizedMicrochip = normalizeMicrochipNumber(microchipNumber);
   if (!normalizedMicrochip) return '';
@@ -200,7 +248,12 @@ async function findAnimalIdByMicrochip(contract, microchipNumber, excludeAnimalI
     if (!animal?.animalId || animal.animalId === excludeAnimalId) continue;
 
     try {
-      const privateResult = await contract.evaluateTransaction('ReadPrivateAnimal', animal.animalId);
+      const privateResult = await evaluateWithEndorsers(
+        contract,
+        'ReadPrivateAnimal',
+        SHARED_PRIVATE_ENDORSERS,
+        animal.animalId,
+      );
       const privateAnimal = JSON.parse(privateResult.toString() || '{}');
       const existingMicrochip = normalizeMicrochipNumber(privateAnimal?.microchipNumber);
 
@@ -478,7 +531,12 @@ app.get('/api/animals/:id', async (req, res) => {
     // Merge private data for Org1 & Org2 (PDC members)
     if (org === 'org1' || org === 'org2') {
       try {
-        const pvt = await contract.evaluateTransaction('ReadPrivateAnimal', req.params.id);
+        const pvt = await evaluateWithEndorsers(
+          contract,
+          'ReadPrivateAnimal',
+          SHARED_PRIVATE_ENDORSERS,
+          req.params.id,
+        );
         const pvtData = JSON.parse(pvt.toString() || '{}');
         animal.microchipNumber = pvtData.microchipNumber ?? null;
         animal.vaccination = pvtData.vaccination ?? null;
@@ -487,6 +545,27 @@ app.get('/api/animals/:id', async (req, res) => {
       } catch (pvtErr) {
         console.warn('Private data not available for', req.params.id, String(pvtErr));
         animal._hasPrivateData = false;
+      }
+
+      try {
+        const currentOwnerResult = await evaluateWithEndorsers(
+          contract,
+          'ReadCurrentOwner',
+          SHARED_PRIVATE_ENDORSERS,
+          req.params.id,
+        );
+        animal.currentOwner = JSON.parse(currentOwnerResult.toString() || 'null');
+      } catch {
+        animal.currentOwner = null;
+      }
+    }
+
+    if (org === 'org1') {
+      try {
+        const formerOwnersResult = await contract.evaluateTransaction('GetFormerOwners', req.params.id);
+        animal.formerOwners = JSON.parse(formerOwnersResult.toString() || '[]');
+      } catch {
+        animal.formerOwners = [];
       }
     }
 
@@ -537,7 +616,9 @@ app.post('/api/animals', async (req, res) => {
     });
     gateway = g;
 
-    const { animalId, name, species, breed, gender, age, shelterId, microchipNumber, vaccination, notes } = req.body;
+    const { animalId, name, species, breed, gender, age, shelterId, microchipNumber, vaccination, notes, currentOwner, formerOwners } = req.body;
+    const normalizedCurrentOwner = normalizeOwnerInfo(currentOwner);
+    const normalizedFormerOwners = normalizeFormerOwnersInput(formerOwners);
 
     // if not 15 digits or empty, error messgae
     if (!isValidMicrochipNumber(microchipNumber)) {
@@ -549,8 +630,10 @@ app.post('/api/animals', async (req, res) => {
       return res.status(409).json({ error: `Microchip number is already assigned to animal '${duplicateAnimalId}'.` });
     }
 
-    await contract.submitTransaction(
+    await submitWithEndorsers(
+      contract,
       'CreateAnimal',
+      SHARED_PRIVATE_ENDORSERS,
       String(animalId),
       String(name ?? 'Unknown'),
       String(species ?? 'Unknown'),
@@ -560,7 +643,9 @@ app.post('/api/animals', async (req, res) => {
       String(shelterId ?? 'Unknown'),
       String(microchipNumber ?? 'Unknown'),
       String(vaccination ?? 'Unknown'),
-      String(notes ?? 'Unknown')
+      String(notes ?? 'Unknown'),
+      JSON.stringify(normalizedCurrentOwner),
+      JSON.stringify(normalizedFormerOwners)
     );
 
     txLog('CREATE', org, userId, animalId, `${species} / ${name}`);
@@ -574,9 +659,12 @@ app.post('/api/animals', async (req, res) => {
       gender: gender ?? '',
       age: String(age ?? ''),
       shelterId: shelterId ?? 'Unknown',
+      adoptionStatus: 'AVAILABLE',
       microchipNumber: microchipNumber ?? 'Unknown',
       vaccination: String(vaccination ?? 'Unknown'),
       notes: notes ?? 'Unknown',
+      currentOwner: normalizedCurrentOwner,
+      formerOwners: normalizedFormerOwners,
     });
 
     res.status(201).json({ ok: true });
@@ -619,58 +707,78 @@ app.put('/api/animals/:id', async (req, res) => {
 
     const animalId = req.params.id;
     const { name, species, breed, gender, age, shelterId, adoptionStatus,
-            microchipNumber, vaccination, notes } = req.body;
-    const role = req.header('x-org');
+            microchipNumber, vaccination, notes, currentOwner, formerOwners } = req.body;
+    const role = org;
+
+    if (role !== 'org1' && role !== 'org2') {
+      return res.status(403).json({ error: 'Only authorized staff can update pet records' });
+    }
 
     if (!isValidMicrochipNumber(microchipNumber)) {
       return res.status(400).json({ error: 'Microchip number must be exactly 15 digits.' });
     }
 
-    if (role === 'org1' || role === 'org2') {
-      const duplicateAnimalId = await findAnimalIdByMicrochip(contract, microchipNumber, animalId);
-      if (duplicateAnimalId) {
-        return res.status(409).json({ error: `Microchip number is already assigned to animal '${duplicateAnimalId}'.` });
-      }
+    const duplicateAnimalId = await findAnimalIdByMicrochip(contract, microchipNumber, animalId);
+    if (duplicateAnimalId) {
+      return res.status(409).json({ error: `Microchip number is already assigned to animal '${duplicateAnimalId}'.` });
     }
 
-    // Update private data on ledger (only Org1 & Org2 can write to PDC)
-    if (role === 'org1' || role === 'org2') {
-      await contract.submitTransaction(
+    if (role === 'org1') {
+      const normalizedCurrentOwner = normalizeOwnerInfo(currentOwner);
+      const normalizedFormerOwners = normalizeFormerOwnersInput(formerOwners);
+
+      await submitWithEndorsers(
+        contract,
+        'UpdateAnimalRecord',
+        SHARED_PRIVATE_ENDORSERS,
+        String(animalId),
+        String(name ?? ''),
+        String(species ?? ''),
+        String(breed ?? ''),
+        String(gender ?? ''),
+        String(age ?? ''),
+        String(shelterId ?? ''),
+        String(adoptionStatus ?? 'AVAILABLE'),
+        String(microchipNumber ?? ''),
+        String(vaccination ?? ''),
+        String(notes ?? ''),
+        JSON.stringify(normalizedCurrentOwner),
+        JSON.stringify(normalizedFormerOwners)
+      );
+
+      updatePetData(animalId, {
+        name: name ?? undefined,
+        species: species ?? undefined,
+        breed: breed ?? undefined,
+        gender: gender ?? undefined,
+        age: String(age ?? ''),
+        shelterId: shelterId ?? undefined,
+        adoptionStatus: adoptionStatus ?? undefined,
+        microchipNumber: microchipNumber ?? undefined,
+        vaccination: String(vaccination ?? ''),
+        notes: notes ?? undefined,
+        currentOwner: normalizedCurrentOwner,
+        formerOwners: normalizedFormerOwners,
+      });
+    } else {
+      await submitWithEndorsers(
+        contract,
         'UpdatePrivateAnimal',
+        SHARED_PRIVATE_ENDORSERS,
         String(animalId),
         String(microchipNumber ?? ''),
         String(vaccination ?? ''),
         String(notes ?? '')
       );
+
+      updatePetData(animalId, {
+        microchipNumber: microchipNumber ?? undefined,
+        vaccination: String(vaccination ?? ''),
+        notes: notes ?? undefined,
+      });
     }
 
-    // Update public data on ledger
-    await contract.submitTransaction(
-      'UpdateAsset',
-      String(animalId),
-      String(name ?? ''),
-      String(species ?? ''),
-      String(breed ?? ''),
-      String(gender ?? ''),
-      String(age ?? ''),
-      String(shelterId ?? ''),
-      String(adoptionStatus ?? 'AVAILABLE')
-    );
-
     txLog('UPDATE', org, userId, animalId, `${name}`);
-
-    // Persist to JSON
-    updatePetData(animalId, {
-      name: name ?? undefined,
-      species: species ?? undefined,
-      breed: breed ?? undefined,
-      gender: gender ?? undefined,
-      age: String(age ?? ''),
-      shelterId: shelterId ?? undefined,
-      microchipNumber: microchipNumber ?? undefined,
-      vaccination: String(vaccination ?? ''),
-      notes: notes ?? undefined,
-    });
 
     res.json({ ok: true });
   } catch (e) {
@@ -685,8 +793,11 @@ app.put('/api/animals/:id', async (req, res) => {
 
 // POST: upload image for a pet (off-chain, saved to pet_data/images/{id}.jpg)
 app.post('/api/animals/:id/image', imageUpload.single('image'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'No image file provided' });
   const { org: imgOrg, userId: imgUser } = getAuth(req);
+  if (imgOrg !== 'org1') {
+    return res.status(403).json({ error: 'Only Org1 (Adoption Center) can update pet images' });
+  }
+  if (!req.file) return res.status(400).json({ error: 'No image file provided' });
   txLog('IMAGE', imgOrg, imgUser, req.params.id, req.file.originalname);
   res.json({ ok: true, path: `/pet_images/${req.params.id}.jpg` });
 });
@@ -697,6 +808,9 @@ app.patch('/api/animals/:id/status', async (req, res) => {
   let gateway;
   try {
     const { org, userId } = getAuth(req);
+    if (org !== 'org1') {
+      return res.status(403).json({ error: 'Only Org1 (Adoption Center) can change adoption status' });
+    }
     const { gateway: g, contract } = await connect({
       org, userId, channelName: CHANNEL, chaincodeName: CC,
     });
@@ -761,6 +875,10 @@ app.delete('/api/animals/:id', async (req, res) => {
   let gateway;
   try {
     const { org, userId } = getAuth(req);
+    if (org !== 'org1') {
+      return res.status(403).json({ error: 'Only Org1 (Adoption Center) can delete pets' });
+    }
+
     const { gateway: g, contract } = await connect({
       org, userId, channelName: CHANNEL, chaincodeName: CC,
     });
@@ -769,7 +887,12 @@ app.delete('/api/animals/:id', async (req, res) => {
     const animalId = req.params.id;
 
     // Delete from ledger (public + private data)
-    await contract.submitTransaction('DeleteAnimal', animalId);
+    await submitWithEndorsers(
+      contract,
+      'DeleteAnimal',
+      SHARED_PRIVATE_ENDORSERS,
+      animalId,
+    );
 
     txLog('DELETE', org, userId, animalId);
 

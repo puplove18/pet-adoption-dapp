@@ -17,6 +17,12 @@ export default function PetForm({ onSubmit, submitting }) {
     microchipNumber: "",
     vaccination: "false",
     notes: "",
+    currentOwner: {
+      name: "",
+      phone: "",
+      city: "",
+    },
+    formerOwners: [],
   });
 
   function handleImageChange(e) {
@@ -29,6 +35,42 @@ export default function PetForm({ onSubmit, submitting }) {
 
   function Set(key, value) {
     setForm((p) => ({ ...p, [key]: value }));
+  }
+
+  function updateCurrentOwner(field, value) {
+    setForm((p) => ({
+      ...p,
+      currentOwner: {
+        ...p.currentOwner,
+        [field]: value,
+      },
+    }));
+  }
+
+  function addFormerOwner() {
+    setForm((p) => ({
+      ...p,
+      formerOwners: [
+        ...(Array.isArray(p.formerOwners) ? p.formerOwners : []),
+        { name: "", phone: "", city: "" },
+      ],
+    }));
+  }
+
+  function updateFormerOwner(index, field, value) {
+    setForm((p) => ({
+      ...p,
+      formerOwners: (Array.isArray(p.formerOwners) ? p.formerOwners : []).map((owner, ownerIndex) =>
+        ownerIndex === index ? { ...owner, [field]: value } : owner
+      ),
+    }));
+  }
+
+  function removeFormerOwner(index) {
+    setForm((p) => ({
+      ...p,
+      formerOwners: (Array.isArray(p.formerOwners) ? p.formerOwners : []).filter((_, ownerIndex) => ownerIndex !== index),
+    }));
   }
 
   return (
@@ -140,6 +182,54 @@ export default function PetForm({ onSubmit, submitting }) {
           />
         </Field>
 
+        <Field label={t("form.currentOwner")} wide>
+          <OwnerFields
+            owner={form.currentOwner}
+            onChange={updateCurrentOwner}
+            t={t}
+          />
+        </Field>
+
+        <Field label={t("form.formerOwners")} wide>
+          <div className="space-y-3">
+            {(Array.isArray(form.formerOwners) ? form.formerOwners : []).length === 0 && (
+              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                {t("form.noFormerOwners")}
+              </div>
+            )}
+
+            {(Array.isArray(form.formerOwners) ? form.formerOwners : []).map((owner, index) => (
+              <div key={index} className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div className="text-sm font-bold text-gray-700">
+                    {t("form.formerOwner")} {index + 1}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeFormerOwner(index)}
+                    className="rounded-xl border border-red-200 bg-white px-3 py-1 text-xs font-bold text-red-600 hover:bg-red-50"
+                  >
+                    {t("form.removeFormerOwner")}
+                  </button>
+                </div>
+                <OwnerFields
+                  owner={owner}
+                  onChange={(field, value) => updateFormerOwner(index, field, value)}
+                  t={t}
+                />
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addFormerOwner}
+              className="rounded-2xl border border-purple-200 bg-purple-50 px-4 py-2 text-sm font-bold text-purple-700 hover:bg-purple-100"
+            >
+              {t("form.addFormerOwner")}
+            </button>
+          </div>
+        </Field>
+
         <Field label={t("form.image")} wide>
           <input
             type="file"
@@ -173,5 +263,32 @@ function Field({ label, children, required, wide }) {
       </div>
       {children}
     </label>
+  );
+}
+
+function OwnerFields({ owner, onChange, t }) {
+  const safeOwner = owner ?? { name: "", phone: "", city: "" };
+
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      <input
+        className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-200"
+        value={safeOwner.name ?? ""}
+        onChange={(e) => onChange("name", e.target.value)}
+        placeholder={t("form.ownerName")}
+      />
+      <input
+        className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-200"
+        value={safeOwner.phone ?? ""}
+        onChange={(e) => onChange("phone", e.target.value)}
+        placeholder={t("form.ownerPhone")}
+      />
+      <input
+        className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-200"
+        value={safeOwner.city ?? ""}
+        onChange={(e) => onChange("city", e.target.value)}
+        placeholder={t("form.ownerCity")}
+      />
+    </div>
   );
 }

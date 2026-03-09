@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiPost } from "../lib/api";
-import { setSession } from "../lib/session";
+import { clearSession, setSession } from "../lib/session";
 import { useTranslation } from "../i18n/LanguageContext";
 import LanguageToggle from "../components/languageToggle";
 import { PawPrint } from "lucide-react";
@@ -18,7 +18,9 @@ export default function Login() {
 
   // Show splash page briefly before showing the login form
   // paw print bouncing ❤
+  // make this to be fresh browaer session, how...?
   useEffect(() => {
+    clearSession();
     const timer = setTimeout(() => setShowForm(true), 2000); // 1.8s splash
     return () => clearTimeout(timer);
   }, []);

@@ -9,7 +9,8 @@
     "shelterId": "shelter A",
     "microchipNumber": "123456789012345",
     "vaccination": "true",
-    "notes": "Healthy"
+    "notes": "Healthy",
+    "adoptionStatus": "ADOPTED"
   },
   {
     "animalId": "cat001",
@@ -20,7 +21,7 @@
     "shelterId": "Leipzig001",
     "microchipNumber": "123451234512345",
     "vaccination": "true",
-    "notes": "",
+    "notes": "testing",
     "adoptionStatus": "RESERVED",
     "age": "5"
   },
@@ -110,5 +111,54 @@
     "microchipNumber": "098765432123456",
     "vaccination": "true",
     "notes": ""
+  },
+  {
+    "animalId": "ownertest001",
+    "name": "OWNER TEST",
+    "species": "dog",
+    "breed": "CURRENT OWNER",
+    "gender": "",
+    "age": "0",
+    "shelterId": "",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "owner test for current being empty",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Jane Doe",
+      "phone": "00000000000",
+      "city": "Leipzig"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "ownertest002",
+    "name": "OWNER TEST",
+    "species": "dog",
+    "breed": "FORMER OWNER",
+    "gender": "",
+    "age": "0",
+    "shelterId": "",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "currentOwner": {
+      "name": "nein",
+      "phone": null,
+      "city": null
+    },
+    "formerOwners": [
+      {
+        "name": "John Doe",
+        "phone": "11111111111",
+        "city": "Leipzig"
+      },
+      {
+        "name": "Jane Doe2",
+        "phone": null,
+        "city": null
+      }
+    ],
+    "adoptionStatus": "AVAILABLE"
   }
 ]
