@@ -21,6 +21,7 @@ export default function Pets() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [speciesFilter, setSpeciesFilter] = useState("");
 
 
   async function load() {
@@ -45,6 +46,13 @@ export default function Pets() {
     veterinarian: t("role.vet.full"),
     adopter: t("role.adopter.full"),
   };
+
+  function categoryForSpecies(species) {
+    const normalized = String(species ?? "").trim().toLowerCase();
+    if (normalized === "dog") return "dog";
+    if (normalized === "cat") return "cat";
+    return "other";
+  }
 
   return (
     <div className="space-y-5">
@@ -89,7 +97,7 @@ export default function Pets() {
         </div>
       )}
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <input
           type="text"
           value={search}
@@ -97,6 +105,16 @@ export default function Pets() {
           placeholder={t("pets.searchPlaceholder")}
           className="rounded-xl border border-gray-200 px-4 py-2"
         />
+        <select
+          value={speciesFilter}
+          onChange={(e) => setSpeciesFilter(e.target.value)}
+          className="rounded-xl border border-gray-200 px-4 py-2"
+        >
+          <option value="">{t("pets.allCategories")}</option>
+          <option value="dog">{t("form.dog")}</option>
+          <option value="cat">{t("form.cat")}</option>
+          <option value="other">{t("form.other")}</option>
+        </select>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
@@ -128,6 +146,7 @@ export default function Pets() {
           .filter((pet) => {
             const q = search.toLowerCase();
             if (q && !(pet.name ?? "").toLowerCase().includes(q) && !(pet.animalId ?? "").toLowerCase().includes(q)) return false;
+            if (speciesFilter && categoryForSpecies(pet.species) !== speciesFilter) return false;
             if (statusFilter && (pet.adoptionStatus ?? "").toUpperCase() !== statusFilter) return false;
             return true;
           })

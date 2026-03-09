@@ -37,6 +37,11 @@ export default function Home() {
     adopter: t("role.adopter.full"),
   };
 
+  // for hte featured pets on the HOME, only available ones be shown
+  const featuredPets = pets
+    .filter((pet) => String(pet?.adoptionStatus ?? "").toUpperCase() === "AVAILABLE")
+    .slice(0, 4);
+
   return (
     <div className="space-y-8">
       {/* HERO */}
@@ -118,13 +123,13 @@ export default function Home() {
 
         {loadingPets ? (
           <div className="mt-5 text-sm text-gray-600">{t("home.loading")}</div>
-        ) : pets.length === 0 ? (
+        ) : featuredPets.length === 0 ? (
           <div className="mt-5 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
             {t("home.empty")}
           </div>
         ) : (
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {pets.slice(0, 4).map((pet) => (
+            {featuredPets.map((pet) => (
               <PetCard key={pet.animalId} pet={pet} />
             ))}
           </div>
@@ -134,6 +139,7 @@ export default function Home() {
   );
 }
 
+// card for the features on HOME
 function Feature({ title, desc, icon }) {
   return (
     <div className="rounded-3xl border border-[var(--border)] bg-white p-6 shadow-sm">
