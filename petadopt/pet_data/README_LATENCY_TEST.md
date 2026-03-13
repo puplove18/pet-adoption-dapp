@@ -88,9 +88,59 @@ for n in 25 50 100 200 400; do
 done
 ```
 
+## Add Prometheus processed transaction count
+
+Transaction count is a workload sanity check to validate fairness of runs and dataset sizes.  
+Create `with_prometheus.csv` by combining run logs and Prometheus API results:
+
+```bash
+echo "dataset_size,run,import_duration_sec,processed_tx_success" > results/exp1/with_prometheus.csv
+
+for f in results/exp1/N*_run*.log; do
+  n=$(basename "$f" | sed -E 's/^N([0-9]+)_run[0-9]+\.log$/\1/')
+  r=$(basename "$f" | sed -E 's/^N[0-9]+_run0?([0-9]+)\.log$/\1/')
+  start=$(grep -m1 'IMPORT_START' "$f" | awk '{print $2}')
+  end=$(grep -m1 'IMPORT_END' "$f" | awk '{print $2}')
+  dur=$(grep -m1 'IMPORT_DURATION_SEC' "$f" | awk '{print $2}')
+
+  start_ts=$(date -d "$start" +%s)
+  end_ts=$(date -d "$end" +%s)
+  win=$((end_ts-start_ts))
+
+  tx=$(curl -sG 'http://localhost:9090/api/v1/query' \
+    --data-urlencode "query=sum(increase(broadcast_processed_count{channel=\"mychannel\",status=\"SUCCESS\",type=\"ENDORSER_TRANSACTION\"}[${win}s]))" \
+    --data-urlencode "time=$end_ts" | jq -r '.data.result[0].value[1] // "NaN"')
+
+  echo "$n,$r,$dur,$tx" >> results/exp1/with_prometheus.csv
+done
+```
+
+Sort it:
+
+```bash
+{
+  head -n 1 results/exp1/with_prometheus.csv
+  tail -n +2 results/exp1/with_prometheus.csv | sort -t, -k1,1n -k2,2n
+} > results/exp1/with_prometheus_sorted.csv
+```
+
+Create combined summary with the tx count and durations:
+
+```bash
+echo "dataset_size,duration_mean_sec,duration_median_sec,tx_mean,tx_median" > results/exp1/summary_with_prometheus.csv
+
+for n in 25 50 100 200 400; do
+  d_mean=$(awk -F, -v n="$n" '$1==n{s+=$3;c++} END{if(c) printf "%.3f", s/c}' results/exp1/with_prometheus_sorted.csv)
+  d_med=$(awk -F, -v n="$n" '$1==n{print $3}' results/exp1/with_prometheus_sorted.csv | sort -n | awk '{a[NR]=$1} END{if(NR%2) printf "%.3f", a[(NR+1)/2]; else printf "%.3f", (a[NR/2]+a[NR/2+1])/2}')
+  t_mean=$(awk -F, -v n="$n" '$1==n{s+=$4;c++} END{if(c) printf "%.3f", s/c}' results/exp1/with_prometheus_sorted.csv)
+  t_med=$(awk -F, -v n="$n" '$1==n{print $4}' results/exp1/with_prometheus_sorted.csv | sort -n | awk '{a[NR]=$1} END{if(NR%2) printf "%.3f", a[(NR+1)/2]; else printf "%.3f", (a[NR/2]+a[NR/2+1])/2}')
+  echo "$n,$d_mean,$d_med,$t_mean,$t_med" >> results/exp1/summary_with_prometheus.csv
+done
+```
+
 ## Graph for thesis
 
-Use `results/exp1/summary.csv`:
+Use `results/exp1/summary_with_prometheus.csv`:
 
 - X-axis: `dataset_size`
 - Y-axis: `median_sec` (or `mean_sec`)
