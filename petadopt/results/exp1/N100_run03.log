@@ -1,0 +1,1101 @@
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Pre-deploy checks[0m
+[0;36m══════════════════════════════════════════[0m
+
+[0;32m[✔] Fabric binaries added to PATH[0m
+[0;32m[✔] All pre-deploy checks passed[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Step 1/6 — Cleaning up previous network (if any)[0m
+[0;36m══════════════════════════════════════════[0m
+
+[0;34mUsing docker and docker compose[0m
+[0;34mStopping network[0m
+[0;34mRemoving remaining containers[0m
+[0;34mRemoving generated chaincode docker images[0m
+Total reclaimed space: 0B
+[0;32m[✔] Previous network cleaned[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Step 2/6 — Starting Fabric network + channel[0m
+[0;36m══════════════════════════════════════════[0m
+
+[0;34mUsing docker and docker compose[0m
+[0;34mCreating channel 'mychannel'.[0m
+[0;34mIf network is not up, starting nodes with CLI timeout of '5' tries and CLI delay of '3' seconds and using database 'couchdb with crypto from 'Certificate Authorities'[0m
+[0;34mBringing up network[0m
+[0;34mLOCAL_VERSION=v2.5.14[0m
+[0;34mDOCKER_IMAGE_VERSION=v2.5.14[0m
+[0;34mCA_LOCAL_VERSION=v1.5.15[0m
+[0;34mCA_DOCKER_IMAGE_VERSION=v1.5.15[0m
+[0;34mGenerating certificates using Fabric CA[0m
+ Container ca_orderer Creating 
+ Container ca_org2 Creating 
+ Container ca_org1 Creating 
+ Container ca_orderer Created 
+ Container ca_org2 Created 
+ Container ca_org1 Created 
+ Container ca_orderer Starting 
+ Container ca_org2 Starting 
+ Container ca_org1 Starting 
+ Container ca_org1 Started 
+ Container ca_orderer Started 
+ Container ca_org2 Started 
++ fabric-ca-client getcainfo -u https://admin:adminpw@localhost:7054 --caname ca-org1 --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/03/13 16:28:41 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:41 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerRevocationPublicKey
++ res=0
+[0;34mCreating Org1 Identities[0m
+[0;34mEnrolling the CA admin[0m
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --caname ca-org1 --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] Created a default configuration file at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:41 [INFO] encoded CSR
+2026/03/13 16:28:41 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:41 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/03/13 16:28:41 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:41 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mRegistering peer0[0m
++ fabric-ca-client register --caname ca-org1 --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] TLS Enabled
+Password: peer0pw
+[0;34mRegistering user[0m
++ fabric-ca-client register --caname ca-org1 --id.name user1 --id.secret user1pw --id.type client --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] TLS Enabled
+Password: user1pw
+[0;34mRegistering the org admin[0m
++ fabric-ca-client register --caname ca-org1 --id.name org1admin --id.secret org1adminpw --id.type admin --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] TLS Enabled
+Password: org1adminpw
+[0;34mGenerating the peer0 msp[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-org1 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:41 [INFO] encoded CSR
+2026/03/13 16:28:41 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:41 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/03/13 16:28:41 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:41 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-org1 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls --enrollment.profile tls --csr.hosts peer0.org1.example.com --csr.hosts localhost --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:41 [INFO] encoded CSR
+2026/03/13 16:28:41 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/signcerts/cert.pem
+2026/03/13 16:28:41 [INFO] Stored TLS root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/tlscacerts/tls-localhost-7054-ca-org1.pem
+2026/03/13 16:28:41 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/IssuerPublicKey
+2026/03/13 16:28:41 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/IssuerRevocationPublicKey
+[0;34mGenerating the user msp[0m
++ fabric-ca-client enroll -u https://user1:user1pw@localhost:7054 --caname ca-org1 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:41 [INFO] encoded CSR
+2026/03/13 16:28:41 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:41 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/03/13 16:28:41 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:41 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the org admin msp[0m
++ fabric-ca-client enroll -u https://org1admin:org1adminpw@localhost:7054 --caname ca-org1 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem
+2026/03/13 16:28:41 [INFO] TLS Enabled
+2026/03/13 16:28:41 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:41 [INFO] encoded CSR
+2026/03/13 16:28:42 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:42 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/cacerts/localhost-7054-ca-org1.pem
+2026/03/13 16:28:42 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:42 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/IssuerRevocationPublicKey
+[0;34mCreating Org2 Identities[0m
+[0;34mEnrolling the CA admin[0m
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:8054 --caname ca-org2 --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] Created a default configuration file at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:42 [INFO] encoded CSR
+2026/03/13 16:28:42 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:42 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/03/13 16:28:42 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:42 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mRegistering peer0[0m
++ fabric-ca-client register --caname ca-org2 --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] TLS Enabled
+Password: peer0pw
+[0;34mRegistering user[0m
++ fabric-ca-client register --caname ca-org2 --id.name user1 --id.secret user1pw --id.type client --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] TLS Enabled
+Password: user1pw
+[0;34mRegistering the org admin[0m
++ fabric-ca-client register --caname ca-org2 --id.name org2admin --id.secret org2adminpw --id.type admin --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] TLS Enabled
+Password: org2adminpw
+[0;34mGenerating the peer0 msp[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-org2 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:42 [INFO] encoded CSR
+2026/03/13 16:28:42 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:42 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/03/13 16:28:42 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:42 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-org2 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls --enrollment.profile tls --csr.hosts peer0.org2.example.com --csr.hosts localhost --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:42 [INFO] encoded CSR
+2026/03/13 16:28:42 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/signcerts/cert.pem
+2026/03/13 16:28:42 [INFO] Stored TLS root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/tlscacerts/tls-localhost-8054-ca-org2.pem
+2026/03/13 16:28:42 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/IssuerPublicKey
+2026/03/13 16:28:42 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/IssuerRevocationPublicKey
+[0;34mGenerating the user msp[0m
++ fabric-ca-client enroll -u https://user1:user1pw@localhost:8054 --caname ca-org2 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:42 [INFO] encoded CSR
+2026/03/13 16:28:42 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:42 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/03/13 16:28:42 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:42 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the org admin msp[0m
++ fabric-ca-client enroll -u https://org2admin:org2adminpw@localhost:8054 --caname ca-org2 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/org2/ca-cert.pem
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:42 [INFO] encoded CSR
+2026/03/13 16:28:42 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:42 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/cacerts/localhost-8054-ca-org2.pem
+2026/03/13 16:28:42 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:42 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/IssuerRevocationPublicKey
+[0;34mCreating Orderer Org Identities[0m
+[0;34mEnrolling the CA admin[0m
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:9054 --caname ca-orderer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:42 [INFO] Created a default configuration file at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:42 [INFO] encoded CSR
+2026/03/13 16:28:42 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:42 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/03/13 16:28:42 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/IssuerPublicKey
+2026/03/13 16:28:42 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/msp/IssuerRevocationPublicKey
+[0;34mRegistering orderer[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer --id.secret ordererpw --id.type orderer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:42 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] TLS Enabled
+Password: ordererpw
+[0;34mGenerating the orderer MSP[0m
++ fabric-ca-client enroll -u https://orderer:ordererpw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:42 [INFO] TLS Enabled
+2026/03/13 16:28:42 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:42 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer:ordererpw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls --enrollment.profile tls --csr.hosts orderer.example.com --csr.hosts localhost --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:43 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored TLS root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering orderer2[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer2 --id.secret orderer2pw --id.type orderer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] TLS Enabled
+Password: orderer2pw
+[0;34mGenerating the orderer2 MSP[0m
++ fabric-ca-client enroll -u https://orderer2:orderer2pw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:43 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer2 TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer2:orderer2pw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls --enrollment.profile tls --csr.hosts orderer2.example.com --csr.hosts localhost --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:43 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored TLS root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering orderer3[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer3 --id.secret orderer3pw --id.type orderer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] TLS Enabled
+Password: orderer3pw
+[0;34mGenerating the orderer3 MSP[0m
++ fabric-ca-client enroll -u https://orderer3:orderer3pw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:43 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer3 TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer3:orderer3pw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls --enrollment.profile tls --csr.hosts orderer3.example.com --csr.hosts localhost --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:43 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored TLS root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering orderer4[0m
++ fabric-ca-client register --caname ca-orderer --id.name orderer4 --id.secret orderer4pw --id.type orderer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] TLS Enabled
+Password: orderer4pw
+[0;34mGenerating the orderer4 MSP[0m
++ fabric-ca-client enroll -u https://orderer4:orderer4pw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:43 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the orderer4 TLS certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://orderer4:orderer4pw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls --enrollment.profile tls --csr.hosts orderer4.example.com --csr.hosts localhost --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:43 [INFO] encoded CSR
+2026/03/13 16:28:43 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/signcerts/cert.pem
+2026/03/13 16:28:43 [INFO] Stored TLS root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/tlscacerts/tls-localhost-9054-ca-orderer.pem
+2026/03/13 16:28:43 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/IssuerPublicKey
+2026/03/13 16:28:43 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer4.example.com/tls/IssuerRevocationPublicKey
+[0;34mRegistering the orderer admin[0m
++ fabric-ca-client register --caname ca-orderer --id.name ordererAdmin --id.secret ordererAdminpw --id.type admin --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:43 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/fabric-ca-client-config.yaml
+2026/03/13 16:28:43 [INFO] TLS Enabled
+2026/03/13 16:28:43 [INFO] TLS Enabled
+Password: ordererAdminpw
+[0;34mGenerating the admin msp[0m
++ fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@localhost:9054 --caname ca-orderer -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/fabric-ca/ordererOrg/ca-cert.pem
+2026/03/13 16:28:44 [INFO] TLS Enabled
+2026/03/13 16:28:44 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:28:44 [INFO] encoded CSR
+2026/03/13 16:28:44 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/signcerts/cert.pem
+2026/03/13 16:28:44 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/cacerts/localhost-9054-ca-orderer.pem
+2026/03/13 16:28:44 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/IssuerPublicKey
+2026/03/13 16:28:44 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating CCP files for Org1 and Org2[0m
+ Volume compose_peer0.org1.example.com Creating 
+ Volume compose_peer0.org1.example.com Created 
+ Volume compose_peer0.org2.example.com Creating 
+ Volume compose_peer0.org2.example.com Created 
+ Volume compose_orderer.example.com Creating 
+ Volume compose_orderer.example.com Created 
+time="2026-03-13T16:28:44+01:00" level=warning msg="Found orphan containers ([ca_org2 ca_org1 ca_orderer]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container couchdb0 Creating 
+ Container couchdb1 Creating 
+ Container orderer.example.com Creating 
+ Container couchdb1 Created 
+ Container peer0.org2.example.com Creating 
+ Container couchdb0 Created 
+ Container peer0.org1.example.com Creating 
+ Container orderer.example.com Created 
+ Container peer0.org1.example.com Created 
+ Container peer0.org2.example.com Created 
+ Container couchdb1 Starting 
+ Container couchdb0 Starting 
+ Container orderer.example.com Starting 
+ Container orderer.example.com Started 
+ Container couchdb1 Started 
+ Container peer0.org2.example.com Starting 
+ Container couchdb0 Started 
+ Container peer0.org1.example.com Starting 
+ Container peer0.org2.example.com Started 
+ Container peer0.org1.example.com Started 
+CONTAINER ID   IMAGE                               COMMAND                  CREATED                  STATUS                            PORTS                                                                                                                                   NAMES
+c3150379ea07   hyperledger/fabric-peer:latest      "peer node start"        Less than a second ago   Up Less than a second             0.0.0.0:7051->7051/tcp, [::]:7051->7051/tcp, 0.0.0.0:9444->9444/tcp, [::]:9444->9444/tcp                                                peer0.org1.example.com
+885e106c1d82   hyperledger/fabric-peer:latest      "peer node start"        Less than a second ago   Up Less than a second             0.0.0.0:9051->9051/tcp, [::]:9051->9051/tcp, 7051/tcp, 0.0.0.0:9445->9445/tcp, [::]:9445->9445/tcp                                      peer0.org2.example.com
+ab7b17f1b34c   couchdb:3.4.2                       "tini -- /docker-ent…"   Less than a second ago   Up Less than a second             4369/tcp, 9100/tcp, 0.0.0.0:5984->5984/tcp, [::]:5984->5984/tcp                                                                         couchdb0
+525dc4ee1bc5   hyperledger/fabric-orderer:latest   "orderer"                Less than a second ago   Up Less than a second             0.0.0.0:7050->7050/tcp, [::]:7050->7050/tcp, 0.0.0.0:7053->7053/tcp, [::]:7053->7053/tcp, 0.0.0.0:9443->9443/tcp, [::]:9443->9443/tcp   orderer.example.com
+a15f0bfe754a   couchdb:3.4.2                       "tini -- /docker-ent…"   Less than a second ago   Up Less than a second             4369/tcp, 9100/tcp, 0.0.0.0:7984->5984/tcp, [::]:7984->5984/tcp                                                                         couchdb1
+c2f386e7d97b   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   5 seconds ago            Up 5 seconds                      0.0.0.0:8054->8054/tcp, [::]:8054->8054/tcp, 7054/tcp, 0.0.0.0:18054->18054/tcp, [::]:18054->18054/tcp                                  ca_org2
+15336eb3a5f9   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   5 seconds ago            Up 5 seconds                      0.0.0.0:7054->7054/tcp, [::]:7054->7054/tcp, 0.0.0.0:17054->17054/tcp, [::]:17054->17054/tcp                                            ca_org1
+affb9558b08a   hyperledger/fabric-ca:latest        "sh -c 'fabric-ca-se…"   5 seconds ago            Up 5 seconds                      0.0.0.0:9054->9054/tcp, [::]:9054->9054/tcp, 7054/tcp, 0.0.0.0:19054->19054/tcp, [::]:19054->19054/tcp                                  ca_orderer
+b3970539bd5b   busybox                             "sh -c 'cd /data && …"   About an hour ago        Created                                                                                                                                                                   competent_proskuriakova
+3e7a97eba32a   grafana/grafana:8.3.4               "/run.sh"                27 hours ago             Up 27 hours                       0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp                                                                                             grafana
+bf819bac5721   google/cadvisor:latest              "/usr/bin/cadvisor -…"   27 hours ago             Restarting (255) 22 seconds ago                                                                                                                                           cadvisor
+cd185598770b   prom/prometheus:v2.32.1             "/bin/prometheus --c…"   27 hours ago             Up 27 hours                       0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp                                                                                             prometheus
+cdb98f381d18   prom/node-exporter:v1.3.1           "/bin/node_exporter …"   27 hours ago             Up 27 hours                       0.0.0.0:9100->9100/tcp, [::]:9100->9100/tcp                                                                                             node-exporter
+[0;34mUsing docker and docker compose[0m
+[0;34mGenerating channel genesis block 'mychannel.block'[0m
+[0;34mUsing organization 1[0m
+/home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/../bin/configtxgen
++ '[' 0 -eq 1 ']'
++ configtxgen -profile ChannelUsingRaft -outputBlock ./channel-artifacts/mychannel.block -channelID mychannel
+[34m2026-03-13 16:28:44.675 CET 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2026-03-13 16:28:44.679 CET 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> orderer type: etcdraft
+[34m2026-03-13 16:28:44.679 CET 0003 INFO[0m [common.tools.configtxgen.localconfig] [34;1mcompleteInitialization[0m -> Orderer.EtcdRaft.Options unset, setting to tick_interval:"500ms" election_tick:10 heartbeat_tick:1 max_inflight_blocks:5 snapshot_interval_size:16777216 
+[34m2026-03-13 16:28:44.679 CET 0004 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoad[0m -> Loaded configuration: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/configtx/configtx.yaml
+[34m2026-03-13 16:28:44.680 CET 0005 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Generating genesis block
+[34m2026-03-13 16:28:44.680 CET 0006 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Creating application channel genesis block
+[34m2026-03-13 16:28:44.681 CET 0007 INFO[0m [common.tools.configtxgen] [34;1mdoOutputBlock[0m -> Writing genesis block
++ res=0
+[0;34mCreating channel mychannel[0m
+[0;34mAdding orderers[0m
++ . scripts/orderer.sh mychannel
++ '[' 0 -eq 1 ']'
++ res=0
+Status: 201
+{
+	"name": "mychannel",
+	"url": "/participation/v1/channels/mychannel",
+	"consensusRelation": "consenter",
+	"status": "active",
+	"height": 1
+}
+
+[0;32mChannel 'mychannel' created[0m
+[0;34mJoining org1 peer to the channel...[0m
+[0;34mUsing organization 1[0m
++ peer channel join -b ./channel-artifacts/mychannel.block
++ res=0
+[34m2026-03-13 16:28:50.764 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:28:50.865 CET 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[0;34mJoining org2 peer to the channel...[0m
+[0;34mUsing organization 2[0m
++ peer channel join -b ./channel-artifacts/mychannel.block
++ res=0
+[34m2026-03-13 16:28:53.910 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:28:53.981 CET 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[0;34mSetting anchor peer for org1...[0m
+[0;34mUsing organization 1[0m
+[0;34mFetching channel config for channel mychannel[0m
+[0;34mUsing organization 1[0m
+[0;34mFetching the most recent configuration block for the channel[0m
+++ peer channel fetch config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.pb -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c mychannel --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+[34m2026-03-13 16:28:54.018 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:28:54.019 CET 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[34m2026-03-13 16:28:54.019 CET 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 0
+[34m2026-03-13 16:28:54.020 CET 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[0;34mDecoding config block to JSON and isolating config to /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org1MSPconfig.json[0m
+++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.pb --type common.Block --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.json
+++ jq '.data.data[0].payload.data.config' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.json
+++ res=0
+[0;34mGenerating anchor peer update transaction for Org1 on channel mychannel[0m
+++ jq '.channel_group.groups.Application.groups.Org1MSP.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "peer0.org1.example.com","port": 7051}]},"version": "0"}}' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org1MSPconfig.json
+++ res=0
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org1MSPconfig.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/original_config.pb
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org1MSPmodified_config.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/modified_config.pb
+++ configtxlator compute_update --channel_id mychannel --original /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/original_config.pb --updated /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/modified_config.pb --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.pb
+++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.pb --type common.ConfigUpdate --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.json
+++ jq .
++++ cat /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.json
+++ echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":{' '"channel_id":' '"mychannel",' '"isolated_data":' '{},' '"read_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org1MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '},' '"write_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org1MSP":' '{' '"groups":' '{},' '"mod_policy":' '"Admins",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"AnchorPeers":' '{' '"mod_policy":' '"Admins",' '"value":' '{' '"anchor_peers":' '[' '{' '"host":' '"peer0.org1.example.com",' '"port":' 7051 '}' ']' '},' '"version":' '"0"' '},' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '}}}}'
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update_in_envelope.json --type common.Envelope --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org1MSPanchors.tx
+[34m2026-03-13 16:28:54.120 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:28:54.126 CET 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[0;32mAnchor peer set for org 'Org1MSP' on channel 'mychannel'[0m
+[0;34mSetting anchor peer for org2...[0m
+[0;34mUsing organization 2[0m
+[0;34mFetching channel config for channel mychannel[0m
+[0;34mUsing organization 2[0m
+[0;34mFetching the most recent configuration block for the channel[0m
+++ peer channel fetch config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.pb -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c mychannel --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+[34m2026-03-13 16:28:54.162 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:28:54.163 CET 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[34m2026-03-13 16:28:54.164 CET 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 1
+[34m2026-03-13 16:28:54.164 CET 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 1
+[0;34mDecoding config block to JSON and isolating config to /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org2MSPconfig.json[0m
+++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.pb --type common.Block --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.json
+++ jq '.data.data[0].payload.data.config' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_block.json
+++ res=0
+[0;34mGenerating anchor peer update transaction for Org2 on channel mychannel[0m
+++ jq '.channel_group.groups.Application.groups.Org2MSP.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "peer0.org2.example.com","port": 9051}]},"version": "0"}}' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org2MSPconfig.json
+++ res=0
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org2MSPconfig.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/original_config.pb
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org2MSPmodified_config.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/modified_config.pb
+++ configtxlator compute_update --channel_id mychannel --original /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/original_config.pb --updated /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/modified_config.pb --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.pb
+++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.pb --type common.ConfigUpdate --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.json
+++ jq .
++++ cat /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update.json
+++ echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":{' '"channel_id":' '"mychannel",' '"isolated_data":' '{},' '"read_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org2MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '},' '"write_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org2MSP":' '{' '"groups":' '{},' '"mod_policy":' '"Admins",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"AnchorPeers":' '{' '"mod_policy":' '"Admins",' '"value":' '{' '"anchor_peers":' '[' '{' '"host":' '"peer0.org2.example.com",' '"port":' 9051 '}' ']' '},' '"version":' '"0"' '},' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '}}}}'
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/config_update_in_envelope.json --type common.Envelope --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/channel-artifacts/Org2MSPanchors.tx
+[34m2026-03-13 16:28:54.268 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:28:54.275 CET 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[0;32mAnchor peer set for org 'Org2MSP' on channel 'mychannel'[0m
+[0;32mChannel 'mychannel' joined[0m
+[0;32m[✔] Fabric network is UP  |  Channel: mychannel[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Step 3/6 — Adding Org3 (adopter organisation)[0m
+[0;36m══════════════════════════════════════════[0m
+
+[0;34mUsing docker and docker compose[0m
+[0;34mAdding org3 to channel 'mychannel' with '10' seconds and CLI delay of '3' seconds and using database 'couchdb'[0m
+
+[0;34mGenerating certificates using Fabric CA[0m
+ Network compose_default Creating 
+ Network compose_default Created 
+time="2026-03-13T16:28:54+01:00" level=warning msg="Found orphan containers ([peer0.org1.example.com peer0.org2.example.com couchdb0 orderer.example.com couchdb1 ca_org2 ca_org1 ca_orderer]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container ca_org3 Creating 
+ Container ca_org3 Created 
+ Container ca_org3 Starting 
+ Container ca_org3 Started 
+[0;34mCreating Org3 Identities[0m
+[0;34mEnrolling the CA admin[0m
++ fabric-ca-client enroll -u https://admin:adminpw@localhost:11054 --caname ca-org3 --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:04 [INFO] Created a default configuration file at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:29:04 [INFO] TLS Enabled
+2026/03/13 16:29:04 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:29:04 [INFO] encoded CSR
+2026/03/13 16:29:04 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/msp/signcerts/cert.pem
+2026/03/13 16:29:04 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/msp/cacerts/localhost-11054-ca-org3.pem
+2026/03/13 16:29:04 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/msp/IssuerPublicKey
+2026/03/13 16:29:04 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/msp/IssuerRevocationPublicKey
+[0;34mRegistering peer0[0m
++ fabric-ca-client register --caname ca-org3 --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:04 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:29:04 [INFO] TLS Enabled
+2026/03/13 16:29:04 [INFO] TLS Enabled
+Password: peer0pw
+[0;34mRegistering user[0m
++ fabric-ca-client register --caname ca-org3 --id.name user1 --id.secret user1pw --id.type client --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:04 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:29:04 [INFO] TLS Enabled
+2026/03/13 16:29:04 [INFO] TLS Enabled
+Password: user1pw
+[0;34mRegistering the org admin[0m
++ fabric-ca-client register --caname ca-org3 --id.name org3admin --id.secret org3adminpw --id.type admin --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:04 [INFO] Configuration file location: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/fabric-ca-client-config.yaml
+2026/03/13 16:29:04 [INFO] TLS Enabled
+2026/03/13 16:29:04 [INFO] TLS Enabled
+Password: org3adminpw
+[0;34mGenerating the peer0 msp[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:11054 --caname ca-org3 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:04 [INFO] TLS Enabled
+2026/03/13 16:29:04 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:29:04 [INFO] encoded CSR
+2026/03/13 16:29:04 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/msp/signcerts/cert.pem
+2026/03/13 16:29:04 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/msp/cacerts/localhost-11054-ca-org3.pem
+2026/03/13 16:29:04 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/msp/IssuerPublicKey
+2026/03/13 16:29:04 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names[0m
++ fabric-ca-client enroll -u https://peer0:peer0pw@localhost:11054 --caname ca-org3 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls --enrollment.profile tls --csr.hosts peer0.org3.example.com --csr.hosts localhost --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:04 [INFO] TLS Enabled
+2026/03/13 16:29:04 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:29:04 [INFO] encoded CSR
+2026/03/13 16:29:05 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/signcerts/cert.pem
+2026/03/13 16:29:05 [INFO] Stored TLS root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/tlscacerts/tls-localhost-11054-ca-org3.pem
+2026/03/13 16:29:05 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/IssuerPublicKey
+2026/03/13 16:29:05 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/IssuerRevocationPublicKey
+[0;34mGenerating the user msp[0m
++ fabric-ca-client enroll -u https://user1:user1pw@localhost:11054 --caname ca-org3 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/peerOrganizations/org3.example.com/users/User1@org3.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:05 [INFO] TLS Enabled
+2026/03/13 16:29:05 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:29:05 [INFO] encoded CSR
+2026/03/13 16:29:05 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/User1@org3.example.com/msp/signcerts/cert.pem
+2026/03/13 16:29:05 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/User1@org3.example.com/msp/cacerts/localhost-11054-ca-org3.pem
+2026/03/13 16:29:05 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/User1@org3.example.com/msp/IssuerPublicKey
+2026/03/13 16:29:05 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/User1@org3.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating the org admin msp[0m
++ fabric-ca-client enroll -u https://org3admin:org3adminpw@localhost:11054 --caname ca-org3 -M /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp --tls.certfiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/fabric-ca/org3/tls-cert.pem
+2026/03/13 16:29:05 [INFO] TLS Enabled
+2026/03/13 16:29:05 [INFO] generating key: &{A:ecdsa S:256}
+2026/03/13 16:29:05 [INFO] encoded CSR
+2026/03/13 16:29:05 [INFO] Stored client certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp/signcerts/cert.pem
+2026/03/13 16:29:05 [INFO] Stored root CA certificate at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp/cacerts/localhost-11054-ca-org3.pem
+2026/03/13 16:29:05 [INFO] Stored Issuer public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp/IssuerPublicKey
+2026/03/13 16:29:05 [INFO] Stored Issuer revocation public key at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp/IssuerRevocationPublicKey
+[0;34mGenerating CCP files for Org3[0m
+/home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../../bin/configtxgen
+[0;34mGenerating Org3 organization definition[0m
++ configtxgen -printOrg Org3MSP
+[34m2026-03-13 16:29:05.252 CET 0001 INFO[0m [common.tools.configtxgen] [34;1mmain[0m -> Loading configuration
+[34m2026-03-13 16:29:05.252 CET 0002 INFO[0m [common.tools.configtxgen.localconfig] [34;1mLoadTopLevel[0m -> Loaded configuration: /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/configtx.yaml
++ res=0
+[0;34mBringing up Org3 peer[0m
+ Volume compose_peer0.org3.example.com Creating 
+ Volume compose_peer0.org3.example.com Created 
+time="2026-03-13T16:29:05+01:00" level=warning msg="Found orphan containers ([ca_org3 peer0.org1.example.com peer0.org2.example.com couchdb0 orderer.example.com couchdb1 ca_org2 ca_org1 ca_orderer]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container couchdb4 Creating 
+ Container couchdb4 Created 
+ Container peer0.org3.example.com Creating 
+ Container peer0.org3.example.com Created 
+ Container couchdb4 Starting 
+ Container couchdb4 Started 
+ Container peer0.org3.example.com Starting 
+ Container peer0.org3.example.com Started 
+[0;34mGenerating and submitting config tx to add Org3[0m
+[0;34mCreating config transaction to add org3 to network[0m
+[0;34mUsing organization 1[0m
+[0;34mFetching the most recent configuration block for the channel[0m
+++ peer channel fetch config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.pb -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c mychannel --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+[34m2026-03-13 16:29:05.668 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:29:05.670 CET 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[34m2026-03-13 16:29:05.670 CET 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 2
+[34m2026-03-13 16:29:05.671 CET 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 2
+[0;34mDecoding config block to JSON and isolating config to /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config.json[0m
+++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.pb --type common.Block --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.json
+++ jq '.data.data[0].payload.data.config' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.json
+++ res=0
+++ jq -s '.[0] * {"channel_group":{"groups":{"Application":{"groups": {"Org3MSP":.[1]}}}}}' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config.json /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/peerOrganizations/org3.example.com/org3.json
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/original_config.pb
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/modified_config.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/modified_config.pb
+++ configtxlator compute_update --channel_id mychannel --original /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/original_config.pb --updated /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/modified_config.pb --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.pb
+++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.pb --type common.ConfigUpdate --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.json
+++ jq .
++++ cat /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.json
+++ echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":{' '"channel_id":' '"mychannel",' '"isolated_data":' '{},' '"read_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org1MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"1"' '},' '"Org2MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"LifecycleEndorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"Capabilities":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '},' '"write_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org1MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"1"' '},' '"Org2MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"1"' '},' '"Org3MSP":' '{' '"groups":' '{},' '"mod_policy":' '"Admins",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"Admins",' '"policy":' '{' '"type":' 1, '"value":' '{' '"identities":' '[' '{' '"principal":' '{' '"msp_identifier":' '"Org3MSP",' '"role":' '"ADMIN"' '},' '"principal_classification":' '"ROLE"' '}' '],' '"rule":' '{' '"n_out_of":' '{' '"n":' 1, '"rules":' '[' '{' '"signed_by":' 0 '}' ']' '}' '},' '"version":' 0 '}' '},' '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"Admins",' '"policy":' '{' '"type":' 1, '"value":' '{' '"identities":' '[' '{' '"principal":' '{' '"msp_identifier":' '"Org3MSP",' '"role":' '"PEER"' '},' '"principal_classification":' '"ROLE"' '}' '],' '"rule":' '{' '"n_out_of":' '{' '"n":' 1, '"rules":' '[' '{' '"signed_by":' 0 '}' ']' '}' '},' '"version":' 0 '}' '},' '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"Admins",' '"policy":' '{' '"type":' 1, '"value":' '{' '"identities":' '[' '{' '"principal":' '{' '"msp_identifier":' '"Org3MSP",' '"role":' '"ADMIN"' '},' '"principal_classification":' '"ROLE"' '},' '{' '"principal":' '{' '"msp_identifier":' '"Org3MSP",' '"role":' '"PEER"' '},' '"principal_classification":' '"ROLE"' '},' '{' '"principal":' '{' '"msp_identifier":' '"Org3MSP",' '"role":' '"CLIENT"' '},' '"principal_classification":' '"ROLE"' '}' '],' '"rule":' '{' '"n_out_of":' '{' '"n":' 1, '"rules":' '[' '{' '"signed_by":' 0 '},' '{' '"signed_by":' 1 '},' '{' '"signed_by":' 2 '}' ']' '}' '},' '"version":' 0 '}' '},' '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"Admins",' '"policy":' '{' '"type":' 1, '"value":' '{' '"identities":' '[' '{' '"principal":' '{' '"msp_identifier":' '"Org3MSP",' '"role":' '"ADMIN"' '},' '"principal_classification":' '"ROLE"' '},' '{' '"principal":' '{' '"msp_identifier":' '"Org3MSP",' '"role":' '"CLIENT"' '},' '"principal_classification":' '"ROLE"' '}' '],' '"rule":' '{' '"n_out_of":' '{' '"n":' 1, '"rules":' '[' '{' '"signed_by":' 0 '},' '{' '"signed_by":' 1 '}' ']' '}' '},' '"version":' 0 '}' '},' '"version":' '"0"' '}' '},' '"values":' '{' '"MSP":' '{' '"mod_policy":' '"Admins",' '"value":' '{' '"config":' '{' '"admins":' '[],' '"crypto_config":' '{' '"identity_identifier_hash_function":' '"SHA256",' '"signature_hash_family":' '"SHA2"' '},' '"fabric_node_ous":' '{' '"admin_ou_identifier":' '{' '"certificate":' '"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNLRENDQWMrZ0F3SUJBZ0lVTlQ4UFExVTZSZktMVE05R3VLNnJOSC9CbzRJd0NnWUlLb1pJemowRUF3SXcKY1RFTE1Ba0dBMVVFQmhNQ1ZWTXhGekFWQmdOVkJBZ1REazV2Y25Sb0lFTmhjbTlzYVc1aE1SQXdEZ1lEVlFRSApFd2RTWVd4bGFXZG9NUmt3RndZRFZRUUtFeEJ2Y21jekxtVjRZVzF3YkdVdVkyOXRNUnd3R2dZRFZRUURFeE5qCllTNXZjbWN6TG1WNFlXMXdiR1V1WTI5dE1CNFhEVEkyTURNeE16RTFNalF3TUZvWERUUXhNRE13T1RFMU1qUXcKTUZvd2NURUxNQWtHQTFVRUJoTUNWVk14RnpBVkJnTlZCQWdURGs1dmNuUm9JRU5oY205c2FXNWhNUkF3RGdZRApWUVFIRXdkU1lXeGxhV2RvTVJrd0Z3WURWUVFLRXhCdmNtY3pMbVY0WVcxd2JHVXVZMjl0TVJ3d0dnWURWUVFECkV4TmpZUzV2Y21jekxtVjRZVzF3YkdVdVkyOXRNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUUKQzRsQnhVS1pHS2N6UVhuQmZmd1pQUVpMQnRqQnJGL0JUeDJhUlNBMk16NFhYNzArTkRrUjRwYWN1dmg4Z1VRMwpPdVhjUUtDT1dackEyNkFicURNdThLTkZNRU13RGdZRFZSMFBBUUgvQkFRREFnRUdNQklHQTFVZEV3RUIvd1FJCk1BWUJBZjhDQVFFd0hRWURWUjBPQkJZRUZMZVZYQUgyb0szTkRQc08wT1ZKZXhKdm96WGlNQW9HQ0NxR1NNNDkKQkFNQ0EwY0FNRVFDSUUxM01qZmtQTGlpWXpRdWhDY3A3QXJVYk9TZlJhcDlXSzh5ZGRjcDdFNldBaUF6TEhRQQpEdXYvMGw3bmFsQStZdTd0MWJ4UXZTamtBVXdSYklRKzBQNU4ydz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",' '"organizational_unit_identifier":' '"admin"' '},' '"client_ou_identifier":' '{' '"certificate":' '"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNLRENDQWMrZ0F3SUJBZ0lVTlQ4UFExVTZSZktMVE05R3VLNnJOSC9CbzRJd0NnWUlLb1pJemowRUF3SXcKY1RFTE1Ba0dBMVVFQmhNQ1ZWTXhGekFWQmdOVkJBZ1REazV2Y25Sb0lFTmhjbTlzYVc1aE1SQXdEZ1lEVlFRSApFd2RTWVd4bGFXZG9NUmt3RndZRFZRUUtFeEJ2Y21jekxtVjRZVzF3YkdVdVkyOXRNUnd3R2dZRFZRUURFeE5qCllTNXZjbWN6TG1WNFlXMXdiR1V1WTI5dE1CNFhEVEkyTURNeE16RTFNalF3TUZvWERUUXhNRE13T1RFMU1qUXcKTUZvd2NURUxNQWtHQTFVRUJoTUNWVk14RnpBVkJnTlZCQWdURGs1dmNuUm9JRU5oY205c2FXNWhNUkF3RGdZRApWUVFIRXdkU1lXeGxhV2RvTVJrd0Z3WURWUVFLRXhCdmNtY3pMbVY0WVcxd2JHVXVZMjl0TVJ3d0dnWURWUVFECkV4TmpZUzV2Y21jekxtVjRZVzF3YkdVdVkyOXRNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUUKQzRsQnhVS1pHS2N6UVhuQmZmd1pQUVpMQnRqQnJGL0JUeDJhUlNBMk16NFhYNzArTkRrUjRwYWN1dmg4Z1VRMwpPdVhjUUtDT1dackEyNkFicURNdThLTkZNRU13RGdZRFZSMFBBUUgvQkFRREFnRUdNQklHQTFVZEV3RUIvd1FJCk1BWUJBZjhDQVFFd0hRWURWUjBPQkJZRUZMZVZYQUgyb0szTkRQc08wT1ZKZXhKdm96WGlNQW9HQ0NxR1NNNDkKQkFNQ0EwY0FNRVFDSUUxM01qZmtQTGlpWXpRdWhDY3A3QXJVYk9TZlJhcDlXSzh5ZGRjcDdFNldBaUF6TEhRQQpEdXYvMGw3bmFsQStZdTd0MWJ4UXZTamtBVXdSYklRKzBQNU4ydz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",' '"organizational_unit_identifier":' '"client"' '},' '"enable":' true, '"orderer_ou_identifier":' '{' '"certificate":' '"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNLRENDQWMrZ0F3SUJBZ0lVTlQ4UFExVTZSZktMVE05R3VLNnJOSC9CbzRJd0NnWUlLb1pJemowRUF3SXcKY1RFTE1Ba0dBMVVFQmhNQ1ZWTXhGekFWQmdOVkJBZ1REazV2Y25Sb0lFTmhjbTlzYVc1aE1SQXdEZ1lEVlFRSApFd2RTWVd4bGFXZG9NUmt3RndZRFZRUUtFeEJ2Y21jekxtVjRZVzF3YkdVdVkyOXRNUnd3R2dZRFZRUURFeE5qCllTNXZjbWN6TG1WNFlXMXdiR1V1WTI5dE1CNFhEVEkyTURNeE16RTFNalF3TUZvWERUUXhNRE13T1RFMU1qUXcKTUZvd2NURUxNQWtHQTFVRUJoTUNWVk14RnpBVkJnTlZCQWdURGs1dmNuUm9JRU5oY205c2FXNWhNUkF3RGdZRApWUVFIRXdkU1lXeGxhV2RvTVJrd0Z3WURWUVFLRXhCdmNtY3pMbVY0WVcxd2JHVXVZMjl0TVJ3d0dnWURWUVFECkV4TmpZUzV2Y21jekxtVjRZVzF3YkdVdVkyOXRNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUUKQzRsQnhVS1pHS2N6UVhuQmZmd1pQUVpMQnRqQnJGL0JUeDJhUlNBMk16NFhYNzArTkRrUjRwYWN1dmg4Z1VRMwpPdVhjUUtDT1dackEyNkFicURNdThLTkZNRU13RGdZRFZSMFBBUUgvQkFRREFnRUdNQklHQTFVZEV3RUIvd1FJCk1BWUJBZjhDQVFFd0hRWURWUjBPQkJZRUZMZVZYQUgyb0szTkRQc08wT1ZKZXhKdm96WGlNQW9HQ0NxR1NNNDkKQkFNQ0EwY0FNRVFDSUUxM01qZmtQTGlpWXpRdWhDY3A3QXJVYk9TZlJhcDlXSzh5ZGRjcDdFNldBaUF6TEhRQQpEdXYvMGw3bmFsQStZdTd0MWJ4UXZTamtBVXdSYklRKzBQNU4ydz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",' '"organizational_unit_identifier":' '"orderer"' '},' '"peer_ou_identifier":' '{' '"certificate":' '"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNLRENDQWMrZ0F3SUJBZ0lVTlQ4UFExVTZSZktMVE05R3VLNnJOSC9CbzRJd0NnWUlLb1pJemowRUF3SXcKY1RFTE1Ba0dBMVVFQmhNQ1ZWTXhGekFWQmdOVkJBZ1REazV2Y25Sb0lFTmhjbTlzYVc1aE1SQXdEZ1lEVlFRSApFd2RTWVd4bGFXZG9NUmt3RndZRFZRUUtFeEJ2Y21jekxtVjRZVzF3YkdVdVkyOXRNUnd3R2dZRFZRUURFeE5qCllTNXZjbWN6TG1WNFlXMXdiR1V1WTI5dE1CNFhEVEkyTURNeE16RTFNalF3TUZvWERUUXhNRE13T1RFMU1qUXcKTUZvd2NURUxNQWtHQTFVRUJoTUNWVk14RnpBVkJnTlZCQWdURGs1dmNuUm9JRU5oY205c2FXNWhNUkF3RGdZRApWUVFIRXdkU1lXeGxhV2RvTVJrd0Z3WURWUVFLRXhCdmNtY3pMbVY0WVcxd2JHVXVZMjl0TVJ3d0dnWURWUVFECkV4TmpZUzV2Y21jekxtVjRZVzF3YkdVdVkyOXRNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUUKQzRsQnhVS1pHS2N6UVhuQmZmd1pQUVpMQnRqQnJGL0JUeDJhUlNBMk16NFhYNzArTkRrUjRwYWN1dmg4Z1VRMwpPdVhjUUtDT1dackEyNkFicURNdThLTkZNRU13RGdZRFZSMFBBUUgvQkFRREFnRUdNQklHQTFVZEV3RUIvd1FJCk1BWUJBZjhDQVFFd0hRWURWUjBPQkJZRUZMZVZYQUgyb0szTkRQc08wT1ZKZXhKdm96WGlNQW9HQ0NxR1NNNDkKQkFNQ0EwY0FNRVFDSUUxM01qZmtQTGlpWXpRdWhDY3A3QXJVYk9TZlJhcDlXSzh5ZGRjcDdFNldBaUF6TEhRQQpEdXYvMGw3bmFsQStZdTd0MWJ4UXZTamtBVXdSYklRKzBQNU4ydz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",' '"organizational_unit_identifier":' '"peer"' '}' '},' '"intermediate_certs":' '[],' '"name":' '"Org3MSP",' '"organizational_unit_identifiers":' '[],' '"revocation_list":' '[],' '"root_certs":' '[' '"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNLRENDQWMrZ0F3SUJBZ0lVTlQ4UFExVTZSZktMVE05R3VLNnJOSC9CbzRJd0NnWUlLb1pJemowRUF3SXcKY1RFTE1Ba0dBMVVFQmhNQ1ZWTXhGekFWQmdOVkJBZ1REazV2Y25Sb0lFTmhjbTlzYVc1aE1SQXdEZ1lEVlFRSApFd2RTWVd4bGFXZG9NUmt3RndZRFZRUUtFeEJ2Y21jekxtVjRZVzF3YkdVdVkyOXRNUnd3R2dZRFZRUURFeE5qCllTNXZjbWN6TG1WNFlXMXdiR1V1WTI5dE1CNFhEVEkyTURNeE16RTFNalF3TUZvWERUUXhNRE13T1RFMU1qUXcKTUZvd2NURUxNQWtHQTFVRUJoTUNWVk14RnpBVkJnTlZCQWdURGs1dmNuUm9JRU5oY205c2FXNWhNUkF3RGdZRApWUVFIRXdkU1lXeGxhV2RvTVJrd0Z3WURWUVFLRXhCdmNtY3pMbVY0WVcxd2JHVXVZMjl0TVJ3d0dnWURWUVFECkV4TmpZUzV2Y21jekxtVjRZVzF3YkdVdVkyOXRNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUUKQzRsQnhVS1pHS2N6UVhuQmZmd1pQUVpMQnRqQnJGL0JUeDJhUlNBMk16NFhYNzArTkRrUjRwYWN1dmg4Z1VRMwpPdVhjUUtDT1dackEyNkFicURNdThLTkZNRU13RGdZRFZSMFBBUUgvQkFRREFnRUdNQklHQTFVZEV3RUIvd1FJCk1BWUJBZjhDQVFFd0hRWURWUjBPQkJZRUZMZVZYQUgyb0szTkRQc08wT1ZKZXhKdm96WGlNQW9HQ0NxR1NNNDkKQkFNQ0EwY0FNRVFDSUUxM01qZmtQTGlpWXpRdWhDY3A3QXJVYk9TZlJhcDlXSzh5ZGRjcDdFNldBaUF6TEhRQQpEdXYvMGw3bmFsQStZdTd0MWJ4UXZTamtBVXdSYklRKzBQNU4ydz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"' '],' '"signing_identity":' null, '"tls_intermediate_certs":' '[],' '"tls_root_certs":' '[' '"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNLRENDQWMrZ0F3SUJBZ0lVTlQ4UFExVTZSZktMVE05R3VLNnJOSC9CbzRJd0NnWUlLb1pJemowRUF3SXcKY1RFTE1Ba0dBMVVFQmhNQ1ZWTXhGekFWQmdOVkJBZ1REazV2Y25Sb0lFTmhjbTlzYVc1aE1SQXdEZ1lEVlFRSApFd2RTWVd4bGFXZG9NUmt3RndZRFZRUUtFeEJ2Y21jekxtVjRZVzF3YkdVdVkyOXRNUnd3R2dZRFZRUURFeE5qCllTNXZjbWN6TG1WNFlXMXdiR1V1WTI5dE1CNFhEVEkyTURNeE16RTFNalF3TUZvWERUUXhNRE13T1RFMU1qUXcKTUZvd2NURUxNQWtHQTFVRUJoTUNWVk14RnpBVkJnTlZCQWdURGs1dmNuUm9JRU5oY205c2FXNWhNUkF3RGdZRApWUVFIRXdkU1lXeGxhV2RvTVJrd0Z3WURWUVFLRXhCdmNtY3pMbVY0WVcxd2JHVXVZMjl0TVJ3d0dnWURWUVFECkV4TmpZUzV2Y21jekxtVjRZVzF3YkdVdVkyOXRNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUUKQzRsQnhVS1pHS2N6UVhuQmZmd1pQUVpMQnRqQnJGL0JUeDJhUlNBMk16NFhYNzArTkRrUjRwYWN1dmg4Z1VRMwpPdVhjUUtDT1dackEyNkFicURNdThLTkZNRU13RGdZRFZSMFBBUUgvQkFRREFnRUdNQklHQTFVZEV3RUIvd1FJCk1BWUJBZjhDQVFFd0hRWURWUjBPQkJZRUZMZVZYQUgyb0szTkRQc08wT1ZKZXhKdm96WGlNQW9HQ0NxR1NNNDkKQkFNQ0EwY0FNRVFDSUUxM01qZmtQTGlpWXpRdWhDY3A3QXJVYk9TZlJhcDlXSzh5ZGRjcDdFNldBaUF6TEhRQQpEdXYvMGw3bmFsQStZdTd0MWJ4UXZTamtBVXdSYklRKzBQNU4ydz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"' ']' '},' '"type":' 0 '},' '"version":' '"0"' '}' '},' '"version":' '"0"' '}' '},' '"mod_policy":' '"Admins",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"LifecycleEndorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"Capabilities":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '}}}}'
+++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update_in_envelope.json --type common.Envelope --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/org3_update_in_envelope.pb
+[0;34mSigning config transaction[0m
+[0;34mUsing organization 1[0m
+++ peer channel signconfigtx -f /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/org3_update_in_envelope.pb
+[34m2026-03-13 16:29:05.788 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[0;34mSubmitting transaction from a different peer (peer0.org2) which also signs it[0m
+[0;34mUsing organization 2[0m
+++ peer channel update -f /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/org3_update_in_envelope.pb -c mychannel -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+[34m2026-03-13 16:29:05.825 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:29:05.835 CET 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[0;32mConfig transaction to add org3 to network submitted[0m
+[0;34mJoining Org3 peers to network[0m
+[0;34mUsing organization 3[0m
+Fetching channel config block from orderer...
+++ peer channel fetch 0 /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/mychannel.block -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c mychannel --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+++ res=0
+[34m2026-03-13 16:29:05.883 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:29:05.886 CET 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
+[0;34mJoining org3 peer to the channel...[0m
+[0;34mUsing organization 3[0m
+++ peer channel join -b /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/mychannel.block
+++ res=0
+[34m2026-03-13 16:29:08.928 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:29:09.362 CET 0002 INFO[0m [channelCmd] [34;1mexecuteJoin[0m -> Successfully submitted proposal to join channel
+[0;34mSetting anchor peer for org3...[0m
+[0;34mUsing organization 3[0m
+[0;34mFetching channel config for channel mychannel[0m
+[0;34mUsing organization 3[0m
+[0;34mFetching the most recent configuration block for the channel[0m
++ peer channel fetch config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.pb -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com -c mychannel --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+[34m2026-03-13 16:29:09.406 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:29:09.408 CET 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[34m2026-03-13 16:29:09.408 CET 0003 INFO[0m [channelCmd] [34;1mfetch[0m -> Retrieving last config block: 3
+[34m2026-03-13 16:29:09.409 CET 0004 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 3
+[0;34mDecoding config block to JSON and isolating config to /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/Org3MSPconfig.json[0m
++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.pb --type common.Block --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.json
++ jq '.data.data[0].payload.data.config' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_block.json
++ res=0
+[0;34mGenerating anchor peer update transaction for Org3 on channel mychannel[0m
++ jq '.channel_group.groups.Application.groups.Org3MSP.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "peer0.org3.example.com","port": 11051}]},"version": "0"}}' /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/Org3MSPconfig.json
++ res=0
++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/Org3MSPconfig.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/original_config.pb
++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/Org3MSPmodified_config.json --type common.Config --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/modified_config.pb
++ configtxlator compute_update --channel_id mychannel --original /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/original_config.pb --updated /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/modified_config.pb --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.pb
++ configtxlator proto_decode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.pb --type common.ConfigUpdate --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.json
++ jq .
+++ cat /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update.json
++ echo '{"payload":{"header":{"channel_header":{"channel_id":"mychannel", "type":2}},"data":{"config_update":{' '"channel_id":' '"mychannel",' '"isolated_data":' '{},' '"read_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org3MSP":' '{' '"groups":' '{},' '"mod_policy":' '"",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"0"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '},' '"write_set":' '{' '"groups":' '{' '"Application":' '{' '"groups":' '{' '"Org3MSP":' '{' '"groups":' '{},' '"mod_policy":' '"Admins",' '"policies":' '{' '"Admins":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Endorsement":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Readers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '},' '"Writers":' '{' '"mod_policy":' '"",' '"policy":' null, '"version":' '"0"' '}' '},' '"values":' '{' '"AnchorPeers":' '{' '"mod_policy":' '"Admins",' '"value":' '{' '"anchor_peers":' '[' '{' '"host":' '"peer0.org3.example.com",' '"port":' 11051 '}' ']' '},' '"version":' '"0"' '},' '"MSP":' '{' '"mod_policy":' '"",' '"value":' null, '"version":' '"0"' '}' '},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"1"' '}' '},' '"mod_policy":' '"",' '"policies":' '{},' '"values":' '{},' '"version":' '"0"' '}' '}}}}'
++ configtxlator proto_encode --input /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/config_update_in_envelope.json --type common.Envelope --output /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/addOrg3/../channel-artifacts/Org3MSPanchors.tx
+[34m2026-03-13 16:29:09.518 CET 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2026-03-13 16:29:09.527 CET 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+[0;32mAnchor peer set for org 'Org3MSP' on channel 'mychannel'[0m
+[0;32mChannel 'mychannel' joined[0m
+[0;32mOrg3 peer successfully added to network[0m
+[0;32m[✔] Org3 joined the network[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Step 4/6 — Deploying 'adoption' chaincode[0m
+[0;36m══════════════════════════════════════════[0m
+
+[0;34mUsing docker and docker compose[0m
+[0;34mdeploying chaincode on channel 'mychannel'[0m
+executing with the following
+- CHANNEL_NAME: [0;32mmychannel[0m
+- CC_NAME: [0;32madoption[0m
+- CC_SRC_PATH: [0;32m/home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript[0m
+- CC_SRC_LANGUAGE: [0;32mtypescript[0m
+- CC_VERSION: [0;32m1.0[0m
+- CC_SEQUENCE: [0;32mauto[0m
+- CC_END_POLICY: [0;32mNA[0m
+- CC_COLL_CONFIG: [0;32m/home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json[0m
+- CC_INIT_FCN: [0;32mNA[0m
+- DELAY: [0;32m3[0m
+- MAX_RETRY: [0;32m5[0m
+- VERBOSE: [0;32mfalse[0m
+executing with the following
+- CC_NAME: [0;32madoption[0m
+- CC_SRC_PATH: [0;32m/home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript[0m
+- CC_SRC_LANGUAGE: [0;32mtypescript[0m
+- CC_VERSION: [0;32m1.0[0m
+[0;34mCompiling TypeScript code into JavaScript...[0m
+~/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript ~/Documents/TYP/hyperledger/fabric-samples/test-network
+
+up to date, audited 205 packages in 1s
+
+40 packages are looking for funding
+  run `npm fund` for details
+
+6 vulnerabilities (1 low, 3 moderate, 2 high)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+> asset-transfer-basic@1.0.0 build
+> tsc
+
+~/Documents/TYP/hyperledger/fabric-samples/test-network
+[0;32mFinished compiling TypeScript code into JavaScript[0m
++ '[' false = true ']'
++ peer lifecycle chaincode package adoption.tar.gz --path /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript --lang node --label adoption_1.0
++ res=0
+[0;32mChaincode is packaged[0m
+[0;34mInstalling chaincode on peer0.org1...[0m
+[0;34mUsing organization 1[0m
++ peer lifecycle chaincode queryinstalled --output json
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ grep '^adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba$'
++ test 1 -ne 0
++ peer lifecycle chaincode install adoption.tar.gz
++ res=0
+[34m2026-03-13 16:29:17.051 CET 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nMadoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba\022\014adoption_1.0" > 
+[34m2026-03-13 16:29:17.051 CET 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba
+[0;32mChaincode is installed on peer0.org1[0m
+[0;34mInstall chaincode on peer0.org2...[0m
+[0;34mUsing organization 2[0m
++ peer lifecycle chaincode queryinstalled --output json
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ grep '^adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba$'
++ test 1 -ne 0
++ peer lifecycle chaincode install adoption.tar.gz
++ res=0
+[34m2026-03-13 16:29:20.427 CET 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nMadoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba\022\014adoption_1.0" > 
+[34m2026-03-13 16:29:20.427 CET 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba
+[0;32mChaincode is installed on peer0.org2[0m
+++ peer lifecycle chaincode querycommitted --channelID mychannel --name adoption
+++ sed -n '/Version:/{s/.*Sequence: //; s/, Endorsement Plugin:.*$//; p;}'
+Error: query failed with status: 404 - namespace adoption is not defined
++ COMMITTED_CC_SEQUENCE=
++ res=0
+[0;34mUsing organization 1[0m
++ peer lifecycle chaincode queryinstalled --output json
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ grep '^adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba$'
++ res=0
+adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba
+[0;32mQuery installed successful on peer0.org1 on channel[0m
+[0;34mUsing organization 1[0m
++ peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --channelID mychannel --name adoption --version 1.0 --package-id adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json
++ res=0
+[34m2026-03-13 16:29:22.640 CET 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [47c8bd89243b538ef9a77fa98e8426d0a8273fc4fdd9e0851c19f55da077b113] committed with status (VALID) at localhost:7051
+[0;32mChaincode definition approved on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org1 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org1, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name adoption --version 1.0 --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": false,
+		"Org3MSP": false
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org2 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org2, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name adoption --version 1.0 --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": false,
+		"Org3MSP": false
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org2 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
++ peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --channelID mychannel --name adoption --version 1.0 --package-id adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json
++ res=0
+[34m2026-03-13 16:29:30.924 CET 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [8637a12dc0f4e58f3fa66e8d34b7bd4ade4c1b32923a5156fc42fd3648582057] committed with status (VALID) at localhost:9051
+[0;32mChaincode definition approved on peer0.org2 on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org1 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org1, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name adoption --version 1.0 --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true,
+		"Org3MSP": false
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
+[0;34mChecking the commit readiness of the chaincode definition on peer0.org2 on channel 'mychannel'...[0m
+[0;34mAttempting to check the commit readiness of the chaincode definition on peer0.org2, Retry after 3 seconds.[0m
++ peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name adoption --version 1.0 --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json --output json
++ res=0
+{
+	"approvals": {
+		"Org1MSP": true,
+		"Org2MSP": true,
+		"Org3MSP": false
+	}
+}
+[0;34mChecking the commit readiness of the chaincode definition successful on peer0.org2 on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mUsing organization 2[0m
++ peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --channelID mychannel --name adoption --peerAddresses localhost:7051 --tlsRootCertFiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem --peerAddresses localhost:9051 --tlsRootCertFiles /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem --version 1.0 --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json
++ res=0
+[34m2026-03-13 16:29:39.132 CET 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [bc8f3c4c97b9fd3acf41e30b0d9d7a5ee4bc67be7441d220c46ccf3ec903cdca] committed with status (VALID) at localhost:7051
+[34m2026-03-13 16:29:39.135 CET 0002 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [bc8f3c4c97b9fd3acf41e30b0d9d7a5ee4bc67be7441d220c46ccf3ec903cdca] committed with status (VALID) at localhost:9051
+[0;32mChaincode definition committed on channel 'mychannel'[0m
+[0;34mUsing organization 1[0m
+[0;34mQuerying chaincode definition on peer0.org1 on channel 'mychannel'...[0m
+[0;34mAttempting to Query committed status on peer0.org1, Retry after 3 seconds.[0m
++ peer lifecycle chaincode querycommitted --channelID mychannel --name adoption
++ res=0
+Committed chaincode definition for chaincode 'adoption' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, Org3MSP: false]
+[0;32mQuery chaincode definition successful on peer0.org1 on channel 'mychannel'[0m
+[0;34mUsing organization 2[0m
+[0;34mQuerying chaincode definition on peer0.org2 on channel 'mychannel'...[0m
+[0;34mAttempting to Query committed status on peer0.org2, Retry after 3 seconds.[0m
++ peer lifecycle chaincode querycommitted --channelID mychannel --name adoption
++ res=0
+Committed chaincode definition for chaincode 'adoption' on channel 'mychannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true, Org3MSP: false]
+[0;32mQuery chaincode definition successful on peer0.org2 on channel 'mychannel'[0m
+[0;34mChaincode initialization is not required[0m
+[0;32m[✔] Chaincode 'adoption' deployed on Org1 & Org2[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Step 4b — Installing chaincode on Org3 peer[0m
+[0;36m══════════════════════════════════════════[0m
+
+[0;34mUsing organization 1[0m
+[0;34mPackage ID: adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba[0m
+[0;34mUsing organization 1[0m
+[0;34mInstalling chaincode on peer0.org3...[0m
+[0;34mUsing organization 3[0m
++ peer lifecycle chaincode queryinstalled --output json
++ grep '^adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba$'
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ test 1 -ne 0
++ peer lifecycle chaincode install adoption.tar.gz
++ res=0
+[34m2026-03-13 16:29:49.022 CET 0001 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Installed remotely: response:<status:200 payload:"\nMadoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba\022\014adoption_1.0" > 
+[34m2026-03-13 16:29:49.022 CET 0002 INFO[0m [cli.lifecycle.chaincode] [34;1msubmitInstallProposal[0m -> Chaincode code package identifier: adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba
+[0;32mChaincode is installed on peer0.org3[0m
+[0;34mQuerying installed chaincode on peer0.org3...[0m
+[0;34mUsing organization 3[0m
++ peer lifecycle chaincode queryinstalled --output json
++ jq -r 'try (.installed_chaincodes[].package_id)'
++ grep '^adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba$'
++ res=0
+adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba
+[0;32mQuery installed successful on peer0.org3 on channel[0m
+[0;34mApproving chaincode definition for Org3...[0m
+[0;34mUsing organization 3[0m
++ peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --channelID mychannel --name adoption --version 1.0 --package-id adoption_1.0:48feb53e8f6588243206832dd1d5610da7a1e0ab19575f43ebcf2127785e36ba --sequence 1 --collections-config /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/asset-transfer-basic/chaincode-typescript/pdc/collections_config.json
++ res=0
+[34m2026-03-13 16:29:51.176 CET 0001 INFO[0m [chaincodeCmd] [34;1mClientWait[0m -> txid [eb5ff3b7e999f1aaac05ddb5b4789875cde195819b02e1e370ea6faa9a2953ee] committed with status (VALID) at localhost:11051
+[0;32mChaincode definition approved on peer0.org3 on channel 'mychannel'[0m
+[0;32m[✔] Chaincode 'adoption' installed and approved on Org3[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Step 5/6 — Setting up & starting backend[0m
+[0;36m══════════════════════════════════════════[0m
+
+
+up to date, audited 168 packages in 2s
+
+31 packages are looking for funding
+  run `npm fund` for details
+
+9 vulnerabilities (3 low, 1 moderate, 5 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
+[0;32m[✔] Starting Prometheus/Grafana...[0m
+ Container node-exporter Running 
+ Container prometheus Running 
+ Container grafana Running 
+ Container cadvisor Starting 
+ Container cadvisor Started 
+[0;32m[✔] Prometheus ready on port 9090 (Grafana on port 3000)[0m
+[0;32m[✔] Importing pet data from ../pet_data/pets100.json...[0m
+IMPORT_START: 2026-03-13T15:29:53.727Z
+Loaded the network configuration located at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json
+Built a CA Client named ca-org1
+Built a file system wallet at /home/jurikasai18/Documents/TYP/petadopt/backend/wallet
+Successfully enrolled admin user and imported it into the wallet
+Successfully registered and enrolled user importUser and imported it into the wallet
+Creating hamster001...
+Creating bird002...
+Creating hedgehog003...
+Creating snake004...
+Creating cat005...
+Creating ferret006...
+Creating lizard007...
+2026-03-13T15:30:14.872Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:30:14.891Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating guinea_pig008...
+2026-03-13T15:30:18.996Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat009...
+Creating cat010...
+Creating hamster011...
+2026-03-13T15:30:29.277Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:30:29.301Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat012...
+2026-03-13T15:30:31.365Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat013...
+Creating bird014...
+2026-03-13T15:30:39.603Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hamster015...
+2026-03-13T15:30:43.732Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:30:43.752Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating turtle016...
+Creating lizard017...
+Creating rabbit018...
+Creating ferret019...
+Creating lizard020...
+2026-03-13T15:30:58.129Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:30:58.156Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat021...
+Creating snake022...
+Creating hamster023...
+2026-03-13T15:31:08.429Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating bird024...
+Creating bird025...
+Creating hamster026...
+Creating guinea_pig027...
+Creating rabbit028...
+2026-03-13T15:31:20.806Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating turtle029...
+Creating guinea_pig030...
+2026-03-13T15:31:27.045Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hamster031...
+Creating bird032...
+2026-03-13T15:31:31.281Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat033...
+Creating guinea_pig034...
+2026-03-13T15:31:37.520Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating turtle035...
+2026-03-13T15:31:41.716Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating bird036...
+Creating hedgehog037...
+2026-03-13T15:31:49.982Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:31:50.010Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating dog038...
+2026-03-13T15:31:54.120Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hedgehog039...
+Creating bird040...
+Creating bird041...
+Creating snake042...
+2026-03-13T15:32:10.560Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:32:10.593Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating snake043...
+2026-03-13T15:32:14.727Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating lizard044...
+2026-03-13T15:32:16.854Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating ferret045...
+2026-03-13T15:32:21.018Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:32:21.046Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating dog046...
+2026-03-13T15:32:23.174Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:32:23.208Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hamster047...
+2026-03-13T15:32:27.352Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hamster048...
+Creating turtle049...
+Creating cat050...
+Creating turtle051...
+2026-03-13T15:32:39.753Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating snake052...
+2026-03-13T15:32:44.016Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:32:44.071Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat053...
+Creating bird054...
+2026-03-13T15:32:50.301Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating dog055...
+2026-03-13T15:32:52.524Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hedgehog056...
+Creating cat057...
+Creating hedgehog058...
+2026-03-13T15:32:58.805Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:32:58.854Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hamster059...
+2026-03-13T15:33:03.201Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating dog060...
+2026-03-13T15:33:07.388Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:07.425Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating dog061...
+2026-03-13T15:33:09.532Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:09.563Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating lizard062...
+Creating cat063...
+Creating guinea_pig064...
+2026-03-13T15:33:19.895Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:19.933Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating snake065...
+Creating rabbit066...
+Creating lizard067...
+2026-03-13T15:33:32.282Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:32.319Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hedgehog068...
+2026-03-13T15:33:34.432Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:34.467Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating turtle069...
+Creating ferret070...
+2026-03-13T15:33:40.698Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:40.728Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hamster071...
+2026-03-13T15:33:42.853Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating ferret072...
+2026-03-13T15:33:45.004Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:45.036Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat073...
+2026-03-13T15:33:49.190Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat074...
+Creating snake075...
+Creating rabbit076...
+2026-03-13T15:33:57.462Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:33:57.501Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating ferret077...
+2026-03-13T15:33:59.624Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hedgehog078...
+Creating lizard079...
+Creating cat080...
+2026-03-13T15:34:10.047Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating hedgehog081...
+2026-03-13T15:34:14.316Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating lizard082...
+Creating turtle083...
+Creating turtle084...
+2026-03-13T15:34:24.768Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:34:24.806Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating bird085...
+2026-03-13T15:34:28.982Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating bird086...
+Creating dog087...
+2026-03-13T15:34:35.261Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:34:35.302Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating cat088...
+Creating dog089...
+Creating snake090...
+2026-03-13T15:34:47.797Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating lizard091...
+2026-03-13T15:34:49.996Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating ferret092...
+2026-03-13T15:34:54.200Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:34:54.237Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating dog093...
+2026-03-13T15:34:56.427Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating turtle094...
+Creating ferret095...
+2026-03-13T15:35:02.789Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:35:02.857Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating lizard096...
+Creating rabbit097...
+2026-03-13T15:35:09.250Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating dog098...
+2026-03-13T15:35:11.512Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:35:11.551Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Creating ferret099...
+Creating hamster100...
+2026-03-13T15:35:17.791Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+2026-03-13T15:35:17.855Z - [31merror[39m: [DiscoveryHandler]: compareProposalResponseResults[undefined] - read/writes result sets do not match index=1
+Import complete.
+IMPORT_END: 2026-03-13T15:35:21.939Z
+IMPORT_DURATION_SEC: 328.211
+[0;32m[✔] Seeding allowed login user IDs on-chain...[0m
+
+> backend@1.0.0 seed:users
+> node importUser.js
+
+Loaded the network configuration located at /home/jurikasai18/Documents/TYP/hyperledger/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json
+Built a CA Client named ca-org1
+Built a file system wallet at /home/jurikasai18/Documents/TYP/petadopt/backend/wallet
+An identity for the admin user already exists in the wallet
+Successfully registered and enrolled user seedUser and imported it into the wallet
+Allowed login identity center1 for org1
+Allowed login identity center2 for org1
+Allowed login identity admin1 for org1
+Allowed login identity vet1 for org2
+Allowed login identity vet2 for org2
+Allowed login identity doctor1 for org2
+Allowed login identity adopter1 for org3
+Allowed login identity adopter2 for org3
+Allowed login identity user1 for org3
+Allowed user seeding complete.
+[0;32m[✔] Starting backend server on port 4000...[0m
+Backend server running on http://localhost:4000
+[0;32m[✔] Backend running on port 4000 (PID 603328)[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  Step 6/6 — Setting up & starting frontend[0m
+[0;36m══════════════════════════════════════════[0m
+
+
+up to date, audited 180 packages in 1s
+
+40 packages are looking for funding
+  run `npm fund` for details
+
+3 vulnerabilities (1 moderate, 2 high)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+[0;32m[✔] Starting frontend dev server...[0m
+
+  VITE v7.3.1  ready in 194 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://100.65.33.238:5173/
+  ➜  Network: http://172.18.0.1:5173/
+  ➜  Network: http://172.19.0.1:5173/
+[0;32m[✔] Frontend running on port 5173 (PID 603363)[0m
+
+[0;36m══════════════════════════════════════════[0m
+[0;36m  🎉 YAYYY PawLedger is READY on browser![0m
+[0;36m══════════════════════════════════════════[0m
+
+[0;32m  Click to open Frontend:  [0mhttp://localhost:5173
+[0;32m  Backend:   [0mhttp://localhost:4000
+
+[1;33m  To stop everything later, run:[0m
+    [0;36mcd .. && ./teardown.sh[0m
+
+[1;33m  Process PIDs saved to .backend.pid and .frontend.pid[0m
+

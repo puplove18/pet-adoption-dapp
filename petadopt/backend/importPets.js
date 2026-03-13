@@ -41,9 +41,17 @@ async function connect() {
   return { gateway, contract };
 }
 
+// I added the import script to the deploy_latency.sh 
+// this would let either import the default pet_data.json or another pets200.json for the latency test when the deploy_latency.sh
 async function main() {
-  const dataPath = path.join(__dirname, '../pet_data/pet_data.json'
-);
+  const startWallClock = new Date();
+  const startTime = process.hrtime.bigint();
+  console.log(`IMPORT_START: ${startWallClock.toISOString()}`);
+
+  const inputPath = process.argv[2] || process.env.PET_DATA_FILE;
+  const dataPath = inputPath
+    ? path.resolve(__dirname, inputPath)
+    : path.join(__dirname, '../pet_data/pet_data.json');
   const animals = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
   let gateway;
@@ -111,6 +119,11 @@ async function main() {
     console.log('Import complete.');
   } finally {
     if (gateway) gateway.disconnect();
+    const endWallClock = new Date();
+    const endTime = process.hrtime.bigint();
+    const durationSeconds = Number(endTime - startTime) / 1e9;
+    console.log(`IMPORT_END: ${endWallClock.toISOString()}`);
+    console.log(`IMPORT_DURATION_SEC: ${durationSeconds.toFixed(3)}`);
   }
 }
 

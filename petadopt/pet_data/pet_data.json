@@ -154,7 +154,12 @@
         "city": "Leipzig"
       },
       {
-        "name": "Jane Doe2",
+        "name": "jane doe",
+        "phone": null,
+        "city": "Berlin"
+      },
+      {
+        "name": "Em",
         "phone": null,
         "city": null
       }

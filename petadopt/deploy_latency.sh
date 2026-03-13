@@ -52,7 +52,7 @@ if [ -d "$FABRIC_SAMPLES/bin" ]; then
     info "Fabric binaries added to PATH"
 fi
 
-# Export Fabric config path
+# Export Fabric config parh
 export FABRIC_CFG_PATH="$FABRIC_SAMPLES/config"
 
 info "All pre-deploy checks passed"
@@ -64,7 +64,7 @@ info "All pre-deploy checks passed"
 banner "Step 1/6 — Cleaning up previous network (if any)"
 cd "$TEST_NETWORK"
 
-# Force-remove any leftover Org3
+# forcefully remove any leftover Org3
 docker rm -f peer0.org3.example.com ca_org3 couchdb3 2>/dev/null || true
 ./network.sh down 2>/dev/null || true
 rm -rf "$TEST_NETWORK/organizations/peerOrganizations/org3.example.com" 2>/dev/null || true
@@ -114,7 +114,7 @@ info "Chaincode 'adoption' deployed on Org1 & Org2"
 
 
 # Step 4b: Install & approve chaincode on Org3
-# Org3 is stored separately, so needs another setup
+# org3 is stored separately, so needs another setup
 banner "Step 4b — Installing chaincode on Org3 peer"
 
 cd "$TEST_NETWORK"
@@ -167,7 +167,7 @@ queryInstalled 3
 infoln "Approving chaincode definition for Org3..."
 approveForMyOrg 3
 
-# Restore strict error handling for the rest of the deploy.
+# restore strict error handling for the rest of the deploy.
 set -e
 info "Chaincode 'adoption' installed and approved on Org3"
 
@@ -178,11 +178,38 @@ banner "Step 5/6 — Setting up & starting backend"
 cd "$BACKEND_DIR"
 npm install
 
-# Import sample pet data from .json
-info "Importing pet data..."
-npm run import || fail "Pet data import failed — no pets will appear in the UI until the import succeeds"
+# Start metrics before latency workload import, so that i can see the latency for 200 animal importing
+info "Starting Prometheus/Grafana..."
 
-# Seed allowed login identities on-chain
+# docker compose v2, and if not available, fallback to v1
+if docker compose version >/dev/null 2>&1; then
+    docker compose -f "$TEST_NETWORK/prometheus-grafana/docker-compose.yaml" up -d || fail "Failed to start Prometheus/Grafana with docker compose"
+else
+    docker-compose -f "$TEST_NETWORK/prometheus-grafana/docker-compose.yaml" up -d || fail "Failed to start Prometheus/Grafana with docker-compose"
+fi
+
+# Wait until Prometheus is ready so import traffic is captured
+# Every second, try to curl the BE endpoint for 20 sec
+for i in $(seq 1 20); do
+    if curl -fsS http://localhost:9090/-/ready >/dev/null 2>&1; then
+        break
+    fi
+    sleep 1
+done
+
+if curl -fsS http://localhost:9090/-/ready >/dev/null 2>&1; then
+    info "Prometheus ready on port 9090 (Grafana on port 3000)"
+else
+    fail "Prometheus is not ready — check test-network/prometheus-grafana containers"
+fi
+
+# Import pet data from selected file (default: pets200.json)
+# Depending on the size of the file mentioned in terminal to run this file, this code will import the data ont oo chain from according json file.
+PET_FILE="${PET_DATA_FILE:-../pet_data/pets200.json}"
+info "Importing pet data from $PET_FILE..."
+node importPets.js "$PET_FILE" || fail "Pet data import failed — no pets will appear in the UI until the import succeeds"
+
+# seed allowed login identities on-chain
 info "Seeding allowed login user IDs on-chain..."
 npm run seed:users || warn "Allowed user seeding failed — login checks may reject all users"
 
@@ -233,7 +260,7 @@ else
 fi
 
 
-# Done
+# =====================================================================================================
 banner "🎉 YAYYY PawLedger is READY on browser!"
 
 echo -e "${GREEN}  Click to open Frontend:  ${NC}http://localhost:5173"

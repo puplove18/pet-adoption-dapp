@@ -46,25 +46,29 @@ function logTs() {
 }
 
 // Transaction Log on terminal as I was told to have it somewhere 
+// but this dosen't have it anywhere else, no database, no file, no ui, just the terminal
+// txlog for create, update, adopt, return
 function txLog(action, org, userId, animalId, extra = '') {
   const pad = (s, n) => s.padEnd(n);
   const line = `[${logTs()}] TX  | ${pad(action, 10)} | ${pad(org, 4)} ${pad(userId, 12)} | ${animalId}${extra ? ' | ' + extra : ''}`;
   console.log('\x1b[36m%s\x1b[0m', line);  // cyan color
 }
 
+// eventlog for login, list, read, update, adopt, return
 function eventLog(event, org = '-', userId = '-', extra = '') {
   const pad = (s, n) => String(s).padEnd(n);
   const line = `[${logTs()}] EVT | ${pad(event, 10)} | ${pad(org, 4)} ${pad(userId, 12)}${extra ? ' | ' + extra : ''}`;
   console.log('\x1b[35m%s\x1b[0m', line);  // magenta color
 }
 
+// authForLog fot extracting org and userId for logging without errors
 function authForLog(req) {
   const org = req.header('x-org') || req.body?.org || '-';
   const userId = req.header('x-user') || req.body?.userId || '-';
   return { org, userId };
 }
 
-// Request-level terminal audit line for every API call
+// Request-level terminal logging for all API calls
 app.use((req, res, next) => {
   if (!req.path.startsWith('/api/')) return next();
 
@@ -104,7 +108,7 @@ function isValidationError(err) {
 
 function extractPeerMessage(text) {
   if (!text) return "";
-
+  // already existing data 
   const patterns = [
     /message=([^\n\r]+?(?:already exists|already assigned)[^\n\r]*)/i,
     /message:\s*["']([^"']+?(?:already exists|already assigned)[^"']*)["']/i,

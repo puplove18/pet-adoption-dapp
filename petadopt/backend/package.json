@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node backend.js",
     "import": "node importPets.js",
+    "import:200": "node importPets.js ../pet_data/pets200.json",
     "seed:users": "node importUser.js"
   },
   "keywords": [],

@@ -1,0 +1,1895 @@
+[
+  {
+    "animalId": "hamster001",
+    "name": "Kuro",
+    "species": "hamster",
+    "breed": "dwarf",
+    "gender": "female",
+    "age": "10",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": "32000720514",
+      "city": "Leipzig"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "bird002",
+    "name": "Yuki",
+    "species": "bird",
+    "breed": "canary",
+    "gender": "unknown",
+    "age": "3",
+    "shelterId": "shelterA",
+    "microchipNumber": "961834481869175",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "John Doe",
+      "phone": "85627308949",
+      "city": "Hamburg"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hedgehog003",
+    "name": "N/A",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "female",
+    "age": "1",
+    "shelterId": "shelterD",
+    "microchipNumber": "975585130849677",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "snake004",
+    "name": "Hana",
+    "species": "snake",
+    "breed": "ball python",
+    "gender": "female",
+    "age": "4",
+    "shelterId": "shelterD",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "cat005",
+    "name": "Kuro",
+    "species": "cat",
+    "breed": "siamese",
+    "gender": "male",
+    "age": "13",
+    "shelterId": "shelterD",
+    "microchipNumber": "127398199199889",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": "61362108524",
+      "city": "Munich"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "ferret006",
+    "name": "Hana",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "male",
+    "age": "unknown",
+    "shelterId": "shelterA",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "lizard007",
+    "name": "Sora",
+    "species": "lizard",
+    "breed": "gecko",
+    "gender": "male",
+    "age": "unknown",
+    "shelterId": "shelterD",
+    "microchipNumber": "411721922470744",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "98686889818",
+      "city": "Berlin"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "guinea_pig008",
+    "name": "Kuma",
+    "species": "guinea_pig",
+    "breed": "american",
+    "gender": "female",
+    "age": "9",
+    "shelterId": "shelterB",
+    "microchipNumber": "934263765496913",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Lukas Weber",
+      "phone": "11268900492",
+      "city": "Hamburg"
+    },
+    "formerOwners": [
+      {
+        "name": "John Doe",
+        "phone": null,
+        "city": "Berlin"
+      },
+      {
+        "name": "John Doe",
+        "phone": "91255564936",
+        "city": "Munich"
+      },
+      {
+        "name": "Emily Brown",
+        "phone": null,
+        "city": "Kyoto"
+      }
+    ]
+  },
+  {
+    "animalId": "cat009",
+    "name": "Miso",
+    "species": "cat",
+    "breed": "maine coon",
+    "gender": "unknown",
+    "age": "13",
+    "shelterId": "shelterB",
+    "microchipNumber": "274972903599710",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "ADOPTED",
+    "formerOwners": []
+  },
+  {
+    "animalId": "cat010",
+    "name": "Yuki",
+    "species": "cat",
+    "breed": "ragdoll",
+    "gender": "unknown",
+    "age": "14",
+    "shelterId": "shelterB",
+    "microchipNumber": "752313701052248",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": null,
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hamster011",
+    "name": "Nori",
+    "species": "hamster",
+    "breed": "dwarf",
+    "gender": "unknown",
+    "age": "8",
+    "shelterId": "shelterA",
+    "microchipNumber": "419290765979275",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "cat012",
+    "name": "Hana",
+    "species": "cat",
+    "breed": "maine coon",
+    "gender": "unknown",
+    "age": "9",
+    "shelterId": "shelterD",
+    "microchipNumber": "347316554315462",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "formerOwners": [
+      {
+        "name": "Ken Tanaka",
+        "phone": "41705781847",
+        "city": null
+      },
+      {
+        "name": "Emily Brown",
+        "phone": "59413262017",
+        "city": "Berlin"
+      },
+      {
+        "name": "Emily Brown",
+        "phone": "41085966170",
+        "city": "Munich"
+      }
+    ]
+  },
+  {
+    "animalId": "cat013",
+    "name": "Luna",
+    "species": "cat",
+    "breed": "british shorthair",
+    "gender": "unknown",
+    "age": "5",
+    "shelterId": "shelterA",
+    "microchipNumber": "640160682019945",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "bird014",
+    "name": "Yuki",
+    "species": "bird",
+    "breed": "canary",
+    "gender": "unknown",
+    "age": "2",
+    "shelterId": "shelterB",
+    "microchipNumber": "643099749501524",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Ken Tanaka",
+      "phone": "52525452298",
+      "city": "Leipzig"
+    },
+    "formerOwners": [
+      {
+        "name": "Emily Brown",
+        "phone": "26122385134",
+        "city": null
+      },
+      {
+        "name": "Lukas Weber",
+        "phone": "15577555337",
+        "city": null
+      }
+    ]
+  },
+  {
+    "animalId": "hamster015",
+    "name": "Mochi",
+    "species": "hamster",
+    "breed": "dwarf",
+    "gender": "unknown",
+    "age": "4",
+    "shelterId": "shelterA",
+    "microchipNumber": "131843862179822",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": []
+  },
+  {
+    "animalId": "turtle016",
+    "name": "Yuki",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "female",
+    "age": "9",
+    "shelterId": "shelterA",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "lizard017",
+    "name": "N/A",
+    "species": "lizard",
+    "breed": "gecko",
+    "gender": "male",
+    "age": "unknown",
+    "shelterId": "shelterB",
+    "microchipNumber": "925557844422448",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "rabbit018",
+    "name": "Hana",
+    "species": "rabbit",
+    "breed": "lop",
+    "gender": "unknown",
+    "age": "1",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "formerOwners": [
+      {
+        "name": "John Doe",
+        "phone": "83071318512",
+        "city": null
+      },
+      {
+        "name": "Jane Doe",
+        "phone": "54343383530",
+        "city": "Hamburg"
+      }
+    ]
+  },
+  {
+    "animalId": "ferret019",
+    "name": "Miso",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "male",
+    "age": "5",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "lizard020",
+    "name": "Hana",
+    "species": "lizard",
+    "breed": "gecko",
+    "gender": "unknown",
+    "age": "5",
+    "shelterId": "shelterC",
+    "microchipNumber": "919169653444523",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": [
+      {
+        "name": "Maria Garcia",
+        "phone": null,
+        "city": null
+      },
+      {
+        "name": "Lukas Weber",
+        "phone": "71052766428",
+        "city": "Tokyo"
+      }
+    ]
+  },
+  {
+    "animalId": "cat021",
+    "name": "N/A",
+    "species": "cat",
+    "breed": "british shorthair",
+    "gender": "unknown",
+    "age": "13",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": "78352157116",
+      "city": "Munich"
+    },
+    "formerOwners": [
+      {
+        "name": "Maria Garcia",
+        "phone": "14061909965",
+        "city": null
+      },
+      {
+        "name": "Max Müller",
+        "phone": null,
+        "city": "Düsseldorf"
+      },
+      {
+        "name": "John Doe",
+        "phone": "31283943166",
+        "city": null
+      }
+    ]
+  },
+  {
+    "animalId": "snake022",
+    "name": "Yuki",
+    "species": "snake",
+    "breed": "corn snake",
+    "gender": "female",
+    "age": "14",
+    "shelterId": "shelterD",
+    "microchipNumber": "679594003857167",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED",
+    "formerOwners": [
+      {
+        "name": "Lukas Weber",
+        "phone": null,
+        "city": "Leipzig"
+      }
+    ]
+  },
+  {
+    "animalId": "hamster023",
+    "name": "N/A",
+    "species": "hamster",
+    "breed": "dwarf",
+    "gender": "male",
+    "age": "13",
+    "shelterId": "shelterD",
+    "microchipNumber": "600698566321920",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": []
+  },
+  {
+    "animalId": "bird024",
+    "name": "Hana",
+    "species": "bird",
+    "breed": "canary",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "formerOwners": [
+      {
+        "name": "Jane Doe",
+        "phone": "40400347453",
+        "city": null
+      },
+      {
+        "name": "Jane Doe",
+        "phone": "56133366559",
+        "city": "Düsseldorf"
+      }
+    ]
+  },
+  {
+    "animalId": "bird025",
+    "name": "Yuki",
+    "species": "bird",
+    "breed": "canary",
+    "gender": "unknown",
+    "age": "6",
+    "shelterId": "shelterA",
+    "microchipNumber": "297657640255458",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": "22882390741",
+      "city": "Tokyo"
+    },
+    "formerOwners": [
+      {
+        "name": "Lukas Weber",
+        "phone": "67746058290",
+        "city": null
+      }
+    ]
+  },
+  {
+    "animalId": "hamster026",
+    "name": "N/A",
+    "species": "hamster",
+    "breed": "syrian",
+    "gender": "female",
+    "age": "2",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Ken Tanaka",
+      "phone": "25179279046",
+      "city": "Hamburg"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "guinea_pig027",
+    "name": "Nori",
+    "species": "guinea_pig",
+    "breed": "abyssinian",
+    "gender": "female",
+    "age": "1",
+    "shelterId": "shelterA",
+    "microchipNumber": "981156990275857",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": [
+      {
+        "name": "Maria Garcia",
+        "phone": "86203739763",
+        "city": "Munich"
+      }
+    ]
+  },
+  {
+    "animalId": "rabbit028",
+    "name": "Mochi",
+    "species": "rabbit",
+    "breed": "lop",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterA",
+    "microchipNumber": "683302572028845",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "turtle029",
+    "name": "Miso",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "female",
+    "age": "8",
+    "shelterId": "shelterB",
+    "microchipNumber": "959543589674205",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "46976636663",
+      "city": "Munich"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "guinea_pig030",
+    "name": "Kuma",
+    "species": "guinea_pig",
+    "breed": "abyssinian",
+    "gender": "female",
+    "age": "7",
+    "shelterId": "shelterC",
+    "microchipNumber": "750132628059403",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "hamster031",
+    "name": "Mochi",
+    "species": "hamster",
+    "breed": "syrian",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterD",
+    "microchipNumber": "288199788372992",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "20156199156",
+      "city": "Kyoto"
+    },
+    "formerOwners": [
+      {
+        "name": "John Doe",
+        "phone": "20753167234",
+        "city": "Berlin"
+      }
+    ]
+  },
+  {
+    "animalId": "bird032",
+    "name": "Kuma",
+    "species": "bird",
+    "breed": "cockatiel",
+    "gender": "female",
+    "age": "4",
+    "shelterId": "shelterB",
+    "microchipNumber": "773281683641346",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "John Doe",
+      "phone": "11580355191",
+      "city": "Berlin"
+    },
+    "formerOwners": [
+      {
+        "name": "Jane Doe",
+        "phone": "99376168144",
+        "city": null
+      },
+      {
+        "name": "John Doe",
+        "phone": "15706742164",
+        "city": "Kyoto"
+      }
+    ]
+  },
+  {
+    "animalId": "cat033",
+    "name": "Mochi",
+    "species": "cat",
+    "breed": "ragdoll",
+    "gender": "female",
+    "age": "14",
+    "shelterId": "shelterD",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "10546339524",
+      "city": "Düsseldorf"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "guinea_pig034",
+    "name": "Yuki",
+    "species": "guinea_pig",
+    "breed": "american",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterA",
+    "microchipNumber": "195269011073584",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": "98275704618",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "turtle035",
+    "name": "Luna",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterD",
+    "microchipNumber": "754553760280828",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Ken Tanaka",
+      "phone": null,
+      "city": "Leipzig"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "bird036",
+    "name": "Kuro",
+    "species": "bird",
+    "breed": "cockatiel",
+    "gender": "male",
+    "age": "8",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "hedgehog037",
+    "name": "Mochi",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "male",
+    "age": "unknown",
+    "shelterId": "shelterA",
+    "microchipNumber": "611206312165170",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "dog038",
+    "name": "N/A",
+    "species": "dog",
+    "breed": "corgi",
+    "gender": "female",
+    "age": "10",
+    "shelterId": "shelterB",
+    "microchipNumber": "157111484206554",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Ken Tanaka",
+      "phone": null,
+      "city": "Berlin"
+    },
+    "formerOwners": [
+      {
+        "name": "Jane Doe",
+        "phone": "68471569412",
+        "city": "Kyoto"
+      }
+    ]
+  },
+  {
+    "animalId": "hedgehog039",
+    "name": "Yuki",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "male",
+    "age": "2",
+    "shelterId": "shelterB",
+    "microchipNumber": "788363286882177",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "bird040",
+    "name": "Kuma",
+    "species": "bird",
+    "breed": "cockatiel",
+    "gender": "male",
+    "age": "7",
+    "shelterId": "shelterD",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Ken Tanaka",
+      "phone": "12736257469",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "bird041",
+    "name": "Kuma",
+    "species": "bird",
+    "breed": "canary",
+    "gender": "female",
+    "age": "2",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "snake042",
+    "name": "Kuro",
+    "species": "snake",
+    "breed": "ball python",
+    "gender": "unknown",
+    "age": "12",
+    "shelterId": "shelterD",
+    "microchipNumber": "569869897447682",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "snake043",
+    "name": "N/A",
+    "species": "snake",
+    "breed": "ball python",
+    "gender": "female",
+    "age": "10",
+    "shelterId": "shelterB",
+    "microchipNumber": "890111188539343",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": null,
+      "city": "Leipzig"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "lizard044",
+    "name": "Kuma",
+    "species": "lizard",
+    "breed": "bearded dragon",
+    "gender": "male",
+    "age": "9",
+    "shelterId": "shelterA",
+    "microchipNumber": "989736512308287",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "John Doe",
+      "phone": null,
+      "city": "Berlin"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "ferret045",
+    "name": "Sora",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "female",
+    "age": "0",
+    "shelterId": "shelterB",
+    "microchipNumber": "692006823987624",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": [
+      {
+        "name": "Emily Brown",
+        "phone": null,
+        "city": "Leipzig"
+      },
+      {
+        "name": "Ken Tanaka",
+        "phone": "40382555596",
+        "city": "Berlin"
+      }
+    ]
+  },
+  {
+    "animalId": "dog046",
+    "name": "Sora",
+    "species": "dog",
+    "breed": "german shepherd",
+    "gender": "unknown",
+    "age": "2",
+    "shelterId": "shelterB",
+    "microchipNumber": "485816756302158",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": "63626040191",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hamster047",
+    "name": "Nori",
+    "species": "hamster",
+    "breed": "dwarf",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterC",
+    "microchipNumber": "507198798121927",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Lukas Weber",
+      "phone": "10934547505",
+      "city": "Hamburg"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hamster048",
+    "name": "Sora",
+    "species": "hamster",
+    "breed": "dwarf",
+    "gender": "male",
+    "age": "9",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": [
+      {
+        "name": "Emily Brown",
+        "phone": null,
+        "city": "Leipzig"
+      },
+      {
+        "name": "Lukas Weber",
+        "phone": "39774441722",
+        "city": "Hamburg"
+      }
+    ]
+  },
+  {
+    "animalId": "turtle049",
+    "name": "N/A",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterA",
+    "microchipNumber": "550380680148994",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Ken Tanaka",
+      "phone": null,
+      "city": "Leipzig"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "cat050",
+    "name": "Kuro",
+    "species": "cat",
+    "breed": "maine coon",
+    "gender": "unknown",
+    "age": "4",
+    "shelterId": "shelterD",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "turtle051",
+    "name": "Kuro",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterD",
+    "microchipNumber": "517358895035527",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": "45563311270",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "snake052",
+    "name": "Nori",
+    "species": "snake",
+    "breed": "ball python",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterA",
+    "microchipNumber": "126517749861089",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": [
+      {
+        "name": "Lukas Weber",
+        "phone": null,
+        "city": "Munich"
+      },
+      {
+        "name": "Anna Schmidt",
+        "phone": null,
+        "city": "Munich"
+      },
+      {
+        "name": "Max Müller",
+        "phone": null,
+        "city": null
+      }
+    ]
+  },
+  {
+    "animalId": "cat053",
+    "name": "N/A",
+    "species": "cat",
+    "breed": "british shorthair",
+    "gender": "female",
+    "age": "2",
+    "shelterId": "shelterC",
+    "microchipNumber": "805574365524034",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Anna Schmidt",
+      "phone": "81431013008",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "bird054",
+    "name": "Sora",
+    "species": "bird",
+    "breed": "parakeet",
+    "gender": "unknown",
+    "age": "0",
+    "shelterId": "shelterB",
+    "microchipNumber": "129065048995279",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": "25813715211",
+      "city": "Düsseldorf"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "dog055",
+    "name": "Miso",
+    "species": "dog",
+    "breed": "shiba inu",
+    "gender": "male",
+    "age": "unknown",
+    "shelterId": "shelterB",
+    "microchipNumber": "561233036139888",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": [
+      {
+        "name": "Anna Schmidt",
+        "phone": null,
+        "city": null
+      }
+    ]
+  },
+  {
+    "animalId": "hedgehog056",
+    "name": "Sora",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "unknown",
+    "age": "1",
+    "shelterId": "shelterA",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "53598650434",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "cat057",
+    "name": "Kuro",
+    "species": "cat",
+    "breed": "ragdoll",
+    "gender": "unknown",
+    "age": "4",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "hedgehog058",
+    "name": "Luna",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "unknown",
+    "age": "14",
+    "shelterId": "shelterA",
+    "microchipNumber": "367829683160400",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Anna Schmidt",
+      "phone": null,
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hamster059",
+    "name": "Miso",
+    "species": "hamster",
+    "breed": "syrian",
+    "gender": "male",
+    "age": "unknown",
+    "shelterId": "shelterD",
+    "microchipNumber": "384489119090634",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "dog060",
+    "name": "Hana",
+    "species": "dog",
+    "breed": "shiba inu",
+    "gender": "female",
+    "age": "6",
+    "shelterId": "shelterA",
+    "microchipNumber": "775550738495550",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": null,
+      "city": "Kyoto"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "dog061",
+    "name": "Luna",
+    "species": "dog",
+    "breed": "shiba inu",
+    "gender": "unknown",
+    "age": "4",
+    "shelterId": "shelterB",
+    "microchipNumber": "851093551450792",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "lizard062",
+    "name": "Miso",
+    "species": "lizard",
+    "breed": "gecko",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterC",
+    "microchipNumber": "228902797448950",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": null,
+      "city": "Hamburg"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "cat063",
+    "name": "N/A",
+    "species": "cat",
+    "breed": "british shorthair",
+    "gender": "unknown",
+    "age": "11",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": null,
+      "city": "Berlin"
+    },
+    "formerOwners": [
+      {
+        "name": "Jane Doe",
+        "phone": "17252981474",
+        "city": "Berlin"
+      },
+      {
+        "name": "Jane Doe",
+        "phone": "17203569098",
+        "city": "Tokyo"
+      }
+    ]
+  },
+  {
+    "animalId": "guinea_pig064",
+    "name": "Sora",
+    "species": "guinea_pig",
+    "breed": "abyssinian",
+    "gender": "unknown",
+    "age": "2",
+    "shelterId": "shelterD",
+    "microchipNumber": "106103980913019",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "snake065",
+    "name": "Mochi",
+    "species": "snake",
+    "breed": "ball python",
+    "gender": "female",
+    "age": "6",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Lukas Weber",
+      "phone": "53621187804",
+      "city": "Munich"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "rabbit066",
+    "name": "Yuki",
+    "species": "rabbit",
+    "breed": "lop",
+    "gender": "unknown",
+    "age": "4",
+    "shelterId": "shelterA",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Jane Doe",
+      "phone": "95621139686",
+      "city": null
+    },
+    "formerOwners": [
+      {
+        "name": "Max Müller",
+        "phone": null,
+        "city": "Hamburg"
+      }
+    ]
+  },
+  {
+    "animalId": "lizard067",
+    "name": "Sora",
+    "species": "lizard",
+    "breed": "bearded dragon",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterC",
+    "microchipNumber": "790643066682276",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Anna Schmidt",
+      "phone": "45102379533",
+      "city": "Düsseldorf"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hedgehog068",
+    "name": "Mochi",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "unknown",
+    "age": "11",
+    "shelterId": "shelterA",
+    "microchipNumber": "457111330130667",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "turtle069",
+    "name": "Yuki",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "male",
+    "age": "5",
+    "shelterId": "shelterB",
+    "microchipNumber": "977081743521854",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "ferret070",
+    "name": "Mochi",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterD",
+    "microchipNumber": "459481901487209",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "hamster071",
+    "name": "Miso",
+    "species": "hamster",
+    "breed": "syrian",
+    "gender": "unknown",
+    "age": "6",
+    "shelterId": "shelterA",
+    "microchipNumber": "484351344741893",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Jane Doe",
+      "phone": null,
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "ferret072",
+    "name": "Kuro",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "male",
+    "age": "11",
+    "shelterId": "shelterA",
+    "microchipNumber": "754073519080179",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "formerOwners": [
+      {
+        "name": "John Doe",
+        "phone": "47108911553",
+        "city": null
+      },
+      {
+        "name": "Jane Doe",
+        "phone": "61142192141",
+        "city": "Kyoto"
+      }
+    ]
+  },
+  {
+    "animalId": "cat073",
+    "name": "Mochi",
+    "species": "cat",
+    "breed": "maine coon",
+    "gender": "female",
+    "age": "6",
+    "shelterId": "shelterA",
+    "microchipNumber": "300530200685693",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Anna Schmidt",
+      "phone": "12506513467",
+      "city": "Berlin"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "cat074",
+    "name": "Kuro",
+    "species": "cat",
+    "breed": "british shorthair",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterA",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "John Doe",
+      "phone": null,
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "snake075",
+    "name": "N/A",
+    "species": "snake",
+    "breed": "ball python",
+    "gender": "male",
+    "age": "5",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "37759283715",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "rabbit076",
+    "name": "Hana",
+    "species": "rabbit",
+    "breed": "netherland dwarf",
+    "gender": "female",
+    "age": "9",
+    "shelterId": "shelterA",
+    "microchipNumber": "411243918677130",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Max Müller",
+      "phone": null,
+      "city": "Tokyo"
+    },
+    "formerOwners": [
+      {
+        "name": "Maria Garcia",
+        "phone": "45285391653",
+        "city": "Leipzig"
+      }
+    ]
+  },
+  {
+    "animalId": "ferret077",
+    "name": "Kuro",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "female",
+    "age": "12",
+    "shelterId": "shelterD",
+    "microchipNumber": "384354935100452",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Jane Doe",
+      "phone": "64139903766",
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hedgehog078",
+    "name": "Luna",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterB",
+    "microchipNumber": "494875876789051",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "ADOPTED",
+    "formerOwners": []
+  },
+  {
+    "animalId": "lizard079",
+    "name": "Miso",
+    "species": "lizard",
+    "breed": "gecko",
+    "gender": "female",
+    "age": "13",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "John Doe",
+      "phone": "29432559667",
+      "city": "Düsseldorf"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "cat080",
+    "name": "Kuma",
+    "species": "cat",
+    "breed": "ragdoll",
+    "gender": "unknown",
+    "age": "9",
+    "shelterId": "shelterB",
+    "microchipNumber": "434283576702020",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": null,
+      "city": "Berlin"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "hedgehog081",
+    "name": "Kuro",
+    "species": "hedgehog",
+    "breed": "african pygmy",
+    "gender": "female",
+    "age": "8",
+    "shelterId": "shelterD",
+    "microchipNumber": "692433109022680",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "formerOwners": [
+      {
+        "name": "Jane Doe",
+        "phone": "24748574539",
+        "city": "Munich"
+      },
+      {
+        "name": "Anna Schmidt",
+        "phone": "94428107554",
+        "city": "Düsseldorf"
+      },
+      {
+        "name": "Max Müller",
+        "phone": "91264655304",
+        "city": "Munich"
+      }
+    ]
+  },
+  {
+    "animalId": "lizard082",
+    "name": "Sora",
+    "species": "lizard",
+    "breed": "bearded dragon",
+    "gender": "female",
+    "age": "6",
+    "shelterId": "shelterA",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "61866592166",
+      "city": "Kyoto"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "turtle083",
+    "name": "Kuma",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "female",
+    "age": "1",
+    "shelterId": "shelterD",
+    "microchipNumber": "931826991313711",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED"
+  },
+  {
+    "animalId": "turtle084",
+    "name": "Nori",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "female",
+    "age": "1",
+    "shelterId": "shelterB",
+    "microchipNumber": "947962295888389",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "formerOwners": [
+      {
+        "name": "Lukas Weber",
+        "phone": null,
+        "city": null
+      }
+    ]
+  },
+  {
+    "animalId": "bird085",
+    "name": "Mochi",
+    "species": "bird",
+    "breed": "parakeet",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterC",
+    "microchipNumber": "130762140810721",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": "44987575325",
+      "city": "Berlin"
+    },
+    "formerOwners": [
+      {
+        "name": "Emily Brown",
+        "phone": "40914707351",
+        "city": "Tokyo"
+      },
+      {
+        "name": "Ken Tanaka",
+        "phone": "70643811889",
+        "city": "Leipzig"
+      }
+    ]
+  },
+  {
+    "animalId": "bird086",
+    "name": "Kuro",
+    "species": "bird",
+    "breed": "canary",
+    "gender": "male",
+    "age": "14",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": "90527745089",
+      "city": "Kyoto"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "dog087",
+    "name": "Miso",
+    "species": "dog",
+    "breed": "husky",
+    "gender": "female",
+    "age": "5",
+    "shelterId": "shelterA",
+    "microchipNumber": "356973760829252",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": "19020560794",
+      "city": "Berlin"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "cat088",
+    "name": "Yuki",
+    "species": "cat",
+    "breed": "british shorthair",
+    "gender": "male",
+    "age": "1",
+    "shelterId": "shelterC",
+    "microchipNumber": "494941813668352",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Ken Tanaka",
+      "phone": "53708285438",
+      "city": "Leipzig"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "dog089",
+    "name": "Hana",
+    "species": "dog",
+    "breed": "husky",
+    "gender": "male",
+    "age": "3",
+    "shelterId": "shelterB",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "ADOPTED",
+    "currentOwner": {
+      "name": "Lukas Weber",
+      "phone": null,
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "snake090",
+    "name": "Kuma",
+    "species": "snake",
+    "breed": "ball python",
+    "gender": "male",
+    "age": "11",
+    "shelterId": "shelterA",
+    "microchipNumber": "184526993036982",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "lizard091",
+    "name": "Yuki",
+    "species": "lizard",
+    "breed": "bearded dragon",
+    "gender": "male",
+    "age": "14",
+    "shelterId": "shelterA",
+    "microchipNumber": "558210795800412",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "RESERVED",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": "23209922354",
+      "city": "Düsseldorf"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "ferret092",
+    "name": "Sora",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "unknown",
+    "age": "4",
+    "shelterId": "shelterA",
+    "microchipNumber": "742677032142811",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Maria Garcia",
+      "phone": null,
+      "city": null
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "dog093",
+    "name": "Kuro",
+    "species": "dog",
+    "breed": "german shepherd",
+    "gender": "unknown",
+    "age": "0",
+    "shelterId": "shelterD",
+    "microchipNumber": "706284976218196",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "turtle094",
+    "name": "Yuki",
+    "species": "turtle",
+    "breed": "red-eared slider",
+    "gender": "male",
+    "age": "8",
+    "shelterId": "shelterA",
+    "microchipNumber": "",
+    "vaccination": "false",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE"
+  },
+  {
+    "animalId": "ferret095",
+    "name": "Kuro",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "female",
+    "age": "4",
+    "shelterId": "shelterB",
+    "microchipNumber": "933515876396457",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "formerOwners": [
+      {
+        "name": "Jane Doe",
+        "phone": "23887457320",
+        "city": "Leipzig"
+      }
+    ]
+  },
+  {
+    "animalId": "lizard096",
+    "name": "Hana",
+    "species": "lizard",
+    "breed": "gecko",
+    "gender": "male",
+    "age": "1",
+    "shelterId": "shelterD",
+    "microchipNumber": "190467984402975",
+    "vaccination": "false",
+    "notes": "Test sample data",
+    "adoptionStatus": "RESERVED"
+  },
+  {
+    "animalId": "rabbit097",
+    "name": "N/A",
+    "species": "rabbit",
+    "breed": "netherland dwarf",
+    "gender": "female",
+    "age": "9",
+    "shelterId": "shelterD",
+    "microchipNumber": "755436177689181",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "Emily Brown",
+      "phone": null,
+      "city": "Berlin"
+    },
+    "formerOwners": [
+      {
+        "name": "Emily Brown",
+        "phone": null,
+        "city": "Hamburg"
+      }
+    ]
+  },
+  {
+    "animalId": "dog098",
+    "name": "Sora",
+    "species": "dog",
+    "breed": "german shepherd",
+    "gender": "female",
+    "age": "unknown",
+    "shelterId": "shelterB",
+    "microchipNumber": "374673162655033",
+    "vaccination": "true",
+    "notes": "",
+    "adoptionStatus": "AVAILABLE",
+    "currentOwner": {
+      "name": "John Doe",
+      "phone": "17844892160",
+      "city": "Tokyo"
+    },
+    "formerOwners": []
+  },
+  {
+    "animalId": "ferret099",
+    "name": "N/A",
+    "species": "ferret",
+    "breed": "unknown",
+    "gender": "unknown",
+    "age": "0",
+    "shelterId": "shelterC",
+    "microchipNumber": "",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED",
+    "formerOwners": [
+      {
+        "name": "Ken Tanaka",
+        "phone": null,
+        "city": "Hamburg"
+      }
+    ]
+  },
+  {
+    "animalId": "hamster100",
+    "name": "N/A",
+    "species": "hamster",
+    "breed": "syrian",
+    "gender": "unknown",
+    "age": "unknown",
+    "shelterId": "shelterB",
+    "microchipNumber": "229541787603475",
+    "vaccination": "true",
+    "notes": "Test sample data",
+    "adoptionStatus": "ADOPTED"
+  }
+]
