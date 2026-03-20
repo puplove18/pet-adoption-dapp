@@ -1,0 +1,3 @@
+max_message_count,duration_mean_sec,duration_median_sec,tx_mean,tx_median,derived_tx_per_sec,prom_tx_per_sec
+200,13283.046,13283.046,5029.379,5029.379,0.226,0.379
+400,13181.416,13181.416,5029.214,5029.214,0.228,0.382

@@ -181,6 +181,39 @@ done
 Note:
 - This loop does **not** write `processed_tx_success`; run the Prometheus extraction section afterward.
 
+### Overnight run for exp2 with 1000 records (recommended)
+
+This runner is safer for long unattended execution:
+- auto-generates `pet_data/pets1000.json` (if missing)
+- captures `processed_tx_success` right after each run
+- auto-builds summary CSV files at the end
+- restores `configtx.yaml` automatically when done
+
+From `petadopt` directory:
+
+```bash
+mkdir -p results/exp2_1000
+nohup ./run_exp2_1000_overnight.sh > results/exp2_1000/overnight_runner.log 2>&1 &
+echo $! > results/exp2_1000/overnight_runner.pid
+```
+
+Watch progress:
+
+```bash
+tail -f results/exp2_1000/overnight_runner.log
+```
+
+Stop early if needed:
+
+```bash
+kill "$(cat results/exp2_1000/overnight_runner.pid)"
+```
+
+Main outputs:
+- `results/exp2_1000/with_prometheus_sorted.csv`
+- `results/exp2_1000/summary_with_prometheus.csv`
+- `results/exp2_1000/summary_with_prometheus_tps.csv`
+
 Optional: restore default after experiment:
 
 ```bash

@@ -27,3 +27,5 @@ crypto-config/
 
 # Runtime PID files
 *.pid
+
+TYP-Paper/

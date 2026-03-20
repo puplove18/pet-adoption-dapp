@@ -5,7 +5,8 @@
 
 const fs = require("fs");
 
-const TOTAL_RECORDS = 400;
+const TOTAL_RECORDS = Number(process.argv[2] || 400);
+const OUTPUT_FILE = process.argv[3] || `pets${TOTAL_RECORDS}.json`;
 
 const speciesData = {
   dog: ["shiba inu", "german shepherd", "corgi", "husky", "beagle"],
@@ -128,6 +129,6 @@ for (let i = 1; i <= TOTAL_RECORDS; i++) {
   animals.push(animal);
 }
 
-fs.writeFileSync("pets400.json", JSON.stringify(animals,null,2));
+fs.writeFileSync(OUTPUT_FILE, JSON.stringify(animals,null,2));
 
-console.log(`Generated ${animals.length} records`);
+console.log(`Generated ${animals.length} records -> ${OUTPUT_FILE}`);
